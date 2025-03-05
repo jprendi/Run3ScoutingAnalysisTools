@@ -4,8 +4,8 @@
 #### Setup
 Setup a CMSSW working area and clone the `Run3ScoutingAnalysisTools` repo in the specific branch `Run3`:
 ```
-cmsrel CMSSW_5_0_0
-cd CMSSW_5_0_0/src
+cmsrel CMSSW_15_0_0
+cd CMSSW_15_0_0/src
 cmsenv
 git cms-init
 git clone git@github.com:CMS-Run3ScoutingTools/Run3ScoutingAnalysisTools.git -b Run3
