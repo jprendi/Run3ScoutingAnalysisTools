@@ -8,7 +8,7 @@ cmsrel CMSSW_15_0_0
 cd CMSSW_15_0_0/src
 cmsenv
 git cms-init
-git clone git@github.com:CMS-Run3ScoutingTools/Run3ScoutingAnalysisTools.git -b Run3
+git clone git@github.com:jprendi/Run3ScoutingAnalysisTools.git -b Run3
 scram b -j 96
 ```
 
