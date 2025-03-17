@@ -107,7 +107,7 @@ private:
   std::vector<bool>            l1Result_;
 
   TTree* tree;
-
+//  muons
   float trackIso1_mu;
   float trackIso2_mu;
   int nValidPixelHits1_mu;
@@ -147,6 +147,30 @@ private:
   float Lxy;
   float LxyErr;
   float LxySig;
+
+
+// electrons
+
+  float pt_ele;
+  float rawEnergy;
+  float corrEcalEnergyError;
+  float dEtaIn;
+  float dPhiIn;
+  float sigmaIetaIeta;
+  float hOverE;
+  float ooEMOop;
+  int missingHits;
+  float trackfbrem;
+  float ecalIso;
+  float hcalIso;
+  float trackIso;
+  float r9;
+  float sMin;
+  float sMaj;
+
+
+
+
 };
 
 //
