@@ -108,26 +108,26 @@ private:
 
   TTree* tree;
 
-  float trackIso1;
-  float trackIso2;
-  int nValidPixelHits1;
-  int nValidPixelHits2;
-  int nTrackerLayersWithMeasurement1;
-  int nTrackerLayersWithMeasurement2;
-  float trk_chi21;
-  float trk_chi22;
+  float trackIso1_mu;
+  float trackIso2_mu;
+  int nValidPixelHits1_mu;
+  int nValidPixelHits2_mu;
+  int nTrackerLayersWithMeasurement1_mu;
+  int nTrackerLayersWithMeasurement2_mu;
+  float trk_chi21_mu;
+  float trk_chi22_mu;
 
   bool muonID1;
   bool muonID2;
-  float mass;
+  float mass_mu;
   float pt;
-  float dr;
-  float pt1;
-  float pt2;
-  float eta1;
-  float eta2;
-  float phi1;
-  float phi2;
+  float dr_mu;
+  float pt1_mu;
+  float pt2_mu;
+  float eta1_mu;
+  float eta2_mu;
+  float phi1_mu;
+  float phi2_mu;
 
   float rho;
   int nMuonsID;
@@ -248,35 +248,35 @@ void ScoutingTreeMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSe
 
       //std::cout << "ID" << muonID1 << ", " << muonID2 << std::endl;
 
-      trackIso1 = muonsH->at(idx[0]).trackIso();
-      trackIso2 = muonsH->at(idx[1]).trackIso();   
-      nValidPixelHits1 = muonsH->at(idx[0]).nValidPixelHits();
-      nValidPixelHits2 = muonsH->at(idx[1]).nValidPixelHits();
-      nTrackerLayersWithMeasurement1 = muonsH->at(idx[0]).nTrackerLayersWithMeasurement();
-      nTrackerLayersWithMeasurement2 = muonsH->at(idx[1]).nTrackerLayersWithMeasurement();
-      trk_chi21 = muonsH->at(idx[0]).trk_chi2();
-      trk_chi22 = muonsH->at(idx[1]).trk_chi2();
+      trackIso1_mu = muonsH->at(idx[0]).trackIso();
+      trackIso2_mu = muonsH->at(idx[1]).trackIso();   
+      nValidPixelHits1_mu = muonsH->at(idx[0]).nValidPixelHits();
+      nValidPixelHits2_mu = muonsH->at(idx[1]).nValidPixelHits();
+      nTrackerLayersWithMeasurement1_mu = muonsH->at(idx[0]).nTrackerLayersWithMeasurement();
+      nTrackerLayersWithMeasurement2_mu = muonsH->at(idx[1]).nTrackerLayersWithMeasurement();
+      trk_chi21_mu = muonsH->at(idx[0]).trk_chi2();
+      trk_chi22_mu = muonsH->at(idx[1]).trk_chi2();
 
-      pt1=muonsH->at(idx[0]).pt();
-      pt2=muonsH->at(idx[1]).pt();
+      pt1_mu=muonsH->at(idx[0]).pt();
+      pt2_mu=muonsH->at(idx[1]).pt();
 
-      eta1=muonsH->at(idx[0]).eta();
-      eta2=muonsH->at(idx[1]).eta();      
-      phi1=muonsH->at(idx[0]).phi();
-      phi2=muonsH->at(idx[1]).phi();
+      eta1_mu=muonsH->at(idx[0]).eta();
+      eta2_mu=muonsH->at(idx[1]).eta();      
+      phi1_mu=muonsH->at(idx[0]).phi();
+      phi2_mu=muonsH->at(idx[1]).phi();
       
       TLorentzVector mu1;
-      mu1.SetPtEtaPhiM(pt1,eta1,phi1,0.105658);
+      mu1.SetPtEtaPhiM(pt1_mu,eta1_mu,phi1_mu,0.105658);
 
       TLorentzVector mu2;
-      mu2.SetPtEtaPhiM(pt2,eta2,phi2,0.105658);
+      mu2.SetPtEtaPhiM(pt2_mu,eta2_mu,phi2_mu,0.105658);
 
       TLorentzVector dimu = mu1+mu2;
-      mass=dimu.M();
-      pt=dimu.Pt();
-      dr=mu1.DeltaR(mu2);
+      mass_mu=dimu.M();
+      pt_dimu=dimu.Pt();
+      dr_mu=mu1.DeltaR(mu2);
 
-      //std::cout<<"pt: "<<pt1<<", "<<pt2<<", nMuonsID: "<<nMuonsID<<std::endl;
+      //std::cout<<"pt: "<<pt1_mu<<", "<<pt2_mu<<", nMuonsID: "<<nMuonsID<<std::endl;
 
       Handle<double> rhoH;
       iEvent.getByToken(rhoToken, rhoH);
@@ -358,7 +358,7 @@ void ScoutingTreeMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSe
           }
       }
 
-      //std::cout<<"tree filling with mass: "<<mass<<", pt: "<<pt<<std::endl;
+      //std::cout<<"tree filling with mass_mu: "<<mass_mu<<", pt: "<<pt_dimu<<std::endl;
       tree->Fill();
   }
 }
@@ -370,24 +370,24 @@ void ScoutingTreeMakerRun3::beginJob() {
     //tree->Branch("muonID1"             , &muonID1                     , "muonID1/B" );
     //tree->Branch("muonID2"             , &muonID2                     , "muonID2/B" );
 
-    tree->Branch("trackIso1", &trackIso1, "trackIso1/F");
-    tree->Branch("trackIso2", &trackIso2, "trackIso2/F");
-    tree->Branch("nValidPixelHits1", &nValidPixelHits1, "nValidPixelHits1/I");
-    tree->Branch("nValidPixelHits2", &nValidPixelHits2, "nValidPixelHits2/I");
-    tree->Branch("nTrackerLayersWithMeasurement1", &nTrackerLayersWithMeasurement1, "nTrackerLayersWithMeasurement1/I");
-    tree->Branch("nTrackerLayersWithMeasurement2", &nTrackerLayersWithMeasurement2, "nTrackerLayersWithMeasurement2/I");
-    tree->Branch("trk_chi21", &trk_chi21, "trk_chi21/F");
-    tree->Branch("trk_chi22", &trk_chi22, "trk_chi22/F");
+    tree->Branch("trackIso1_mu", &trackIso1_mu, "trackIso1_mu/F");
+    tree->Branch("trackIso2_mu", &trackIso2_mu, "trackIso2_mu/F");
+    tree->Branch("nValidPixelHits1_mu", &nValidPixelHits1_mu, "nValidPixelHits1_mu/I");
+    tree->Branch("nValidPixelHits2_mu", &nValidPixelHits2_mu, "nValidPixelHits2_mu/I");
+    tree->Branch("nTrackerLayersWithMeasurement1_mu", &nTrackerLayersWithMeasurement1_mu, "nTrackerLayersWithMeasurement1_mu/I");
+    tree->Branch("nTrackerLayersWithMeasurement2_mu", &nTrackerLayersWithMeasurement2_mu, "nTrackerLayersWithMeasurement2_mu/I");
+    tree->Branch("trk_chi21_mu", &trk_chi21_mu, "trk_chi21_mu/F");
+    tree->Branch("trk_chi22_mu", &trk_chi22_mu, "trk_chi22_mu/F");
 
-    tree->Branch("mass"                , &mass                        , "mass/F"    );
-    tree->Branch("pt"                  , &pt                          , "pt/F"      );
-    tree->Branch("dr"                  , &dr                          , "dr/F"      );
-    tree->Branch("pt1"                 , &pt1                         , "pt1/F"     );
-    tree->Branch("pt2"                 , &pt2                         , "pt2/F"     );
-    tree->Branch("eta1"                , &eta1                        , "eta1/F"    );
-    tree->Branch("eta2"                , &eta2                        , "eta2/F"    );
-    tree->Branch("phi1"                , &phi1                        , "phi1/F"    );
-    tree->Branch("phi2"                , &phi2                        , "phi2/F"    );
+    tree->Branch("mass_mu"                , &mass_mu                        , "mass_mu/F"    );
+    tree->Branch("pt_dimu"                  , &pt_dimu                          , "pt_dimu/F"      );
+    tree->Branch("dr_mu"                  , &dr_mu                          , "dr_mu/F"      );
+    tree->Branch("pt1_mu"                 , &pt1_mu                         , "pt1_mu/F"     );
+    tree->Branch("pt2_mu"                 , &pt2_mu                         , "pt2_mu/F"     );
+    tree->Branch("eta1_mu"                , &eta1_mu                        , "eta1_mu/F"    );
+    tree->Branch("eta2_mu"                , &eta2_mu                        , "eta2_mu/F"    );
+    tree->Branch("phi1_mu"                , &phi1_mu                        , "phi1_mu/F"    );
+    tree->Branch("phi2_mu"                , &phi2_mu                        , "phi2_mu/F"    );
     tree->Branch("rho"                 , &rho                         , "rho/F"     );
 
     tree->Branch("vtxMatch"            , &vtxMatch                    , "vtxMatch/B");
