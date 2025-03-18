@@ -120,7 +120,7 @@ private:
   bool muonID1;
   bool muonID2;
   float mass_mu;
-  float pt;
+  float pt_dimu;
   float dr_mu;
   float pt1_mu;
   float pt2_mu;
@@ -151,7 +151,17 @@ private:
 
 // electrons
 
-  float pt_ele;
+  float pt_diele;
+  float pt1_ele;
+  float pt2_ele;
+
+  float eta1_ele;
+  float eta2_ele;
+  float phi1_ele;
+  float phi2_ele;
+  float mass_ele; 
+  float dr_ele;
+
   float rawEnergy;
   float corrEcalEnergyError;
   float dEtaIn;
@@ -240,7 +250,7 @@ void ScoutingTreeMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSe
 
   int j=0;
   for (auto muons_iter = muonsH->begin(); muons_iter != muonsH->end(); ++muons_iter) {
-      //std::cout<<"pt: "<<muons_iter->pt()<<std::endl;                                             
+      //std::cout<<"pt_mu: "<<muons_iter->pt()<<std::endl;                                             
       //std::cout<<"trkiso: "<<muons_iter->trackIso()<<" pix hits: "<< muons_iter->nValidPixelHits()<<" layers: "<<muons_iter->nTrackerLayersWithMeasurement()<<" trk chi2: "<<muons_iter->trk_chi2()<<std::endl; 
 
       /*
@@ -382,6 +392,36 @@ void ScoutingTreeMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSe
           }
       }
 
+
+      Handle<vector<Run3ScoutingElectron> > electronsH;
+      iEvent.getByToken(electronsToken, electronsH);
+
+      if (electronsH->size()<2) return;
+
+      pt1_ele=electronsH->at(idx[0]).pt();
+      pt2_ele=electronsH->at(idx[1]).pt();
+
+      eta1_ele=electronsH->at(idx[0]).eta();
+      eta2_ele=electronsH->at(idx[1]).eta();      
+      phi1_ele=electronsH->at(idx[0]).phi();
+      phi2_ele=electronsH->at(idx[1]).phi();
+      
+
+      TLorentzVector ele1;
+      ele1.SetPtEtaPhiM(pt1_ele,eta1_ele,phi1_ele,0.105658);
+
+      TLorentzVector ele2;
+      ele2.SetPtEtaPhiM(pt2_ele,eta2_ele,phi2_ele,0.105658);
+
+      TLorentzVector diele = ele1+ele2;
+      mass_ele=diele.M();
+      pt_diele=diele.Pt();
+      dr_ele=ele1.DeltaR(ele2);
+
+
+
+
+
       //std::cout<<"tree filling with mass_mu: "<<mass_mu<<", pt: "<<pt_dimu<<std::endl;
       tree->Fill();
   }
@@ -424,6 +464,19 @@ void ScoutingTreeMakerRun3::beginJob() {
     tree->Branch("vtxXError"           , &vtxXError                   , "vtxXError/F");
     tree->Branch("vtxYError"           , &vtxYError                   , "vtxYError/F");
     tree->Branch("vtxZError"           , &vtxZError                   , "vtxZError/F");
+
+
+    tree->Branch("mass_ele"                , &mass_ele                        , "mass_ele/F"    );
+    tree->Branch("pt_diele"                , &pt_diele                        , "pt_diele/F"    );
+    tree->Branch("dr_ele"                  , &dr_ele                          , "dr_ele/F"      );
+    tree->Branch("pt1_ele"                 , &pt1_ele                         , "pt1_ele/F"     );
+    tree->Branch("pt2_ele"                 , &pt2_ele                         , "pt2_ele/F"     );
+    tree->Branch("eta1_ele"                , &eta1_ele                        , "eta1_ele/F"    );
+    tree->Branch("eta2_ele"                , &eta2_ele                        , "eta2_ele/F"    );
+    tree->Branch("phi1_ele"                , &phi1_ele                        , "phi1_ele/F"    );
+    tree->Branch("phi2_ele"                , &phi2_ele                        , "phi2_ele/F"    );
+   
+
 
     tree->Branch("l1Result", "std::vector<bool>"             ,&l1Result_, 32000, 0  );
 }
