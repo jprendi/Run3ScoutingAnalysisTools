@@ -15,8 +15,7 @@ process.maxEvents = cms.untracked.PSet(
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-        '/store/data/Run2024B/ScoutingPFRun3/RAW/v1/000/379/349/00000/11875fc9-72ca-41d6-b97e-49afa43802e2.root',
-        '/store/data/Run2024B/ScoutingPFRun3/RAW/v1/000/379/349/00000/3d9a4294-329c-4d65-8fc8-d14c82f3b261.root'
+       'file:/data/jprendi/diff_Tags_initial/src/scouting_kickoff/outputScoutingPF_PromptTag.root'
  )
 )
 
@@ -35,7 +34,7 @@ process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 from Configuration.AlCa.GlobalTag import GlobalTag
 #process.GlobalTag = GlobalTag(process.GlobalTag, '124X_dataRun3_Prompt_v4', '') # Run 3 2022
 #process.GlobalTag = GlobalTag(process.GlobalTag, '132X_dataRun3_Prompt_v2', '') # Run 3 2023
-process.GlobalTag = GlobalTag(process.GlobalTag, '140X_dataRun3_Prompt_v1', '') # Run 3 2024
+process.GlobalTag = GlobalTag(process.GlobalTag, '140X_dataRun3_Prompt_v4', '') # Run 3 2024
 
 #L1Info = ["L1_DoubleMu_12_5","L1_DoubleMu_15_7","L1_DoubleMu4p5er2p0_SQ_OS_Mass_Min7","L1_DoubleMu4p5er2p0_SQ_OS_Mass_7to18","L1_DoubleMu4_SQ_OS_dR_Max1p2","L1_DoubleMu4p5_SQ_OS_dR_Max1p2"]
 #L1Info = ["L1_DoubleMu_12_5","L1_DoubleMu_15_7","L1_DoubleMu4p5er2p0_SQ_OS_Mass_Min7","L1_DoubleMu4p5er2p0_SQ_OS_Mass_7to18","L1_DoubleMu4_SQ_OS_dR_Max1p2","L1_DoubleMu4p5_SQ_OS_dR_Max1p2", "L1_DoubleMu0er1p4_SQ_OS_dR_Max1p4", "L1_DoubleMu0er1p5_SQ_OS_dR_Max1p4", "L1_DoubleMu8_SQ"]
