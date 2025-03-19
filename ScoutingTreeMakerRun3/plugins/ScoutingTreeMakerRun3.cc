@@ -109,6 +109,8 @@ private:
 
   TTree* tree;
   TH1F* dimuon_hist;
+  TH1F* diele_hist;
+
   //  muons
   float trackIso1_mu;
   float trackIso2_mu;
@@ -423,6 +425,7 @@ void ScoutingTreeMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSe
       //std::cout<<"tree filling with mass_mu: "<<mass_mu<<", pt: "<<pt_dimu<<std::endl;
       tree->Fill();
       dimuon_hist->Fill(mass_mu);
+      diele_hist->Fill(mass_ele);
   }
 }
 
@@ -479,8 +482,9 @@ void ScoutingTreeMakerRun3::beginJob() {
 
     tree->Branch("l1Result", "std::vector<bool>"             ,&l1Result_, 32000, 0  );
     
-    dimuon_hist = fs->make<TH1F>("dimuonMass", "Dimuon mass; Mass (GeV); Entries", 10, 0.0, 100.0); 
 
+    dimuon_hist = fs->make<TH1F>("dimuonMass", "Dimuon mass; Mass (GeV); Entries", 100, 0.0, 50.0); 
+    diele_hist = fs->make<TH1F>("dieleMass", "Dielectron mass; Mass (GeV); Entries", 100, 0.0, 50.0); 
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
