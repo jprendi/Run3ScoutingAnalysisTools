@@ -479,13 +479,13 @@ void ScoutingTreeMakerRun3::beginJob() {
 
     tree->Branch("l1Result", "std::vector<bool>"             ,&l1Result_, 32000, 0  );
     
-    dimuon_hist = new TH1F("dimuonMass", "Dimuon mass; Mass (GeV); Entries", 10, 0.0, 100.0); 
+    dimuon_hist = fs->make<TH1F>("dimuonMass", "Dimuon mass; Mass (GeV); Entries", 10, 0.0, 100.0); 
 
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
 void ScoutingTreeMakerRun3::endJob() {
-  dimuon_hist->Delete();
+  //dimuon_hist->Delete();
 	  // please remove this method if not needed
 }
 
