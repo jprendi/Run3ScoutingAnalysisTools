@@ -74,6 +74,7 @@ public:
 
 private:
   void beginJob() override;
+  void beginHisto();
   void analyze(const edm::Event&, const edm::EventSetup&) override;
   void endJob() override;
     //void beginRun(edm::Run const&, edm::EventSetup const&) override;
@@ -107,7 +108,8 @@ private:
   std::vector<bool>            l1Result_;
 
   TTree* tree;
-//  muons
+  TH1F* dimuon_hist;
+  //  muons
   float trackIso1_mu;
   float trackIso2_mu;
   int nValidPixelHits1_mu;
@@ -420,6 +422,7 @@ void ScoutingTreeMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSe
 
       //std::cout<<"tree filling with mass_mu: "<<mass_mu<<", pt: "<<pt_dimu<<std::endl;
       tree->Fill();
+      dimuon_hist->Fill(mass_mu);
   }
 }
 
@@ -475,11 +478,15 @@ void ScoutingTreeMakerRun3::beginJob() {
 
 
     tree->Branch("l1Result", "std::vector<bool>"             ,&l1Result_, 32000, 0  );
+    
+    dimuon_hist = new TH1F("dimuonMass", "Dimuon mass; Mass (GeV); Entries", 10, 0.0, 100.0); 
+
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
 void ScoutingTreeMakerRun3::endJob() {
-  // please remove this method if not needed
+  dimuon_hist->Delete();
+	  // please remove this method if not needed
 }
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
