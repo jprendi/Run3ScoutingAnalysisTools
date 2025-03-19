@@ -162,23 +162,19 @@ private:
   float mass_ele; 
   float dr_ele;
 
-  float rawEnergy;
-  float corrEcalEnergyError;
+  float d0;
+  float dz;
   float dEtaIn;
   float dPhiIn;
   float sigmaIetaIeta;
   float hOverE;
   float ooEMOop;
+  int charge;
   int missingHits;
-  float trackfbrem;
   float ecalIso;
   float hcalIso;
   float trackIso;
-  float r9;
-  float sMin;
-  float sMaj;
-
-
+ 
 
 
 };
@@ -408,10 +404,10 @@ void ScoutingTreeMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSe
       
 
       TLorentzVector ele1;
-      ele1.SetPtEtaPhiM(pt1_ele,eta1_ele,phi1_ele,0.105658);
+      ele1.SetPtEtaPhiM(pt1_ele,eta1_ele,phi1_ele,0.0005109);
 
       TLorentzVector ele2;
-      ele2.SetPtEtaPhiM(pt2_ele,eta2_ele,phi2_ele,0.105658);
+      ele2.SetPtEtaPhiM(pt2_ele,eta2_ele,phi2_ele,0.0005109);
 
       TLorentzVector diele = ele1+ele2;
       mass_ele=diele.M();
