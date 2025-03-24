@@ -108,8 +108,21 @@ private:
   std::vector<bool>            l1Result_;
 
   TTree* tree;
+
   TH1F* dimuon_hist;
+  TH1F* pt1_mu_hist;
+  TH1F* eta1_mu_hist;
+  
   TH1F* diele_hist;
+  TH1F* pt1_ele_hist;
+  TH1F* eta1_ele_hist;
+
+  TH1F* pt1_pho_hist;
+  TH1F* eta1_pho_hist; 
+
+  TH1F* pt1_PFJ_hist;
+  TH1F* eta1_PFJ_hist;
+
 
   //  muons
   float trackIso1_mu;
@@ -134,7 +147,7 @@ private:
   float phi2_mu;
 
   float rho;
-  int nMuonsID;
+ // int nMuonsID;
 
   bool hasPvtx;
 
@@ -166,19 +179,95 @@ private:
   float mass_ele; 
   float dr_ele;
 
-  float d0;
-  float dz;
-  float dEtaIn;
-  float dPhiIn;
-  float sigmaIetaIeta;
-  float hOverE;
-  float ooEMOop;
-  int charge;
-  int missingHits;
-  float ecalIso;
-  float hcalIso;
-  float trackIso;
+  float rawEnergy_ele;
+  float preshowerEnergy_ele;
+  float corrEcalEnergyError_ele;
+  float dEtaIn_ele;
+  float dPhiIn_ele;
+  float sigmaIetaIeta_ele;
+  float hOverE_ele;
+  float ooEMOop_ele;
+  int missingHits_ele;
+  float ecalIso_ele;
+  float hcalIso_ele;
+  float trackIso_ele;
+  float r9_ele;
+  float sMin_ele;
+  float sMaj_ele; 
+  
+// photons
+
+  float pt1_pho;
+  float pt2_pho;
+  float eta1_pho;
+  float eta2_pho;
+  float phi1_pho;
+  float phi2_pho; 
  
+  float rawEnergy_pho;
+  float preshowerEnergy_pho;
+  float corrEcalEnergyError_pho;
+  float sigmaIetaIeta_pho;
+  float hOverE_pho;
+  float ecalIso_pho;
+  float hcalIso_pho;
+  float trackIso_pho;
+  float r9_pho;
+  float sMin_pho;
+  float sMaj_pho;
+
+// PFjets
+
+  float pt1_PFJ;
+  float pt2_PFJ;
+  float eta1_PFJ;
+  float eta2_PFJ;
+  float phi1_PFJ;
+  float phi2_PFJ;
+  float m_PFJ;
+  float jetArea_PFJ;
+  float chargedHadronEnergy_PFJ;
+  float neutralHadronEnergy_PFJ;
+  float photonEnergy_PFJ;
+  float electronEnergy_PFJ;
+  float muonEnergy_PFJ;
+  float HFHadronEnergy_PFJ;
+  float HFEMEnergy_PFJ;
+  int chargedHadronMultiplicity_PFJ;
+  int neutralHadronMultiplicity_PFJ;
+  int photonMultiplicity_PFJ;
+  int electronMultiplicity_PFJ;
+  int muonMultiplicity_PFJ;
+  int HFHadronMultiplicity_PFJ;
+  int HFEMMultiplicity_PFJ;
+  float HOEnergy_PFJ;
+  float csv_PFJ;
+  float mvaDiscriminator_PFJ;
+
+ /*
+
+// Calojets
+
+  float pt1_CLJ;
+  float pt2_CLJ;
+  float eta1_CLJ;
+  float eta2_CLJ;
+  float phi1_CLJ;
+  float phi2_CLJ;
+  float m_CLJ;
+  float jetArea_CLJ;
+  float maxEInEmTowers_CLJ;
+  float maxEInHadTowers_CLJ;
+  float hadEnergyInHB_CLJ;
+  float hadEnergyInHE_CLJ;
+  float hadEnergyInHF_CLJ;
+  float emEnergyInEB_CLJ;
+  float emEnergyInEE_CLJ;
+  float emEnergyInHF_CLJ;
+  float towersArea_CLJ;
+  float mvaDiscriminator_CLJ;
+  float btagDiscriminator_CLJ;
+ */
 
 
 };
@@ -244,8 +333,8 @@ void ScoutingTreeMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSe
 
   if (muonsH->size()<2) return;
 
-  int nMuons=0;
-  nMuonsID=0;
+ // int nMuons=0;
+ // nMuonsID=0;
   vector<int> idx;
 
   int j=0;
@@ -418,14 +507,106 @@ void ScoutingTreeMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSe
       pt_diele=diele.Pt();
       dr_ele=ele1.DeltaR(ele2);
 
+      rawEnergy_ele=electronsH->at(idx[0]).rawEnergy();
+      preshowerEnergy_ele=electronsH->at(idx[0]).preshowerEnergy();
+      corrEcalEnergyError_ele=electronsH->at(idx[0]).corrEcalEnergyError();
+      dEtaIn_ele=electronsH->at(idx[0]).dEtaIn();
+      dPhiIn_ele=electronsH->at(idx[0]).dPhiIn();
+      sigmaIetaIeta_ele=electronsH->at(idx[0]).sigmaIetaIeta();
+      hOverE_ele=electronsH->at(idx[0]).hOverE();
+      ooEMOop_ele=electronsH->at(idx[0]).ooEMOop();
+      missingHits_ele=electronsH->at(idx[0]).missingHits();
+      ecalIso_ele=electronsH->at(idx[0]).ecalIso();
+      hcalIso_ele=electronsH->at(idx[0]).hcalIso();
+      trackIso_ele=electronsH->at(idx[0]).trackIso();
+      r9_ele=electronsH->at(idx[0]).r9();
+      sMin_ele=electronsH->at(idx[0]).sMin();
+      sMaj_ele=electronsH->at(idx[0]).sMaj();
+	
+
+      Handle<vector<Run3ScoutingPhoton> > photonsH;
+      iEvent.getByToken(photonsToken, photonsH);
+
+      if (photonsH->size()<2) return;
+
+      pt1_pho=photonsH->at(idx[0]).pt();
+      pt2_pho=photonsH->at(idx[1]).pt();
+      eta1_pho=photonsH->at(idx[0]).eta();
+      eta2_pho=photonsH->at(idx[1]).eta();
+      phi1_pho=photonsH->at(idx[0]).phi();
+      phi2_pho=photonsH->at(idx[1]).phi();
+
+      rawEnergy_pho=photonsH->at(idx[0]).rawEnergy();
+      preshowerEnergy_pho=photonsH->at(idx[0]).preshowerEnergy();
+      corrEcalEnergyError_pho=photonsH->at(idx[0]).corrEcalEnergyError();
+      sigmaIetaIeta_pho=photonsH->at(idx[0]).sigmaIetaIeta();
+      hOverE_pho=photonsH->at(idx[0]).hOverE();
+      ecalIso_pho=photonsH->at(idx[0]).ecalIso();
+      hcalIso_pho=photonsH->at(idx[0]).hcalIso();
+      trackIso_pho=photonsH->at(idx[0]).trkIso();
+      r9_pho=photonsH->at(idx[0]).r9();
+      sMin_pho=photonsH->at(idx[0]).sMin();
+      sMaj_pho=photonsH->at(idx[0]).sMaj();
 
 
+      Handle<vector<Run3ScoutingPFJet> > PFjetsH;
+      iEvent.getByToken(pfjetsToken, PFjetsH);
 
+      if (PFjetsH->size() < 2) return;
+
+      pt1_PFJ = PFjetsH->at(idx[0]).pt();
+      pt2_PFJ = PFjetsH->at(idx[1]).pt();
+      eta1_PFJ = PFjetsH->at(idx[0]).eta();
+      eta2_PFJ = PFjetsH->at(idx[1]).eta();
+      phi1_PFJ = PFjetsH->at(idx[0]).phi();
+      phi2_PFJ = PFjetsH->at(idx[1]).phi();
+
+      m_PFJ = PFjetsH->at(idx[0]).m();
+      jetArea_PFJ = PFjetsH->at(idx[0]).jetArea();
+      chargedHadronEnergy_PFJ = PFjetsH->at(idx[0]).chargedHadronEnergy();
+      neutralHadronEnergy_PFJ = PFjetsH->at(idx[0]).neutralHadronEnergy();
+      photonEnergy_PFJ = PFjetsH->at(idx[0]).photonEnergy();
+      electronEnergy_PFJ = PFjetsH->at(idx[0]).electronEnergy();
+      muonEnergy_PFJ = PFjetsH->at(idx[0]).muonEnergy();
+      HFHadronEnergy_PFJ = PFjetsH->at(idx[0]).HFHadronEnergy();
+      HFEMEnergy_PFJ = PFjetsH->at(idx[0]).HFEMEnergy();
+      chargedHadronMultiplicity_PFJ = PFjetsH->at(idx[0]).chargedHadronMultiplicity();
+      neutralHadronMultiplicity_PFJ = PFjetsH->at(idx[0]).neutralHadronMultiplicity();
+      photonMultiplicity_PFJ = PFjetsH->at(idx[0]).photonMultiplicity();
+      electronMultiplicity_PFJ = PFjetsH->at(idx[0]).electronMultiplicity();
+      muonMultiplicity_PFJ = PFjetsH->at(idx[0]).muonMultiplicity();
+      HFHadronMultiplicity_PFJ = PFjetsH->at(idx[0]).HFHadronMultiplicity();
+      HFEMMultiplicity_PFJ = PFjetsH->at(idx[0]).HFEMMultiplicity();
+      HOEnergy_PFJ = PFjetsH->at(idx[0]).HOEnergy();
+      csv_PFJ = PFjetsH->at(idx[0]).csv();
+      mvaDiscriminator_PFJ = PFjetsH->at(idx[0]).mvaDiscriminator();
+
+//TLorentzVector jet1;
+//jet1.SetPtEtaPhiM(pt1_PFJ, eta1_PFJ, phi1_PFJ, 0);
+
+//TLorentzVector jet2;
+//jet2.SetPtEtaPhiM(pt2_PFJ, eta2_PFJ, phi2_PFJ, 0);
+
+//TLorentzVector dijet = jet1 + jet2;
+//mass_PFJ = dijet.M();
+//pt_dijet = dijet.Pt();
+//dr_PFJ = jet1.DeltaR(jet2);
 
       //std::cout<<"tree filling with mass_mu: "<<mass_mu<<", pt: "<<pt_dimu<<std::endl;
       tree->Fill();
       dimuon_hist->Fill(mass_mu);
+      pt1_mu_hist->Fill(pt1_mu);
+      eta1_mu_hist->Fill(eta1_mu);
+
       diele_hist->Fill(mass_ele);
+      pt1_ele_hist->Fill(pt1_ele);
+      eta1_ele_hist->Fill(eta1_ele);
+
+      pt1_pho_hist->Fill(pt1_pho);
+      eta1_pho_hist->Fill(eta1_pho);
+     
+      pt1_PFJ_hist->Fill(pt1_PFJ);
+      eta1_PFJ_hist->Fill(eta1_PFJ); 
   }
 }
 
@@ -477,14 +658,84 @@ void ScoutingTreeMakerRun3::beginJob() {
     tree->Branch("eta2_ele"                , &eta2_ele                        , "eta2_ele/F"    );
     tree->Branch("phi1_ele"                , &phi1_ele                        , "phi1_ele/F"    );
     tree->Branch("phi2_ele"                , &phi2_ele                        , "phi2_ele/F"    );
-   
+    tree->Branch("preshowerEnergy_ele"     , &preshowerEnergy_ele      , "preshowerEnergy_ele/F");
+    tree->Branch("corrEcalEnergyError_ele", &corrEcalEnergyError_ele,"corrEcalEnergyError_ele/F");
+    tree->Branch("dEtaIn_ele"              , &dEtaIn_ele               , "dEtaIn_ele/F"         );
+    tree->Branch("sigmaIetaIeta_ele"       , &sigmaIetaIeta_ele          , "sigmaIetaIeta_ele/F");
+    tree->Branch("hOverE_ele"              , &hOverE_ele                      , "hOverE_ele/F"  );
+    tree->Branch("ooEMOop_ele"             , &ooEMOop_ele                     , "ooEMOop_ele/F" );
+    tree->Branch("missingHits_ele"         , &missingHits_ele              , "missingHits_ele/I");
+    tree->Branch("ecalIso_ele"             , &ecalIso_ele                     , "ecalIso_ele/F" );
+    tree->Branch("hcalIso_ele"             , &hcalIso_ele                     , "hcalIso_ele/F" );
+    tree->Branch("trackIso_ele"            , &trackIso_ele                    , "trackIso_ele/F");
+    tree->Branch("r9_ele"                  , &r9_ele                          , "r9_ele/F"      );
+    tree->Branch("sMin_ele"                , &sMin_ele                        , "sMin_ele/F"    );
+    tree->Branch("sMaj_ele"                , &sMaj_ele                        , "sMaj_ele/F"    );
+    tree->Branch("rawEnergy_ele"           , &rawEnergy_ele                  , "rawEnergy_ele/F");
+
+
+    tree->Branch("pt1_pho"                 , &pt1_pho                         , "pt1_pho/F"     );
+    tree->Branch("pt2_pho"                 , &pt2_pho                         , "pt2_pho/F"     );
+    tree->Branch("eta1_pho"                , &eta1_pho                        , "eta1_pho/F"    );
+    tree->Branch("eta2_pho"                , &eta2_pho                        , "eta2_pho/F"    );
+    tree->Branch("phi1_pho"                , &phi1_pho                        , "phi1_pho/F"    );
+    tree->Branch("phi2_pho"                , &phi2_pho                        , "phi2_pho/F"    );
+    tree->Branch("preshowerEnergy_pho"     , &preshowerEnergy_pho             , "preshowerEnergy_pho/F");
+    tree->Branch("corrEcalEnergyError_pho", &corrEcalEnergyError_pho         , "corrEcalEnergyError_pho/F");
+    tree->Branch("sigmaIetaIeta_pho"       , &sigmaIetaIeta_pho               , "sigmaIetaIeta_pho/F"  );
+    tree->Branch("hOverE_pho"              , &hOverE_pho                      , "hOverE_pho/F"  );
+    tree->Branch("ecalIso_pho"             , &ecalIso_pho                     , "ecalIso_pho/F" );
+    tree->Branch("hcalIso_pho"             , &hcalIso_pho                     , "hcalIso_pho/F" );
+    tree->Branch("trackIso_pho"            , &trackIso_pho                    , "trackIso_pho/F");
+    tree->Branch("r9_pho"                  , &r9_pho                          , "r9_pho/F"      );
+    tree->Branch("sMin_pho"                , &sMin_pho                        , "sMin_pho/F"    );
+    tree->Branch("sMaj_pho"                , &sMaj_pho                        , "sMaj_pho/F"    );
+    tree->Branch("rawEnergy_pho"           , &rawEnergy_pho                   , "rawEnergy_pho/F" );
+
+     
+    tree->Branch("pt1_PFJ"                   , &pt1_PFJ                         , "pt1_PFJ/F");
+    tree->Branch("pt2_PFJ"                   , &pt2_PFJ                         , "pt2_PFJ/F");
+    tree->Branch("eta1_PFJ"                  , &eta1_PFJ                        , "eta1_PFJ/F");
+    tree->Branch("eta2_PFJ"                  , &eta2_PFJ                        , "eta2_PFJ/F");
+    tree->Branch("phi1_PFJ"                  , &phi1_PFJ                        , "phi1_PFJ/F");
+    tree->Branch("phi2_PFJ"                  , &phi2_PFJ                        , "phi2_PFJ/F");
+    tree->Branch("m_PFJ"                     , &m_PFJ                           , "m_PFJ/F");
+    tree->Branch("jetArea_PFJ"               , &jetArea_PFJ                     , "jetArea_PFJ/F");
+    tree->Branch("chargedHadronEnergy_PFJ"   , &chargedHadronEnergy_PFJ         , "chargedHadronEnergy_PFJ/F");
+    tree->Branch("neutralHadronEnergy_PFJ"   , &neutralHadronEnergy_PFJ         , "neutralHadronEnergy_PFJ/F");
+    tree->Branch("photonEnergy_PFJ"          , &photonEnergy_PFJ                , "photonEnergy_PFJ/F");
+    tree->Branch("electronEnergy_PFJ"        , &electronEnergy_PFJ              , "electronEnergy_PFJ/F");
+    tree->Branch("muonEnergy_PFJ"            , &muonEnergy_PFJ                  , "muonEnergy_PFJ/F");
+    tree->Branch("HFHadronEnergy_PFJ"        , &HFHadronEnergy_PFJ              , "HFHadronEnergy_PFJ/F");
+    tree->Branch("HFEMEnergy_PFJ"            , &HFEMEnergy_PFJ                  , "HFEMEnergy_PFJ/F");
+    tree->Branch("chargedHadronMultiplicity_PFJ" , &chargedHadronMultiplicity_PFJ , "chargedHadronMultiplicity_PFJ/I");
+    tree->Branch("neutralHadronMultiplicity_PFJ" , &neutralHadronMultiplicity_PFJ , "neutralHadronMultiplicity_PFJ/I");
+    tree->Branch("photonMultiplicity_PFJ"    , &photonMultiplicity_PFJ          , "photonMultiplicity_PFJ/I");
+    tree->Branch("electronMultiplicity_PFJ"  , &electronMultiplicity_PFJ        , "electronMultiplicity_PFJ/I");
+    tree->Branch("muonMultiplicity_PFJ"      , &muonMultiplicity_PFJ            , "muonMultiplicity_PFJ/I");
+    tree->Branch("HFHadronMultiplicity_PFJ"  , &HFHadronMultiplicity_PFJ        , "HFHadronMultiplicity_PFJ/I");
+    tree->Branch("HFEMMultiplicity_PFJ"      , &HFEMMultiplicity_PFJ            , "HFEMMultiplicity_PFJ/I");
+    tree->Branch("HOEnergy_PFJ"              , &HOEnergy_PFJ                    , "HOEnergy_PFJ/F");
+    tree->Branch("csv_PFJ"                   , &csv_PFJ                         , "csv_PFJ/F");
+    tree->Branch("mvaDiscriminator_PFJ"      , &mvaDiscriminator_PFJ            , "mvaDiscriminator_PFJ/F");
+
 
 
     tree->Branch("l1Result", "std::vector<bool>"             ,&l1Result_, 32000, 0  );
     
 
-    dimuon_hist = fs->make<TH1F>("dimuonMass", "Dimuon mass; Mass (GeV); Entries", 100, 0.0, 50.0); 
-    diele_hist = fs->make<TH1F>("dieleMass", "Dielectron mass; Mass (GeV); Entries", 100, 0.0, 50.0); 
+    dimuon_hist = fs->make<TH1F>("dimuonMass", "Dimuon mass; Mass (GeV); Entries", 100, 0.0, 100.0); 
+    pt1_mu_hist = fs->make<TH1F>("muon_pT","muon p_{T}; p_{T} (GeV); Entries", 100, 0.0, 150.0);
+    eta1_mu_hist = fs->make<TH1F>("muon_eta", "muon #eta; #eta (GeV); Entries", 100, -2.7, 2.7);
+    
+    diele_hist = fs->make<TH1F>("dieleMass", "Dielectron mass; Mass (GeV); Entries", 100, 0.0, 100.0);	  pt1_ele_hist = fs->make<TH1F>("electron_pT","electron p_{T}; p_{T} (GeV); Entries", 100, 0.0, 150.0); 
+    eta1_ele_hist = fs->make<TH1F>("electron_eta", "electron #eta; #eta (GeV); Entries", 100, -2.7, 2.7);
+    pt1_pho_hist = fs->make<TH1F>("photon_pT","photon p_{T}; p_{T} (GeV); Entries", 100, 0.0, 170.0);
+    eta1_pho_hist = fs->make<TH1F>("photon_eta", "photon #eta; #eta (GeV); Entries", 100, -2.7, 2.7);
+
+    pt1_PFJ_hist = fs->make<TH1F>("PFJ_pT","PF jet p_{T}; p_{T} (GeV); Entries", 100, 0.0, 170.0);
+    eta1_PFJ_hist = fs->make<TH1F>("PFJ_eta", "PF jet #eta; #eta (GeV); Entries", 100, -2.7, 2.7);
+
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
