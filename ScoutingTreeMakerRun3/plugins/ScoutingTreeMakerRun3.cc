@@ -74,7 +74,6 @@ public:
 
 private:
   void beginJob() override;
-  void beginHisto();
   void analyze(const edm::Event&, const edm::EventSetup&) override;
   void endJob() override;
     //void beginRun(edm::Run const&, edm::EventSetup const&) override;
@@ -109,19 +108,110 @@ private:
 
   TTree* tree;
 
+
+  TH1F* trackIso1_mu_hist;
+  TH1F* trackIso2_mu_hist;
+  TH1I* nValidPixelHits1_mu_hist;
+  TH1I* nValidPixelHits2_mu_hist;
+  TH1I* nTrackerLayersWithMeasurement1_mu_hist;
+  TH1I* nTrackerLayersWithMeasurement2_mu_hist;
+  TH1F* trk_chi21_mu_hist;
+  TH1F* trk_chi22_mu_hist;
+
+
   TH1F* dimuon_hist;
+  TH1F* pt_dimu_hist;
+  TH1F* dr_mu_hist; 
   TH1F* pt1_mu_hist;
+  TH1F* pt2_mu_hist;
   TH1F* eta1_mu_hist;
-  
+  TH1F* eta2_mu_hist;
+  TH1F* phi1_mu_hist;
+  TH1F* phi2_mu_hist;
+  TH1F* rho_hist;
+  TH1I* vtxMatch_hist;
+  TH1F* vtxChi2_hist;
+  TH1I* vtxNdof_hist;
+  TH1F* Lxy_hist;
+  TH1F* LxyErr_hist;
+  TH1F* LxySig_hist;
+  TH1F* vtxXError_hist;
+  TH1F* vtxYError_hist;
+  TH1F* vtxZError_hist;
+
+
+
   TH1F* diele_hist;
+  TH1F* pt_diele_hist;
+  TH1F* dr_ele_hist;
   TH1F* pt1_ele_hist;
+  TH1F* pt2_ele_hist;
   TH1F* eta1_ele_hist;
+  TH1F* eta2_ele_hist;
+  TH1F* phi1_ele_hist;
+  TH1F* phi2_ele_hist;
+  TH1F* preshowerEnergy_ele_hist;
+  TH1F* corrEcalEnergyError_ele_hist;
+  TH1F* dEtaIn_ele_hist;
+  TH1F* sigmaIetaIeta_ele_hist;
+  TH1F* hOverE_ele_hist;
+  TH1F* ooEMOop_ele_hist;
+  TH1I* missingHits_ele_hist;
+  TH1F* ecalIso_ele_hist;
+  TH1F* hcalIso_ele_hist;
+  TH1F* trackIso_ele_hist;
+  TH1F* r9_ele_hist;
+  TH1F* sMin_ele_hist;
+  TH1F* sMaj_ele_hist;
+  TH1F* rawEnergy_ele_hist;
+
 
   TH1F* pt1_pho_hist;
-  TH1F* eta1_pho_hist; 
+  TH1F* pt2_pho_hist;
+  TH1F* eta1_pho_hist;
+  TH1F* eta2_pho_hist;
+  TH1F* phi1_pho_hist;
+  TH1F* phi2_pho_hist;
+  TH1F* rawEnergy_pho_hist;
+  TH1F* preshowerEnergy_pho_hist;
+  TH1F* corrEcalEnergyError_pho_hist;
+  TH1F* sigmaIetaIeta_pho_hist;
+  TH1F* hOverE_pho_hist;
+  TH1F* ecalIso_pho_hist;
+  TH1F* hcalIso_pho_hist;
+  TH1F* trackIso_pho_hist;
+  TH1F* r9_pho_hist;
+  TH1F* sMin_pho_hist;
+  TH1F* sMaj_pho_hist;
+
 
   TH1F* pt1_PFJ_hist;
+  TH1F* pt2_PFJ_hist;
   TH1F* eta1_PFJ_hist;
+  TH1F* eta2_PFJ_hist;
+  TH1F* phi1_PFJ_hist;
+  TH1F* phi2_PFJ_hist;
+  TH1F* m_PFJ_hist;
+  TH1F* jetArea_PFJ_hist;
+  TH1F* chargedHadronEnergy_PFJ_hist;
+  TH1F* neutralHadronEnergy_PFJ_hist;
+  TH1F* photonEnergy_PFJ_hist;
+  TH1F* electronEnergy_PFJ_hist;
+  TH1F* muonEnergy_PFJ_hist;
+  TH1F* HFHadronEnergy_PFJ_hist;
+  TH1F* HFEMEnergy_PFJ_hist;
+  TH1F* chargedHadronMultiplicity_PFJ_hist;
+  TH1F* neutralHadronMultiplicity_PFJ_hist;
+  TH1F* photonMultiplicity_PFJ_hist;
+  TH1F* electronMultiplicity_PFJ_hist;
+  TH1F* muonMultiplicity_PFJ_hist;
+  TH1F* HFHadronMultiplicity_PFJ_hist;
+  TH1F* HFEMMultiplicity_PFJ_hist;
+  TH1F* HOEnergy_PFJ_hist;
+  TH1F* csv_PFJ_hist;
+  TH1F* mvaDiscriminator_PFJ_hist;
+
+
 
 
   //  muons
@@ -244,9 +334,15 @@ private:
   float csv_PFJ;
   float mvaDiscriminator_PFJ;
 
- /*
 
-// Calojets
+// PF candidates
+
+  int pdgId;
+ 
+ 
+  /*
+
+// Calojets (this is actually not used anymore lol)
 
   float pt1_CLJ;
   float pt2_CLJ;
@@ -328,13 +424,21 @@ void ScoutingTreeMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSe
   using namespace std;
   using namespace reco;
 
+
+ Handle<vector<Run3ScoutingParticle> > pfcandsH;
+   iEvent.getByToken(pfcandsToken, pfcandsH);
+ 
+  
   Handle<vector<Run3ScoutingMuon> > muonsH;
   iEvent.getByToken(muonsToken, muonsH);
+
+
 
   if (muonsH->size()<2) return;
 
  // int nMuons=0;
  // nMuonsID=0;
+
   vector<int> idx;
 
   int j=0;
@@ -358,7 +462,8 @@ void ScoutingTreeMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSe
       j+=1;
   }
 
-  //std::cout<<std::endl<<idx.size()<<std::endl;
+//std::cout  <<" \n \n \n \n"  <<"pdgId: " << pfcandsH->at(idx[0]).pdgId() << " general size is " << idx.size() <<" \n \n \n \n";
+  std::cout<<std::endl<<idx.size()<<std::endl;
 
   if (idx.size()>1) {
       //std::cout << "charge: " << (muonsH->at(idx[0]).charge()) << ", " << (muonsH->at(idx[1]).charge()) << std::endl;
@@ -487,6 +592,8 @@ void ScoutingTreeMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSe
 
       if (electronsH->size()<2) return;
 
+      
+
       pt1_ele=electronsH->at(idx[0]).pt();
       pt2_ele=electronsH->at(idx[1]).pt();
 
@@ -528,7 +635,6 @@ void ScoutingTreeMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSe
       iEvent.getByToken(photonsToken, photonsH);
 
       if (photonsH->size()<2) return;
-
       pt1_pho=photonsH->at(idx[0]).pt();
       pt2_pho=photonsH->at(idx[1]).pt();
       eta1_pho=photonsH->at(idx[0]).eta();
@@ -607,6 +713,112 @@ void ScoutingTreeMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSe
      
       pt1_PFJ_hist->Fill(pt1_PFJ);
       eta1_PFJ_hist->Fill(eta1_PFJ); 
+
+
+
+
+trackIso1_mu_hist->Fill(trackIso1_mu);
+trackIso2_mu_hist->Fill(trackIso2_mu);
+nValidPixelHits1_mu_hist->Fill(nValidPixelHits1_mu);
+nValidPixelHits2_mu_hist->Fill(nValidPixelHits2_mu);
+nTrackerLayersWithMeasurement1_mu_hist->Fill(nTrackerLayersWithMeasurement1_mu);
+nTrackerLayersWithMeasurement2_mu_hist->Fill(nTrackerLayersWithMeasurement2_mu);
+trk_chi21_mu_hist->Fill(trk_chi21_mu);
+trk_chi22_mu_hist->Fill(trk_chi22_mu);
+
+pt_dimu_hist->Fill(pt_dimu);
+dr_mu_hist->Fill(dr_mu);
+pt1_mu_hist->Fill(pt1_mu);
+pt2_mu_hist->Fill(pt2_mu);
+eta1_mu_hist->Fill(eta1_mu);
+eta2_mu_hist->Fill(eta2_mu);
+phi1_mu_hist->Fill(phi1_mu);
+phi2_mu_hist->Fill(phi2_mu);
+rho_hist->Fill(rho);
+
+vtxMatch_hist->Fill(vtxMatch);
+vtxChi2_hist->Fill(vtxChi2);
+vtxNdof_hist->Fill(vtxNdof);
+Lxy_hist->Fill(Lxy);
+LxyErr_hist->Fill(LxyErr);
+LxySig_hist->Fill(LxySig);
+
+vtxXError_hist->Fill(vtxXError);
+vtxYError_hist->Fill(vtxYError);
+vtxZError_hist->Fill(vtxZError);
+
+pt_diele_hist->Fill(pt_diele);
+dr_ele_hist->Fill(dr_ele);
+pt1_ele_hist->Fill(pt1_ele);
+pt2_ele_hist->Fill(pt2_ele);
+eta1_ele_hist->Fill(eta1_ele);
+eta2_ele_hist->Fill(eta2_ele);
+phi1_ele_hist->Fill(phi1_ele);
+phi2_ele_hist->Fill(phi2_ele);
+preshowerEnergy_ele_hist->Fill(preshowerEnergy_ele);
+corrEcalEnergyError_ele_hist->Fill(corrEcalEnergyError_ele);
+dEtaIn_ele_hist->Fill(dEtaIn_ele);
+sigmaIetaIeta_ele_hist->Fill(sigmaIetaIeta_ele);
+hOverE_ele_hist->Fill(hOverE_ele);
+ooEMOop_ele_hist->Fill(ooEMOop_ele);
+missingHits_ele_hist->Fill(missingHits_ele);
+ecalIso_ele_hist->Fill(ecalIso_ele);
+hcalIso_ele_hist->Fill(hcalIso_ele);
+trackIso_ele_hist->Fill(trackIso_ele);
+r9_ele_hist->Fill(r9_ele);
+sMin_ele_hist->Fill(sMin_ele);
+sMaj_ele_hist->Fill(sMaj_ele);
+rawEnergy_ele_hist->Fill(rawEnergy_ele);
+
+pt1_pho_hist->Fill(pt1_pho);
+pt2_pho_hist->Fill(pt2_pho);
+eta1_pho_hist->Fill(eta1_pho);
+eta2_pho_hist->Fill(eta2_pho);
+phi1_pho_hist->Fill(phi1_pho);
+phi2_pho_hist->Fill(phi2_pho);
+rawEnergy_pho_hist->Fill(rawEnergy_pho);
+preshowerEnergy_pho_hist->Fill(preshowerEnergy_pho);
+corrEcalEnergyError_pho_hist->Fill(corrEcalEnergyError_pho);
+sigmaIetaIeta_pho_hist->Fill(sigmaIetaIeta_pho);
+hOverE_pho_hist->Fill(hOverE_pho);
+ecalIso_pho_hist->Fill(ecalIso_pho);
+hcalIso_pho_hist->Fill(hcalIso_pho);
+trackIso_pho_hist->Fill(trackIso_pho);
+r9_pho_hist->Fill(r9_pho);
+sMin_pho_hist->Fill(sMin_pho);
+sMaj_pho_hist->Fill(sMaj_pho);
+
+pt1_PFJ_hist->Fill(pt1_PFJ);
+pt2_PFJ_hist->Fill(pt2_PFJ);
+eta1_PFJ_hist->Fill(eta1_PFJ);
+eta2_PFJ_hist->Fill(eta2_PFJ);
+phi1_PFJ_hist->Fill(phi1_PFJ);
+phi2_PFJ_hist->Fill(phi2_PFJ);
+m_PFJ_hist->Fill(m_PFJ);
+jetArea_PFJ_hist->Fill(jetArea_PFJ);
+chargedHadronEnergy_PFJ_hist->Fill(chargedHadronEnergy_PFJ);
+neutralHadronEnergy_PFJ_hist->Fill(neutralHadronEnergy_PFJ);
+photonEnergy_PFJ_hist->Fill(photonEnergy_PFJ);
+electronEnergy_PFJ_hist->Fill(electronEnergy_PFJ);
+muonEnergy_PFJ_hist->Fill(muonEnergy_PFJ);
+HFHadronEnergy_PFJ_hist->Fill(HFHadronEnergy_PFJ);
+HFEMEnergy_PFJ_hist->Fill(HFEMEnergy_PFJ);
+chargedHadronMultiplicity_PFJ_hist->Fill(chargedHadronMultiplicity_PFJ);
+neutralHadronMultiplicity_PFJ_hist->Fill(neutralHadronMultiplicity_PFJ);
+photonMultiplicity_PFJ_hist->Fill(photonMultiplicity_PFJ);
+electronMultiplicity_PFJ_hist->Fill(electronMultiplicity_PFJ);
+muonMultiplicity_PFJ_hist->Fill(muonMultiplicity_PFJ);
+HFHadronMultiplicity_PFJ_hist->Fill(HFHadronMultiplicity_PFJ);
+HFEMMultiplicity_PFJ_hist->Fill(HFEMMultiplicity_PFJ);
+HOEnergy_PFJ_hist->Fill(HOEnergy_PFJ);
+csv_PFJ_hist->Fill(csv_PFJ);
+ 
+mvaDiscriminator_PFJ_hist->Fill(mvaDiscriminator_PFJ);
+
+
+
+
+
   }
 }
 
@@ -722,16 +934,113 @@ void ScoutingTreeMakerRun3::beginJob() {
 
 
     tree->Branch("l1Result", "std::vector<bool>"             ,&l1Result_, 32000, 0  );
-    
+  
+
+// we say thank you chatGPT for doing what I am too lazy to do by hand
+
+
+    trackIso1_mu_hist = fs->make<TH1F>("trackIso1_mu", "Track Isolation 1; Isolation; Entries", 100, 0.0, 10.0);
+    trackIso2_mu_hist = fs->make<TH1F>("trackIso2_mu", "Track Isolation 2; Isolation; Entries", 100, 0.0, 10.0);
+    nValidPixelHits1_mu_hist = fs->make<TH1I>("nValidPixelHits1_mu", "Valid Pixel Hits 1; Hits; Entries", 20, 0, 20);
+    nValidPixelHits2_mu_hist = fs->make<TH1I>("nValidPixelHits2_mu", "Valid Pixel Hits 2; Hits; Entries", 20, 0, 20);
+    nTrackerLayersWithMeasurement1_mu_hist = fs->make<TH1I>("nTrackerLayersWithMeasurement1_mu", "Tracker Layers 1; Layers; Entries", 20, 0, 20);
+    nTrackerLayersWithMeasurement2_mu_hist = fs->make<TH1I>("nTrackerLayersWithMeasurement2_mu", "Tracker Layers 2; Layers; Entries", 20, 0, 20);
+    trk_chi21_mu_hist = fs->make<TH1F>("trk_chi21_mu", "Track Chi2 1; #chi^{2}; Entries", 100, 0.0, 10.0);
+    trk_chi22_mu_hist = fs->make<TH1F>("trk_chi22_mu", "Track Chi2 2; #chi^{2}; Entries", 100, 0.0, 10.0);
+    rho_hist = fs->make<TH1F>("rho", "Event Energy Density; #rho; Entries", 100, 0.0, 50.0);
+    vtxMatch_hist = fs->make<TH1I>("vtxMatch", "Vertex Match; Matched (0/1); Entries", 2, 0, 2);
+    vtxChi2_hist = fs->make<TH1F>("vtxChi2", "Vertex #chi^{2}; #chi^{2}; Entries", 100, 0.0, 10.0);
+    vtxNdof_hist = fs->make<TH1I>("vtxNdof", "Vertex Ndof; Ndof; Entries", 50, 0, 50);
+    Lxy_hist = fs->make<TH1F>("Lxy", "Decay Length Lxy; Lxy (cm); Entries", 100, 0.0, 5.0);
+    LxyErr_hist = fs->make<TH1F>("LxyErr", "Lxy Error; Lxy Error (cm); Entries", 100, 0.0, 1.0);
+    LxySig_hist = fs->make<TH1F>("LxySig", "Lxy Significance; Lxy / #sigma_{Lxy}; Entries", 100, 0.0, 10.0);
+    vtxXError_hist = fs->make<TH1F>("vtxXError", "Vertex X Error; X Error (cm); Entries", 100, 0.0, 0.01);
+    vtxYError_hist = fs->make<TH1F>("vtxYError", "Vertex Y Error; Y Error (cm); Entries", 100, 0.0, 0.01);
+    vtxZError_hist = fs->make<TH1F>("vtxZError", "Vertex Z Error; Z Error (cm); Entries", 100, 0.0, 0.05);
+
 
     dimuon_hist = fs->make<TH1F>("dimuonMass", "Dimuon mass; Mass (GeV); Entries", 100, 0.0, 100.0); 
+    pt_dimu_hist = fs->make<TH1F>("pt_dimu", "Dimuon pT; pT (GeV); Entries", 100, 0.0, 100.0);
     pt1_mu_hist = fs->make<TH1F>("muon_pT","muon p_{T}; p_{T} (GeV); Entries", 100, 0.0, 150.0);
+    pt2_mu_hist = fs->make<TH1F>("pt2_mu", "Muon 2 pT; pT (GeV); Entries", 100, 0.0, 100.0);
     eta1_mu_hist = fs->make<TH1F>("muon_eta", "muon #eta; #eta (GeV); Entries", 100, -2.7, 2.7);
-    
-    diele_hist = fs->make<TH1F>("dieleMass", "Dielectron mass; Mass (GeV); Entries", 100, 0.0, 100.0);	  pt1_ele_hist = fs->make<TH1F>("electron_pT","electron p_{T}; p_{T} (GeV); Entries", 100, 0.0, 150.0); 
+    eta2_mu_hist = fs->make<TH1F>("eta2_mu", "Muon 2 #eta; #eta; Entries", 100, -3.0, 3.0);
+    dr_mu_hist = fs->make<TH1F>("dr_mu", "Delta R between muons; #DeltaR; Entries", 100, 0.0, 5.0);
+    phi1_mu_hist = fs->make<TH1F>("phi1_mu", "Muon 1 #phi; #phi (rad); Entries", 100, -3.14, 3.14);
+    phi2_mu_hist = fs->make<TH1F>("phi2_mu", "Muon 2 #phi; #phi (rad); Entries", 100, -3.14, 3.14);
+
+
+    diele_hist = fs->make<TH1F>("dieleMass", "Dielectron mass; Mass (GeV); Entries", 100, 0.0, 100.0);pt_diele_hist = fs->make<TH1F>("pt_diele", "Dielectron pT; pT (GeV); Entries", 100, 0.0, 100.0);
+    dr_ele_hist = fs->make<TH1F>("dr_ele", "Delta R between electrons; #DeltaR; Entries", 100, 0.0, 5.0);
+    pt1_ele_hist = fs->make<TH1F>("electron_pT","electron p_{T}; p_{T} (GeV); Entries", 100, 0.0, 150.0); 
+    pt2_ele_hist = fs->make<TH1F>("pt2_ele", "Electron 2 pT; pT (GeV); Entries", 100, 0.0, 100.0);
     eta1_ele_hist = fs->make<TH1F>("electron_eta", "electron #eta; #eta (GeV); Entries", 100, -2.7, 2.7);
+    eta2_ele_hist = fs->make<TH1F>("eta2_ele", "Electron 2 #eta; #eta; Entries", 100, -3.0, 3.0);
+    phi1_ele_hist = fs->make<TH1F>("phi1_ele", "Electron 1 #phi; #phi (rad); Entries", 100, -3.14, 3.14);
+    phi2_ele_hist = fs->make<TH1F>("phi2_ele", "Electron 2 #phi; #phi (rad); Entries", 100, -3.14, 3.14);
+    preshowerEnergy_ele_hist = fs->make<TH1F>("preshowerEnergy_ele", "Preshower Energy; Energy (GeV); Entries", 100, 0.0, 10.0);
+    corrEcalEnergyError_ele_hist = fs->make<TH1F>("corrEcalEnergyError_ele", "Corrected ECAL Energy Error; Energy Error (GeV); Entries", 100, 0.0, 5.0);
+    dEtaIn_ele_hist = fs->make<TH1F>("dEtaIn_ele", "dEtaIn; #Delta#eta_{in}; Entries", 100, -0.01, 0.01);
+    sigmaIetaIeta_ele_hist = fs->make<TH1F>("sigmaIetaIeta_ele", "Sigma iEta iEta; #sigma_{i#eta i#eta}; Entries", 100, 0.0, 0.05);
+    hOverE_ele_hist = fs->make<TH1F>("hOverE_ele", "H/E; H/E; Entries", 100, 0.0, 0.2);
+    ooEMOop_ele_hist = fs->make<TH1F>("ooEMOop_ele", "1/E - 1/p; 1/E - 1/p; Entries", 100, -0.05, 0.05);
+    missingHits_ele_hist = fs->make<TH1I>("missingHits_ele", "Missing Hits; Hits; Entries", 10, 0, 10);
+    ecalIso_ele_hist = fs->make<TH1F>("ecalIso_ele", "ECAL Isolation; Isolation (GeV); Entries", 100, 0.0, 10.0);
+    hcalIso_ele_hist = fs->make<TH1F>("hcalIso_ele", "HCAL Isolation; Isolation (GeV); Entries", 100, 0.0, 10.0);
+    trackIso_ele_hist = fs->make<TH1F>("trackIso_ele", "Track Isolation; Isolation (GeV); Entries", 100, 0.0, 10.0);
+    r9_ele_hist = fs->make<TH1F>("r9_ele", "R9; R9; Entries", 100, 0.0, 1.2);
+    sMin_ele_hist = fs->make<TH1F>("sMin_ele", "sMin; sMin; Entries", 100, 0.0, 0.1);
+    sMaj_ele_hist = fs->make<TH1F>("sMaj_ele", "sMaj; sMaj; Entries", 100, 0.0, 0.1);
+    rawEnergy_ele_hist = fs->make<TH1F>("rawEnergy_ele", "Raw Energy; Energy (GeV); Entries", 100, 0.0, 100.0);
+
+
+
     pt1_pho_hist = fs->make<TH1F>("photon_pT","photon p_{T}; p_{T} (GeV); Entries", 100, 0.0, 170.0);
+    pt2_pho_hist = fs->make<TH1F>("pt2_pho", "Photon 2 pT; pT (GeV); Entries", 100, 0.0, 200.0);
     eta1_pho_hist = fs->make<TH1F>("photon_eta", "photon #eta; #eta (GeV); Entries", 100, -2.7, 2.7);
+    eta2_pho_hist = fs->make<TH1F>("eta2_pho", "Photon 2 #eta; #eta; Entries", 100, -3.0, 3.0);
+    phi1_pho_hist = fs->make<TH1F>("phi1_pho", "Photon 1 #phi; #phi (rad); Entries", 100, -3.14, 3.14);
+    phi2_pho_hist = fs->make<TH1F>("phi2_pho", "Photon 2 #phi; #phi (rad); Entries", 100, -3.14, 3.14);
+    rawEnergy_pho_hist = fs->make<TH1F>("rawEnergy_pho", "Raw Energy; Energy (GeV); Entries", 100, 0.0, 500.0);
+    preshowerEnergy_pho_hist = fs->make<TH1F>("preshowerEnergy_pho", "Preshower Energy; Energy (GeV); Entries", 100, 0.0, 10.0);
+    corrEcalEnergyError_pho_hist = fs->make<TH1F>("corrEcalEnergyError_pho", "Corrected ECAL Energy Error; Energy Error (GeV); Entries", 100, 0.0, 5.0);
+    sigmaIetaIeta_pho_hist = fs->make<TH1F>("sigmaIetaIeta_pho", "Sigma iEta iEta; #sigma_{i#eta i#eta}; Entries", 100, 0.0, 0.05);
+    hOverE_pho_hist = fs->make<TH1F>("hOverE_pho", "H/E; H/E; Entries", 100, 0.0, 0.2);
+    ecalIso_pho_hist = fs->make<TH1F>("ecalIso_pho", "ECAL Isolation; Isolation (GeV); Entries", 100, 0.0, 10.0);
+    hcalIso_pho_hist = fs->make<TH1F>("hcalIso_pho", "HCAL Isolation; Isolation (GeV); Entries", 100, 0.0, 10.0);
+    trackIso_pho_hist = fs->make<TH1F>("trackIso_pho", "Track Isolation; Isolation (GeV); Entries", 100, 0.0, 10.0);
+    r9_pho_hist = fs->make<TH1F>("r9_pho", "R9; R9; Entries", 100, 0.0, 1.2);
+    sMin_pho_hist = fs->make<TH1F>("sMin_pho", "sMin; sMin; Entries", 100, 0.0, 0.1);
+    sMaj_pho_hist = fs->make<TH1F>("sMaj_pho", "sMaj; sMaj; Entries", 100, 0.0, 0.1);
+
+
+    pt1_PFJ_hist = fs->make<TH1F>("pt1_PFJ", "Leading PFJet pT; pT (GeV); Entries", 100, 0.0, 500.0);
+    pt2_PFJ_hist = fs->make<TH1F>("pt2_PFJ", "Subleading PFJet pT; pT (GeV); Entries", 100, 0.0, 500.0);
+    eta1_PFJ_hist = fs->make<TH1F>("eta1_PFJ", "Leading PFJet #eta; #eta; Entries", 100, -5.0, 5.0);
+    eta2_PFJ_hist = fs->make<TH1F>("eta2_PFJ", "Subleading PFJet #eta; #eta; Entries", 100, -5.0, 5.0);
+    phi1_PFJ_hist = fs->make<TH1F>("phi1_PFJ", "Leading PFJet #phi; #phi (rad); Entries", 100, -3.14, 3.14);
+    phi2_PFJ_hist = fs->make<TH1F>("phi2_PFJ", "Subleading PFJet #phi; #phi (rad); Entries", 100, -3.14, 3.14);
+    m_PFJ_hist = fs->make<TH1F>("m_PFJ", "PFJet Mass; Mass (GeV); Entries", 100, 0.0, 200.0);
+    jetArea_PFJ_hist = fs->make<TH1F>("jetArea_PFJ", "PFJet Area; Area; Entries", 100, 0.0, 2.0);
+    chargedHadronEnergy_PFJ_hist = fs->make<TH1F>("chargedHadronEnergy_PFJ", "Charged Hadron Energy; Energy (GeV); Entries", 100, 0.0, 500.0);
+    neutralHadronEnergy_PFJ_hist = fs->make<TH1F>("neutralHadronEnergy_PFJ", "Neutral Hadron Energy; Energy (GeV); Entries", 100, 0.0, 500.0);
+    photonEnergy_PFJ_hist = fs->make<TH1F>("photonEnergy_PFJ", "Photon Energy; Energy (GeV); Entries", 100, 0.0, 200.0);
+    electronEnergy_PFJ_hist = fs->make<TH1F>("electronEnergy_PFJ", "Electron Energy; Energy (GeV); Entries", 100, 0.0, 100.0);
+    muonEnergy_PFJ_hist = fs->make<TH1F>("muonEnergy_PFJ", "Muon Energy; Energy (GeV); Entries", 100, 0.0, 100.0);
+    HFHadronEnergy_PFJ_hist = fs->make<TH1F>("HFHadronEnergy_PFJ", "HF Hadron Energy; Energy (GeV); Entries", 100, 0.0, 200.0);
+    HFEMEnergy_PFJ_hist = fs->make<TH1F>("HFEMEnergy_PFJ", "HF EM Energy; Energy (GeV); Entries", 100, 0.0, 200.0);
+    chargedHadronMultiplicity_PFJ_hist = fs->make<TH1F>("chargedHadronMultiplicity_PFJ", "Charged Hadron Multiplicity; Multiplicity; Entries", 50, 0, 50);
+    neutralHadronMultiplicity_PFJ_hist = fs->make<TH1F>("neutralHadronMultiplicity_PFJ", "Neutral Hadron Multiplicity; Multiplicity; Entries", 50, 0, 50);
+    photonMultiplicity_PFJ_hist = fs->make<TH1F>("photonMultiplicity_PFJ", "Photon Multiplicity; Multiplicity; Entries", 50, 0, 50);
+    electronMultiplicity_PFJ_hist = fs->make<TH1F>("electronMultiplicity_PFJ", "Electron Multiplicity; Multiplicity; Entries", 20, 0, 20);
+    muonMultiplicity_PFJ_hist = fs->make<TH1F>("muonMultiplicity_PFJ", "Muon Multiplicity; Multiplicity; Entries", 20, 0, 20);
+    HFHadronMultiplicity_PFJ_hist = fs->make<TH1F>("HFHadronMultiplicity_PFJ", "HF Hadron Multiplicity; Multiplicity; Entries", 50, 0, 50);
+    HFEMMultiplicity_PFJ_hist = fs->make<TH1F>("HFEMMultiplicity_PFJ", "HF EM Multiplicity; Multiplicity; Entries", 50, 0, 50);
+    HOEnergy_PFJ_hist = fs->make<TH1F>("HOEnergy_PFJ", "HO Energy; Energy (GeV); Entries", 100, 0.0, 50.0);
+    csv_PFJ_hist = fs->make<TH1F>("csv_PFJ", "CSV Discriminator; CSV; Entries", 100, 0.0, 1.0);
+    mvaDiscriminator_PFJ_hist = fs->make<TH1F>("mvaDiscriminator_PFJ", "MVA Discriminator; MVA Score; Entries", 100, -1.0, 1.0);
+
+
 
     pt1_PFJ_hist = fs->make<TH1F>("PFJ_pT","PF jet p_{T}; p_{T} (GeV); Entries", 100, 0.0, 170.0);
     eta1_PFJ_hist = fs->make<TH1F>("PFJ_eta", "PF jet #eta; #eta (GeV); Entries", 100, -2.7, 2.7);
