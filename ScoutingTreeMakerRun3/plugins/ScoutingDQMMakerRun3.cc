@@ -24,7 +24,7 @@
 #include "DQMServices/Core/interface/DQMEDAnalyzer.h"
 
 #include "FWCore/Framework/interface/Frameworkfwd.h"
-#include "FWCore/Framework/interface/one/EDAnalyzer.h"
+// #include "FWCore/Framework/interface/one/EDAnalyzer.h"
 
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
@@ -74,7 +74,7 @@ public:
   static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
 private:
-  void beginJob() override;
+  // void beginJob() override;
   void analyze(const edm::Event&, const edm::EventSetup&) override;
   void bookHistograms(DQMStore::IBooker&, edm::Run const&, edm::EventSetup const&) override;
 
@@ -400,7 +400,6 @@ ScoutingTreeMakerRun3::ScoutingTreeMakerRun3(const edm::ParameterSet& iConfig):
     tracksToken              (consumes<std::vector<Run3ScoutingTrack> >            (iConfig.getParameter<edm::InputTag>("tracks"))),
     doL1                     (iConfig.existsAs<bool>("doL1")               ?    iConfig.getParameter<bool>  ("doL1")            : false)
 {
-    usesResource("TFileService");
     if (doL1) {
         algInputTag_ = iConfig.getParameter<edm::InputTag>("AlgInputTag");
         extInputTag_ = iConfig.getParameter<edm::InputTag>("l1tExtBlkInputTag");
@@ -906,11 +905,11 @@ for (float pt : pT_2) {
 }
 
 // ------------ method called once each job just before starting event loop  ------------
-void ScoutingTreeMakerRun3::beginJob() {
-    edm::Service<TFileService> fs;
-    // we say thank you chatGPT for doing what I am too lazy to do by hand
-
-
+void ScoutingTreeMakerRun3::bookHistograms(DQMStore::IBooker & ibook, edm::Run const& run, edm::EventSetup const& iSetup) {
+    
+	
+	
+	// we say thank you chatGPT for doing what I am too lazy to do by hand
     trackIso1_mu_hist = ibook.book1D("trackIso1_mu", "Track Isolation 1; Isolation; Entries", 100, 0.0, 10.0);
     trackIso2_mu_hist = ibook.book1D("trackIso2_mu", "Track Isolation 2; Isolation; Entries", 100, 0.0, 20.0);
     nValidPixelHits1_mu_hist = ibook.book1D("nValidPixelHits1_mu", "Valid Pixel Hits 1; Hits; Entries", 20, 0, 20);
