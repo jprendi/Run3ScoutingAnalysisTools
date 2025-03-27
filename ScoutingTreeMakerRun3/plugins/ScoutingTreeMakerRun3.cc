@@ -211,6 +211,13 @@ private:
   TH1F* csv_PFJ_hist;
   TH1F* mvaDiscriminator_PFJ_hist;
 
+  TH1F* PF_pT_211_hist;
+  TH1F* PF_pT_n211_hist;
+  TH1F* PF_pT_130_hist;
+  TH1F* PF_pT_22_hist;
+  TH1F* PF_pT_1_hist;
+  TH1F* PF_pT_2_hist;
+ 
 
 
 
@@ -338,7 +345,12 @@ private:
 // PF candidates
 
   int pdgId;
- 
+  std::vector<float> pT_211;
+  std::vector<float> pT_n211;
+  std::vector<float> pT_130;
+  std::vector<float> pT_22;
+  std::vector<float> pT_1;
+  std::vector<float> pT_2;
  
   /*
 
@@ -433,8 +445,55 @@ void ScoutingTreeMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSe
   iEvent.getByToken(muonsToken, muonsH);
 
 
+  Handle<vector<Run3ScoutingPFJet> > PFjetsH;
+      iEvent.getByToken(pfjetsToken, PFjetsH);
 
-  if (muonsH->size()<2) return;
+
+
+     Handle<vector<Run3ScoutingPhoton> > photonsH;
+      iEvent.getByToken(photonsToken, photonsH);
+
+
+      Handle<vector<Run3ScoutingElectron> > electronsH;
+      iEvent.getByToken(electronsToken, electronsH);
+
+
+  Handle<vector<Run3ScoutingVertex> > verticesH;
+      iEvent.getByToken(verticesToken, verticesH);
+
+
+      Handle<vector<Run3ScoutingVertex> > primaryVerticesH;
+      iEvent.getByToken(primaryVerticesToken, primaryVerticesH);
+
+if (pfcandsH->size() >= 2 && PFjetsH->size() >= 2 && muonsH->size() >= 2 &&
+    photonsH->size() >= 2 && electronsH->size() >= 2 && verticesH->size() >= 2) {
+    
+    std::cout << "\n whatever ok is " << pfcandsH->size() << " \n ";
+    std::cout << "pfjets  " << PFjetsH->size() << "  \n ";
+    std::cout << "muons  " << muonsH->size() << "  \n ";
+    std::cout << "photons  " << photonsH->size() << "  \n ";
+    std::cout << "electrons  " << electronsH->size() << "  \n ";
+    std::cout << "vertices  " << verticesH->size() << "  \n ";
+}
+
+
+
+
+
+
+
+/*
+  std::cout << "\n whatever ok is " << pfcandsH->size() << " \n "; 
+
+std::cout << "pfjets  " << PFjetsH->size() << "  \n "; 
+std::cout << "muons  " << muonsH->size() << "  \n "; 
+std::cout << "photons  " << photonsH->size() << "  \n "; 
+std::cout << "electrons  " << electronsH->size() << "  \n "; 
+std::cout << "vertices  " << verticesH->size() << "  \n "; 
+*/
+
+
+if (muonsH->size()<2) return;
 
  // int nMuons=0;
  // nMuonsID=0;
@@ -462,8 +521,7 @@ void ScoutingTreeMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSe
       j+=1;
   }
 
-//std::cout  <<" \n \n \n \n"  <<"pdgId: " << pfcandsH->at(idx[0]).pdgId() << " general size is " << idx.size() <<" \n \n \n \n";
-  std::cout<<std::endl<<idx.size()<<std::endl;
+ // std::cout<<std::endl<<idx.size()<<std::endl;
 
   if (idx.size()>1) {
       //std::cout << "charge: " << (muonsH->at(idx[0]).charge()) << ", " << (muonsH->at(idx[1]).charge()) << std::endl;
@@ -510,8 +568,8 @@ void ScoutingTreeMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSe
       iEvent.getByToken(rhoToken, rhoH);
       rho=*rhoH;
 
-      Handle<vector<Run3ScoutingVertex> > primaryVerticesH;
-      iEvent.getByToken(primaryVerticesToken, primaryVerticesH);
+      //Handle<vector<Run3ScoutingVertex> > primaryVerticesH;
+      //iEvent.getByToken(primaryVerticesToken, primaryVerticesH);
 
       std::vector<float> vtxX;
       std::vector<float> vtxY;
@@ -532,8 +590,8 @@ void ScoutingTreeMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSe
 
       //std::cout << "npvtx: " << npvtx << " avgPrimaryX: " << avgPrimary[0] << " avgPrimaryY: " << avgPrimary[1] << std::endl;
 
-      Handle<vector<Run3ScoutingVertex> > verticesH;
-      iEvent.getByToken(verticesToken, verticesH);
+      //Handle<vector<Run3ScoutingVertex> > verticesH;
+      //iEvent.getByToken(verticesToken, verticesH);
 
       std::vector<int> vtxIndx1 = (muonsH->at(idx[0])).vtxIndx();
       std::vector<int> vtxIndx2 = (muonsH->at(idx[1])).vtxIndx();
@@ -587,11 +645,12 @@ void ScoutingTreeMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSe
       }
 
 
-      Handle<vector<Run3ScoutingElectron> > electronsH;
-      iEvent.getByToken(electronsToken, electronsH);
+      //Handle<vector<Run3ScoutingElectron> > electronsH;
+      //iEvent.getByToken(electronsToken, electronsH);
 
       if (electronsH->size()<2) return;
 
+      std::cout << "\n two electrons present \n ";
       
 
       pt1_ele=electronsH->at(idx[0]).pt();
@@ -631,8 +690,8 @@ void ScoutingTreeMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSe
       sMaj_ele=electronsH->at(idx[0]).sMaj();
 	
 
-      Handle<vector<Run3ScoutingPhoton> > photonsH;
-      iEvent.getByToken(photonsToken, photonsH);
+      //Handle<vector<Run3ScoutingPhoton> > photonsH;
+      //iEvent.getByToken(photonsToken, photonsH);
 
       if (photonsH->size()<2) return;
       pt1_pho=photonsH->at(idx[0]).pt();
@@ -655,8 +714,8 @@ void ScoutingTreeMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSe
       sMaj_pho=photonsH->at(idx[0]).sMaj();
 
 
-      Handle<vector<Run3ScoutingPFJet> > PFjetsH;
-      iEvent.getByToken(pfjetsToken, PFjetsH);
+      //Handle<vector<Run3ScoutingPFJet> > PFjetsH;
+      //iEvent.getByToken(pfjetsToken, PFjetsH);
 
       if (PFjetsH->size() < 2) return;
 
@@ -686,6 +745,41 @@ void ScoutingTreeMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSe
       HOEnergy_PFJ = PFjetsH->at(idx[0]).HOEnergy();
       csv_PFJ = PFjetsH->at(idx[0]).csv();
       mvaDiscriminator_PFJ = PFjetsH->at(idx[0]).mvaDiscriminator();
+
+
+
+	
+      std::vector<int> pdgId_all;
+
+
+
+      for (auto iter = pfcandsH->begin(); iter != pfcandsH->end(); ++iter){
+	      pdgId_all.push_back(iter->pdgId());
+	      //if (pdgId_all.back() == -211){pT_211.push_back(iter->pt());}
+	      switch (iter->pdgId()){ 
+		      case 211: pT_211.push_back(iter->pt()); break;
+		      case -211: pT_n211.push_back(iter->pt()); break;
+		      case 130: pT_130.push_back(iter->pt()); break;
+		      case 22: pT_22.push_back(iter->pt()); break;
+		      case 1: pT_1.push_back(iter->pt()); break;
+		      case 2: pT_2.push_back(iter->pt()); break;				
+     		 }
+      }
+
+
+
+
+/*      
+      std::cout << "\n" << "entries in pfcandsH : " ;
+      for (auto i:pdgId_all) {std::cout << i << " " ;}
+      std::cout << "\n";
+
+
+      std::cout << "\n" << "do we have pT 211 ? ";
+      for (auto i:pT_211) {std::cout << i << " " ;}
+      std::cout << "\n";
+
+*/
 
 //TLorentzVector jet1;
 //jet1.SetPtEtaPhiM(pt1_PFJ, eta1_PFJ, phi1_PFJ, 0);
@@ -812,14 +906,35 @@ HFHadronMultiplicity_PFJ_hist->Fill(HFHadronMultiplicity_PFJ);
 HFEMMultiplicity_PFJ_hist->Fill(HFEMMultiplicity_PFJ);
 HOEnergy_PFJ_hist->Fill(HOEnergy_PFJ);
 csv_PFJ_hist->Fill(csv_PFJ);
- 
 mvaDiscriminator_PFJ_hist->Fill(mvaDiscriminator_PFJ);
 
 
+for (float pt : pT_211) {
+    PF_pT_211_hist->Fill(pt);  
+}
+for (float pt : pT_n211) {
+    PF_pT_n211_hist->Fill(pt);  
+}
+for (float pt : pT_130) {
+    PF_pT_130_hist->Fill(pt);  
+}
+
+for (float pt : pT_22) {
+    PF_pT_22_hist->Fill(pt);  
+}
+for (float pt : pT_1) {
+    PF_pT_1_hist->Fill(pt);  
+}
+for (float pt : pT_2) {
+    PF_pT_2_hist->Fill(pt);  
+}
 
 
 
-  }
+
+}
+
+//  }
 }
 
 // ------------ method called once each job just before starting event loop  ------------
@@ -932,7 +1047,16 @@ void ScoutingTreeMakerRun3::beginJob() {
     tree->Branch("mvaDiscriminator_PFJ"      , &mvaDiscriminator_PFJ            , "mvaDiscriminator_PFJ/F");
 
 
+    tree->Branch("pdgId", &pdgId);
 
+
+    tree->Branch("pT_211", &pT_211 );
+    tree->Branch("pT_n211", &pT_n211 );
+    tree->Branch("pT_130", &pT_130 );
+    tree->Branch("pT_22", &pT_22 );
+    tree->Branch("pT_1", &pT_1 );
+    tree->Branch("pT_2", &pT_2 );
+    
     tree->Branch("l1Result", "std::vector<bool>"             ,&l1Result_, 32000, 0  );
   
 
@@ -940,18 +1064,18 @@ void ScoutingTreeMakerRun3::beginJob() {
 
 
     trackIso1_mu_hist = fs->make<TH1F>("trackIso1_mu", "Track Isolation 1; Isolation; Entries", 100, 0.0, 10.0);
-    trackIso2_mu_hist = fs->make<TH1F>("trackIso2_mu", "Track Isolation 2; Isolation; Entries", 100, 0.0, 10.0);
+    trackIso2_mu_hist = fs->make<TH1F>("trackIso2_mu", "Track Isolation 2; Isolation; Entries", 100, 0.0, 20.0);
     nValidPixelHits1_mu_hist = fs->make<TH1I>("nValidPixelHits1_mu", "Valid Pixel Hits 1; Hits; Entries", 20, 0, 20);
     nValidPixelHits2_mu_hist = fs->make<TH1I>("nValidPixelHits2_mu", "Valid Pixel Hits 2; Hits; Entries", 20, 0, 20);
     nTrackerLayersWithMeasurement1_mu_hist = fs->make<TH1I>("nTrackerLayersWithMeasurement1_mu", "Tracker Layers 1; Layers; Entries", 20, 0, 20);
     nTrackerLayersWithMeasurement2_mu_hist = fs->make<TH1I>("nTrackerLayersWithMeasurement2_mu", "Tracker Layers 2; Layers; Entries", 20, 0, 20);
-    trk_chi21_mu_hist = fs->make<TH1F>("trk_chi21_mu", "Track Chi2 1; #chi^{2}; Entries", 100, 0.0, 10.0);
-    trk_chi22_mu_hist = fs->make<TH1F>("trk_chi22_mu", "Track Chi2 2; #chi^{2}; Entries", 100, 0.0, 10.0);
-    rho_hist = fs->make<TH1F>("rho", "Event Energy Density; #rho; Entries", 100, 0.0, 50.0);
+    trk_chi21_mu_hist = fs->make<TH1F>("trk_chi21_mu", "Track Chi2 1; #chi^{2}; Entries", 100, 0.0, 100.0);
+    trk_chi22_mu_hist = fs->make<TH1F>("trk_chi22_mu", "Track Chi2 2; #chi^{2}; Entries", 100, 0.0, 200.0);
+    rho_hist = fs->make<TH1F>("rho", "Event Energy Density; #rho; Entries", 100, 0.0, 80.0);
     vtxMatch_hist = fs->make<TH1I>("vtxMatch", "Vertex Match; Matched (0/1); Entries", 2, 0, 2);
-    vtxChi2_hist = fs->make<TH1F>("vtxChi2", "Vertex #chi^{2}; #chi^{2}; Entries", 100, 0.0, 10.0);
+    vtxChi2_hist = fs->make<TH1F>("vtxChi2", "Vertex #chi^{2}; #chi^{2}; Entries", 100, 0.0, 15.0);
     vtxNdof_hist = fs->make<TH1I>("vtxNdof", "Vertex Ndof; Ndof; Entries", 50, 0, 50);
-    Lxy_hist = fs->make<TH1F>("Lxy", "Decay Length Lxy; Lxy (cm); Entries", 100, 0.0, 5.0);
+    Lxy_hist = fs->make<TH1F>("Lxy", "Decay Length Lxy; Lxy (cm); Entries", 100, 0.0, 1.0);
     LxyErr_hist = fs->make<TH1F>("LxyErr", "Lxy Error; Lxy Error (cm); Entries", 100, 0.0, 1.0);
     LxySig_hist = fs->make<TH1F>("LxySig", "Lxy Significance; Lxy / #sigma_{Lxy}; Entries", 100, 0.0, 10.0);
     vtxXError_hist = fs->make<TH1F>("vtxXError", "Vertex X Error; X Error (cm); Entries", 100, 0.0, 0.01);
@@ -959,8 +1083,8 @@ void ScoutingTreeMakerRun3::beginJob() {
     vtxZError_hist = fs->make<TH1F>("vtxZError", "Vertex Z Error; Z Error (cm); Entries", 100, 0.0, 0.05);
 
 
-    dimuon_hist = fs->make<TH1F>("dimuonMass", "Dimuon mass; Mass (GeV); Entries", 100, 0.0, 100.0); 
-    pt_dimu_hist = fs->make<TH1F>("pt_dimu", "Dimuon pT; pT (GeV); Entries", 100, 0.0, 100.0);
+    dimuon_hist = fs->make<TH1F>("dimuonMass", "Dimuon mass; Mass (GeV); Entries", 100, 0.0, 130.0); 
+    pt_dimu_hist = fs->make<TH1F>("pt_dimu", "Dimuon pT; pT (GeV); Entries", 100, 0.0, 130.0);
     pt1_mu_hist = fs->make<TH1F>("muon_pT","muon p_{T}; p_{T} (GeV); Entries", 100, 0.0, 150.0);
     pt2_mu_hist = fs->make<TH1F>("pt2_mu", "Muon 2 pT; pT (GeV); Entries", 100, 0.0, 100.0);
     eta1_mu_hist = fs->make<TH1F>("muon_eta", "muon #eta; #eta (GeV); Entries", 100, -2.7, 2.7);
@@ -970,7 +1094,7 @@ void ScoutingTreeMakerRun3::beginJob() {
     phi2_mu_hist = fs->make<TH1F>("phi2_mu", "Muon 2 #phi; #phi (rad); Entries", 100, -3.14, 3.14);
 
 
-    diele_hist = fs->make<TH1F>("dieleMass", "Dielectron mass; Mass (GeV); Entries", 100, 0.0, 100.0);pt_diele_hist = fs->make<TH1F>("pt_diele", "Dielectron pT; pT (GeV); Entries", 100, 0.0, 100.0);
+    diele_hist = fs->make<TH1F>("dieleMass", "Dielectron mass; Mass (GeV); Entries", 100, 0.0, 120.0);pt_diele_hist = fs->make<TH1F>("pt_diele", "Dielectron pT; pT (GeV); Entries", 100, 0.0, 100.0);
     dr_ele_hist = fs->make<TH1F>("dr_ele", "Delta R between electrons; #DeltaR; Entries", 100, 0.0, 5.0);
     pt1_ele_hist = fs->make<TH1F>("electron_pT","electron p_{T}; p_{T} (GeV); Entries", 100, 0.0, 150.0); 
     pt2_ele_hist = fs->make<TH1F>("pt2_ele", "Electron 2 pT; pT (GeV); Entries", 100, 0.0, 100.0);
@@ -979,18 +1103,18 @@ void ScoutingTreeMakerRun3::beginJob() {
     phi1_ele_hist = fs->make<TH1F>("phi1_ele", "Electron 1 #phi; #phi (rad); Entries", 100, -3.14, 3.14);
     phi2_ele_hist = fs->make<TH1F>("phi2_ele", "Electron 2 #phi; #phi (rad); Entries", 100, -3.14, 3.14);
     preshowerEnergy_ele_hist = fs->make<TH1F>("preshowerEnergy_ele", "Preshower Energy; Energy (GeV); Entries", 100, 0.0, 10.0);
-    corrEcalEnergyError_ele_hist = fs->make<TH1F>("corrEcalEnergyError_ele", "Corrected ECAL Energy Error; Energy Error (GeV); Entries", 100, 0.0, 5.0);
-    dEtaIn_ele_hist = fs->make<TH1F>("dEtaIn_ele", "dEtaIn; #Delta#eta_{in}; Entries", 100, -0.01, 0.01);
+    corrEcalEnergyError_ele_hist = fs->make<TH1F>("corrEcalEnergyError_ele", "Corrected ECAL Energy Error; Energy Error (GeV); Entries", 100, 0.0, 10.0);
+    dEtaIn_ele_hist = fs->make<TH1F>("dEtaIn_ele", "dEtaIn; #Delta#eta_{in}; Entries", 100, -0.1, 0.1);
     sigmaIetaIeta_ele_hist = fs->make<TH1F>("sigmaIetaIeta_ele", "Sigma iEta iEta; #sigma_{i#eta i#eta}; Entries", 100, 0.0, 0.05);
     hOverE_ele_hist = fs->make<TH1F>("hOverE_ele", "H/E; H/E; Entries", 100, 0.0, 0.2);
-    ooEMOop_ele_hist = fs->make<TH1F>("ooEMOop_ele", "1/E - 1/p; 1/E - 1/p; Entries", 100, -0.05, 0.05);
-    missingHits_ele_hist = fs->make<TH1I>("missingHits_ele", "Missing Hits; Hits; Entries", 10, 0, 10);
-    ecalIso_ele_hist = fs->make<TH1F>("ecalIso_ele", "ECAL Isolation; Isolation (GeV); Entries", 100, 0.0, 10.0);
-    hcalIso_ele_hist = fs->make<TH1F>("hcalIso_ele", "HCAL Isolation; Isolation (GeV); Entries", 100, 0.0, 10.0);
-    trackIso_ele_hist = fs->make<TH1F>("trackIso_ele", "Track Isolation; Isolation (GeV); Entries", 100, 0.0, 10.0);
+    ooEMOop_ele_hist = fs->make<TH1F>("ooEMOop_ele", "1/E - 1/p; 1/E - 1/p; Entries", 100, -0.5, 0.5);
+    missingHits_ele_hist = fs->make<TH1I>("missingHits_ele", "Missing Hits; Hits; Entries", 10, 0, 5.0);
+    ecalIso_ele_hist = fs->make<TH1F>("ecalIso_ele", "ECAL Isolation; Isolation (GeV); Entries", 100, 0.0, 45.0);
+    hcalIso_ele_hist = fs->make<TH1F>("hcalIso_ele", "HCAL Isolation; Isolation (GeV); Entries", 100, 0.0, 15.0);
+    trackIso_ele_hist = fs->make<TH1F>("trackIso_ele", "Track Isolation; Isolation (GeV); Entries", 100, 0.0, 12.0);
     r9_ele_hist = fs->make<TH1F>("r9_ele", "R9; R9; Entries", 100, 0.0, 1.2);
-    sMin_ele_hist = fs->make<TH1F>("sMin_ele", "sMin; sMin; Entries", 100, 0.0, 0.1);
-    sMaj_ele_hist = fs->make<TH1F>("sMaj_ele", "sMaj; sMaj; Entries", 100, 0.0, 0.1);
+    sMin_ele_hist = fs->make<TH1F>("sMin_ele", "sMin; sMin; Entries", 100, 0.0, 0.5);
+    sMaj_ele_hist = fs->make<TH1F>("sMaj_ele", "sMaj; sMaj; Entries", 100, 0.0, 1.0);
     rawEnergy_ele_hist = fs->make<TH1F>("rawEnergy_ele", "Raw Energy; Energy (GeV); Entries", 100, 0.0, 100.0);
 
 
@@ -1023,12 +1147,12 @@ void ScoutingTreeMakerRun3::beginJob() {
     m_PFJ_hist = fs->make<TH1F>("m_PFJ", "PFJet Mass; Mass (GeV); Entries", 100, 0.0, 200.0);
     jetArea_PFJ_hist = fs->make<TH1F>("jetArea_PFJ", "PFJet Area; Area; Entries", 100, 0.0, 2.0);
     chargedHadronEnergy_PFJ_hist = fs->make<TH1F>("chargedHadronEnergy_PFJ", "Charged Hadron Energy; Energy (GeV); Entries", 100, 0.0, 500.0);
-    neutralHadronEnergy_PFJ_hist = fs->make<TH1F>("neutralHadronEnergy_PFJ", "Neutral Hadron Energy; Energy (GeV); Entries", 100, 0.0, 500.0);
+    neutralHadronEnergy_PFJ_hist = fs->make<TH1F>("neutralHadronEnergy_PFJ", "Neutral Hadron Energy; Energy (GeV); Entries", 100, 0.0, 5000.0);
     photonEnergy_PFJ_hist = fs->make<TH1F>("photonEnergy_PFJ", "Photon Energy; Energy (GeV); Entries", 100, 0.0, 200.0);
     electronEnergy_PFJ_hist = fs->make<TH1F>("electronEnergy_PFJ", "Electron Energy; Energy (GeV); Entries", 100, 0.0, 100.0);
-    muonEnergy_PFJ_hist = fs->make<TH1F>("muonEnergy_PFJ", "Muon Energy; Energy (GeV); Entries", 100, 0.0, 100.0);
-    HFHadronEnergy_PFJ_hist = fs->make<TH1F>("HFHadronEnergy_PFJ", "HF Hadron Energy; Energy (GeV); Entries", 100, 0.0, 200.0);
-    HFEMEnergy_PFJ_hist = fs->make<TH1F>("HFEMEnergy_PFJ", "HF EM Energy; Energy (GeV); Entries", 100, 0.0, 200.0);
+    muonEnergy_PFJ_hist = fs->make<TH1F>("muonEnergy_PFJ", "Muon Energy; Energy (GeV); Entries", 100, 0.0, 200.0);
+    HFHadronEnergy_PFJ_hist = fs->make<TH1F>("HFHadronEnergy_PFJ", "HF Hadron Energy; Energy (GeV); Entries", 100, 0.0, 5000.0);
+    HFEMEnergy_PFJ_hist = fs->make<TH1F>("HFEMEnergy_PFJ", "HF EM Energy; Energy (GeV); Entries", 100, 0.0, 100.0);
     chargedHadronMultiplicity_PFJ_hist = fs->make<TH1F>("chargedHadronMultiplicity_PFJ", "Charged Hadron Multiplicity; Multiplicity; Entries", 50, 0, 50);
     neutralHadronMultiplicity_PFJ_hist = fs->make<TH1F>("neutralHadronMultiplicity_PFJ", "Neutral Hadron Multiplicity; Multiplicity; Entries", 50, 0, 50);
     photonMultiplicity_PFJ_hist = fs->make<TH1F>("photonMultiplicity_PFJ", "Photon Multiplicity; Multiplicity; Entries", 50, 0, 50);
@@ -1040,11 +1164,15 @@ void ScoutingTreeMakerRun3::beginJob() {
     csv_PFJ_hist = fs->make<TH1F>("csv_PFJ", "CSV Discriminator; CSV; Entries", 100, 0.0, 1.0);
     mvaDiscriminator_PFJ_hist = fs->make<TH1F>("mvaDiscriminator_PFJ", "MVA Discriminator; MVA Score; Entries", 100, -1.0, 1.0);
 
-
-
     pt1_PFJ_hist = fs->make<TH1F>("PFJ_pT","PF jet p_{T}; p_{T} (GeV); Entries", 100, 0.0, 170.0);
     eta1_PFJ_hist = fs->make<TH1F>("PFJ_eta", "PF jet #eta; #eta (GeV); Entries", 100, -2.7, 2.7);
 
+    PF_pT_211_hist = fs->make<TH1F>("pT_211", "PF #pi^{+} p_{T} (GeV); Entries", 100,0.0,30.0);
+    PF_pT_n211_hist = fs->make<TH1F>("pT_n211", "PF #pi^{-} p_{T} (GeV); Entries", 100,0.0,65.0);
+    PF_pT_130_hist = fs->make<TH1F>("pT_130", "PF K_{L}^{0} p_{T} (GeV); Entries", 100,0.0,25.0);
+    PF_pT_22_hist = fs->make<TH1F>("pT_22", "PF #gamma p_{T} (GeV); Entries", 100,0.0,120.0);
+    PF_pT_2_hist = fs->make<TH1F>("pT_2", "PF d-quark p_{T} (GeV); Entries", 100,0.0,6.0);
+    PF_pT_1_hist = fs->make<TH1F>("pT_1", "PF u-quark p_{T} (GeV); Entries", 100,0.0,6.0);
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
