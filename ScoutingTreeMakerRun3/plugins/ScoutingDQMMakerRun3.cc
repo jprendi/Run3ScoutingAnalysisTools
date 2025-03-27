@@ -78,7 +78,7 @@ private:
   void analyze(const edm::Event&, const edm::EventSetup&) override;
   void bookHistograms(DQMStore::IBooker&, edm::Run const&, edm::EventSetup const&) override;
 
-  const std::string outputInternalPath_;
+  const std::string outputInternalPath_ = "HLT/ScoutingOffline/Misc";
 
   const edm::InputTag triggerResultsTag;
   const edm::EDGetTokenT<edm::TriggerResults>             triggerResultsToken;
@@ -488,13 +488,16 @@ std::cout << "electrons  " << electronsH->size() << "  \n ";
 std::cout << "vertices  " << verticesH->size() << "  \n "; 
 */
 
-
-if (muonsH->size()<2) return;
-
+  vector<int> idx = {0,1,2,3,4};
+	
+// vector<int> idx;
+  
+//  if (muonsH->size()<2) return;
+std::cout << muonsH->size() << "\n";
+if (muonsH->size()>1)
+{
  // int nMuons=0;
  // nMuonsID=0;
-
-  vector<int> idx;
 
   int j=0;
   for (auto muons_iter = muonsH->begin(); muons_iter != muonsH->end(); ++muons_iter) {
@@ -557,7 +560,8 @@ if (muonsH->size()<2) return;
       mass_mu=dimu.M();
       pt_dimu=dimu.Pt();
       dr_mu=mu1.DeltaR(mu2);
-
+      
+      
       //std::cout<<"pt: "<<pt1_mu<<", "<<pt2_mu<<", nMuonsID: "<<nMuonsID<<std::endl;
 
       Handle<double> rhoH;
@@ -620,6 +624,11 @@ if (muonsH->size()<2) return;
         LxyErr = sqrt(dx*dx*(vtx->xError())*(vtx->xError()) + dy*dy*(vtx->yError())*(vtx->yError())) / Lxy;
         LxySig = Lxy/LxyErr;
       }
+      std::cout << "enough muons";
+  }
+  else{ std::cout<< "not enough muons";}
+
+
 
       //std::cout<<"Lxy: "<<Lxy<<" LxyErr: "<<LxyErr<<" LxySig: "<<LxySig<<std::endl;
       
