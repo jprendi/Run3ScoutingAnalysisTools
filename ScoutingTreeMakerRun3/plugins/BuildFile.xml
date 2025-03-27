@@ -9,4 +9,6 @@
 <use name="L1Trigger/L1TGlobal"/>
 <use name="DataFormats/L1TGlobal"/>
 <use name="HLTrigger/HLTcore"/>
+<use name="DQMServices/Core"/>
+
 <flags EDM_PLUGIN="1"/>

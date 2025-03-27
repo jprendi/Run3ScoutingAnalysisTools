@@ -1,9 +1,9 @@
 // -*- C++ -*-
 //
 // Package:    Run3ScoutingAnalysisTools/ScoutingTreeMakerRun3
-// Class:      ScoutingTreeMakerRun3
+// Class:      ScoutingDQMMakerRun3
 //
-/**\class ScoutingTreeMakerRun3 ScoutingTreeMakerRun3.cc Run3ScoutingAnalysisTools/ScoutingTreeMakerRun3/plugins/ScoutingTreeMakerRun3.cc
+/**\class ScoutingTreeMakerRun3 ScoutingDQMMakerRun3.cc Run3ScoutingAnalysisTools/ScoutingTreeMakerRun3/plugins/ScoutingDQMMakerRun3.cc
 
  Description: [one line class summary]
 
@@ -24,7 +24,7 @@
 #include "DQMServices/Core/interface/DQMEDAnalyzer.h"
 
 #include "FWCore/Framework/interface/Frameworkfwd.h"
-// #include "FWCore/Framework/interface/one/EDAnalyzer.h"
+
 
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
@@ -66,10 +66,10 @@
 // from  edm::one::EDAnalyzer<>
 // This will improve performance in multithreaded jobs.
 
-class ScoutingTreeMakerRun3 : public DQMEDAnalyzer {
+class ScoutingDQMMakerRun3 : public DQMEDAnalyzer {
 public:
-  explicit ScoutingTreeMakerRun3(const edm::ParameterSet&);
-  ~ScoutingTreeMakerRun3() override;
+  explicit ScoutingDQMMakerRun3(const edm::ParameterSet&);
+  ~ScoutingDQMMakerRun3() override;
 
   static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
@@ -77,6 +77,8 @@ private:
   // void beginJob() override;
   void analyze(const edm::Event&, const edm::EventSetup&) override;
   void bookHistograms(DQMStore::IBooker&, edm::Run const&, edm::EventSetup const&) override;
+
+  const std::string outputInternalPath_;
 
   const edm::InputTag triggerResultsTag;
   const edm::EDGetTokenT<edm::TriggerResults>             triggerResultsToken;
@@ -386,7 +388,7 @@ private:
 //
 // constructors and destructor
 //
-ScoutingTreeMakerRun3::ScoutingTreeMakerRun3(const edm::ParameterSet& iConfig):
+ScoutingDQMMakerRun3::ScoutingDQMMakerRun3(const edm::ParameterSet& iConfig):
     triggerResultsTag        (iConfig.getParameter<edm::InputTag>("triggerresults")),
     triggerResultsToken      (consumes<edm::TriggerResults>                    (triggerResultsTag)),
     muonsToken               (consumes<std::vector<Run3ScoutingMuon> >             (iConfig.getParameter<edm::InputTag>("muons"))),
@@ -413,7 +415,7 @@ ScoutingTreeMakerRun3::ScoutingTreeMakerRun3(const edm::ParameterSet& iConfig):
     }
 }
 
-ScoutingTreeMakerRun3::~ScoutingTreeMakerRun3() {
+ScoutingDQMMakerRun3::~ScoutingDQMMakerRun3() {
   // do anything here that needs to be done at desctruction time
   // (e.g. close files, deallocate resources etc.)
   //
@@ -425,7 +427,7 @@ ScoutingTreeMakerRun3::~ScoutingTreeMakerRun3() {
 //
 
 // ------------ method called for each event  ------------
-void ScoutingTreeMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup) {
+void ScoutingDQMMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup) {
   using namespace edm;
   using namespace std;
   using namespace reco;
@@ -905,9 +907,11 @@ for (float pt : pT_2) {
 }
 
 // ------------ method called once each job just before starting event loop  ------------
-void ScoutingTreeMakerRun3::bookHistograms(DQMStore::IBooker & ibook, edm::Run const& run, edm::EventSetup const& iSetup) {
+void ScoutingDQMMakerRun3::bookHistograms(DQMStore::IBooker & ibook, edm::Run const& run, edm::EventSetup const& iSetup) {
     
 	
+  ibook.setCurrentFolder(outputInternalPath_);
+
 	
 	// we say thank you chatGPT for doing what I am too lazy to do by hand
     trackIso1_mu_hist = ibook.book1D("trackIso1_mu", "Track Isolation 1; Isolation; Entries", 100, 0.0, 10.0);
@@ -1021,9 +1025,8 @@ void ScoutingTreeMakerRun3::bookHistograms(DQMStore::IBooker & ibook, edm::Run c
     PF_pT_2_hist = ibook.book1D("pT_2", "PF d-quark p_{T} (GeV); Entries", 100,0.0,6.0);
     PF_pT_1_hist = ibook.book1D("pT_1", "PF u-quark p_{T} (GeV); Entries", 100,0.0,6.0);
 }
-
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
-void ScoutingTreeMakerRun3::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+void ScoutingDQMMakerRun3::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   //The following says we do not know what parameters are allowed so do no validation
   // Please change this to state exactly what you do use, even if it is no parameters
   edm::ParameterSetDescription desc;
@@ -1038,4 +1041,4 @@ void ScoutingTreeMakerRun3::fillDescriptions(edm::ConfigurationDescriptions& des
 }
 
 //define this as a plug-in
-DEFINE_FWK_MODULE(ScoutingTreeMakerRun3);
+DEFINE_FWK_MODULE(ScoutingDQMMakerRun3);

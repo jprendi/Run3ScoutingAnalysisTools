@@ -1,0 +1,83 @@
+import FWCore.ParameterSet.Config as cms
+from DQMServices.Core.DQMEDAnalyzer import DQMEDAnalyzer
+
+process = cms.Process("SKIM")
+
+process.load("FWCore.MessageService.MessageLogger_cfi")
+
+process.load("DQMServices.Components.DQMStoreStats_cfi")
+process.load('Configuration.StandardSequences.Services_cff')
+
+process.load("DQMServices.Components.DQMEnvironment_cfi")
+process.DQMStore = cms.Service("DQMStore")
+process.load("DQMServices.FileIO.DQMFileSaverOnline_cfi")
+process.DQMoutput = cms.OutputModule("DQMRootOutputModule",
+                                     fileName = cms.untracked.string("DQM_test.root"))
+
+
+
+process.options = cms.untracked.PSet(
+    wantSummary = cms.untracked.bool(True)
+)
+
+process.MessageLogger.cerr.FwkSummary.reportEvery = 1000
+process.MessageLogger.cerr.FwkReport.reportEvery = 1000
+
+
+
+process.maxEvents = cms.untracked.PSet(
+    input = cms.untracked.int32(-1)
+)
+
+process.source = cms.Source("PoolSource",
+    fileNames = cms.untracked.vstring(
+       'file:/data/jprendi/diff_Tags_initial/src/scouting_kickoff/outputScoutingPF_PromptTag.root'
+ )
+)
+
+#process.load("Run3ScoutingAnalysisTools.ScoutingFilter.ScoutingFilter_cff")
+
+process.load("EventFilter.L1TRawToDigi.gtStage2Digis_cfi")
+process.gtStage2Digis.InputLabel = cms.InputTag( "hltFEDSelectorL1" )
+
+#process.TFileService = cms.Service("TFileService", 
+  #  fileName = cms.string("scout.root")
+#)
+
+#process.ScoutingFilterPath = cms.Path(process.scoutingFilter)
+
+process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
+from Configuration.AlCa.GlobalTag import GlobalTag
+#process.GlobalTag = GlobalTag(process.GlobalTag, '124X_dataRun3_Prompt_v4', '') # Run 3 2022
+#process.GlobalTag = GlobalTag(process.GlobalTag, '132X_dataRun3_Prompt_v2', '') # Run 3 2023
+process.GlobalTag = GlobalTag(process.GlobalTag, '140X_dataRun3_Prompt_v4', '') # Run 3 2024
+
+#L1Info = ["L1_DoubleMu_12_5","L1_DoubleMu_15_7","L1_DoubleMu4p5er2p0_SQ_OS_Mass_Min7","L1_DoubleMu4p5er2p0_SQ_OS_Mass_7to18","L1_DoubleMu4_SQ_OS_dR_Max1p2","L1_DoubleMu4p5_SQ_OS_dR_Max1p2"]
+#L1Info = ["L1_DoubleMu_12_5","L1_DoubleMu_15_7","L1_DoubleMu4p5er2p0_SQ_OS_Mass_Min7","L1_DoubleMu4p5er2p0_SQ_OS_Mass_7to18","L1_DoubleMu4_SQ_OS_dR_Max1p2","L1_DoubleMu4p5_SQ_OS_dR_Max1p2", "L1_DoubleMu0er1p4_SQ_OS_dR_Max1p4", "L1_DoubleMu0er1p5_SQ_OS_dR_Max1p4", "L1_DoubleMu8_SQ"]
+L1Info = ["L1_DoubleMu_12_5","L1_DoubleMu_15_7","L1_DoubleMu4p5er2p0_SQ_OS_Mass_Min7","L1_DoubleMu4p5er2p0_SQ_OS_Mass_7to18","L1_DoubleMu8_SQ","L1_DoubleMu0er1p4_SQ_OS_dEta_Max1p2","L1_DoubleMu4er2p0_SQ_OS_dR_Max1p6","L1_DoubleMu5_SQ_OS_dR_Max1p6","L1_DoubleMu3er2p0_SQ_OS_dR_Max1p6","L1_DoubleMu0er1p5_SQ_OS_dEta_Max1p2","L1_DoubleMu0er2p0_SQ_OS_dEta_Max1p6","L1_DoubleMu0er1p4_OQ_OS_dEta_Max1p6","L1_DoubleMu0er2p0_SQ_OS_dEta_Max1p5","L1_DoubleMu0er1p4_SQ_OS_dR_Max1p4","L1_DoubleMu0er1p5_SQ_OS_dR_Max1p4","L1_DoubleMu4p5_SQ_OS_dR_Max1p2","L1_DoubleMu4_SQ_OS_dR_Max1p2","L1_DoubleMu0_Upt15_Upt7","L1_DoubleMu0_Upt6_IP_Min1_Upt4","L1_DoubleMu6_Upt6_SQ_er2p0","L1_DoubleMu7_Upt7_SQ_er2p0","L1_DoubleMu8_Upt8_SQ_er2p0","L1_DoubleMu0er2p0_SQ_dEta_Max1p6","L1_DoubleMu0er2p0_SQ_dEta_Max1p5"]
+
+process.scoutingTree = DQMEDAnalyzer('ScoutingDQMMakerRun3',
+                                      triggerresults   = cms.InputTag("TriggerResults", "", "HLT"),
+                                      ReadPrescalesFromFile = cms.bool( False ),
+                                      AlgInputTag       = cms.InputTag("gtStage2Digis"),
+                                      l1tAlgBlkInputTag = cms.InputTag("gtStage2Digis"),
+                                      l1tExtBlkInputTag = cms.InputTag("gtStage2Digis"),
+                                      doL1 = cms.bool( True ),
+                                      l1Seeds           = cms.vstring(L1Info),
+                                      muons             = cms.InputTag("hltScoutingMuonPackerNoVtx"),
+                                      electrons         = cms.InputTag("hltScoutingEgammaPacker"),
+                                      photons           = cms.InputTag("hltScoutingEgammaPacker"),
+                                      pfcands           = cms.InputTag("hltScoutingPFPacker"),
+                                      pfjets            = cms.InputTag("hltScoutingPFPacker"),
+                                      tracks            = cms.InputTag("hltScoutingTrackPacker"),
+                                      primaryVertices   = cms.InputTag("hltScoutingPrimaryVertexPacker","primaryVtx"),
+                                      displacedVertices = cms.InputTag("hltScoutingMuonPackerNoVtx","displacedVtx"),
+                                      pfMet             = cms.InputTag("hltScoutingPFPacker","pfMetPt"),
+                                      pfMetPhi          = cms.InputTag("hltScoutingPFPacker","pfMetPhi"),
+                                      rho               = cms.InputTag("hltScoutingPFPacker","rho"),
+                                  )
+process.dqmSaver.tag = 'SCOUTING'   
+
+process.p = cms.Path(process.gtStage2Digis+process.scoutingTree + process.dqmSaver)
+
+process.DQMoutput_step = cms.EndPath(process.DQMoutput)
