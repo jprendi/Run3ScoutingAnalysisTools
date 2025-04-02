@@ -133,7 +133,26 @@ private:
   dqm::reco::MonitorElement* PF_phi_1_hist;
   dqm::reco::MonitorElement* PF_phi_2_hist;
 
- 
+// photon histograms
+   dqm::reco::MonitorElement* pt_pho_hist;
+   dqm::reco::MonitorElement* eta_pho_hist;
+   dqm::reco::MonitorElement* phi_pho_hist;
+   dqm::reco::MonitorElement* m_pho_hist;
+   dqm::reco::MonitorElement* rawEnergy_pho_hist;
+   dqm::reco::MonitorElement* preshowerEnergy_pho_hist;
+   dqm::reco::MonitorElement* corrEcalEnergyError_pho_hist;
+   dqm::reco::MonitorElement* sigmaIetaIeta_pho_hist;
+   dqm::reco::MonitorElement* hOverE_pho_hist;
+   dqm::reco::MonitorElement* ecalIso_pho_hist;
+   dqm::reco::MonitorElement* hcalIso_pho_hist;
+   dqm::reco::MonitorElement* trackIso_pho_hist;
+   dqm::reco::MonitorElement* r9_pho_hist;
+   dqm::reco::MonitorElement* sMin_pho_hist;
+   dqm::reco::MonitorElement* sMaj_pho_hist;
+
+
+
+
 };
 
 //
@@ -191,10 +210,14 @@ void ScoutingDQMMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSet
   using namespace std;
   using namespace reco;
 
-
+// all the handles needed
  Handle<vector<Run3ScoutingParticle> > pfcandsH;
-   iEvent.getByToken(pfcandsToken, pfcandsH);
- 
+ iEvent.getByToken(pfcandsToken, pfcandsH);
+ Handle<vector<Run3ScoutingPhoton> > photonsH;
+ iEvent.getByToken(photonsToken, photonsH);
+
+// fill the PF candidate histograms (no electrons!)
+
    std::cout << "\n"; 
    for (auto iter = pfcandsH->begin(); iter != pfcandsH->end(); ++iter){
 	   std::cout << " " << iter->pdgId() << " ";
@@ -210,6 +233,27 @@ void ScoutingDQMMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSet
        }
    }
   
+// fill all the photon histograms
+
+
+   for (auto iter = photonsH->begin(); iter != photonsH->end(); ++iter){
+	pt_pho_hist->Fill(iter->pt());
+        eta_pho_hist->Fill(iter->eta());
+	phi_pho_hist->Fill(iter->phi());
+    	m_pho_hist->Fill(iter->m());
+	rawEnergy_pho_hist->Fill(iter->rawEnergy());
+       	preshowerEnergy_pho_hist->Fill(iter->preshowerEnergy());
+    	corrEcalEnergyError_pho_hist->Fill(iter->corrEcalEnergyError());
+      	sigmaIetaIeta_pho_hist->Fill(iter->sigmaIetaIeta());
+    	hOverE_pho_hist->Fill(iter->hOverE());
+    	ecalIso_pho_hist->Fill(iter->ecalIso());
+    	hcalIso_pho_hist->Fill(iter->hcalIso());
+   	trackIso_pho_hist->Fill(iter->trkIso());
+   	r9_pho_hist->Fill(iter->r9());
+	sMin_pho_hist->Fill(iter->sMin()); 
+	sMaj_pho_hist->Fill(iter->sMaj());
+   } 
+
 
 }
 
@@ -247,7 +291,43 @@ void ScoutingDQMMakerRun3::bookHistograms(DQMStore::IBooker & ibook, edm::Run co
     PF_phi_1_hist = ibook.book1DD("phi_2", "PF HF h #phi (rad); Entries", 100, -3.14, 3.14);
     PF_phi_2_hist = ibook.book1DD("phi_1", "PF HF e/#gamma #phi (rad); Entries", 100, -3.14, 3.14);
 
-}
+
+     pt_pho_hist = ibook.book1D("pt_pho", "Photon pT; pT (GeV); Entries", 100, 0.0, 200.0);
+     eta_pho_hist = ibook.book1D("eta_pho", "photon #eta; #eta (GeV); Entries", 100, -2.7, 2.7);
+     phi_pho_hist = ibook.book1D("phi_pho", "Photon #phi; #phi (rad); Entries", 100, -3.14, 3.14);
+     m_pho_hist = ibook.book1D("m_pho", "Photon #m; m; Entries", 100, -0.01, 0.01);
+     rawEnergy_pho_hist = ibook.book1D("rawEnergy_pho", "Raw Energy Photon; Energy (GeV); Entries", 100, 0.0, 250.0);
+     preshowerEnergy_pho_hist = ibook.book1D("preshowerEnergy_pho", "Preshower Energy Photon; Energy (GeV); Entries", 100, 0.0, 10.0);
+     corrEcalEnergyError_pho_hist = ibook.book1D("corrEcalEnergyError_pho", "Corrected ECAL Energy Error Photon; Energy Error (GeV); Entries", 100, 0.0, 20.0);
+     sigmaIetaIeta_pho_hist = ibook.book1D("sigmaIetaIeta_pho", "Sigma iEta iEta Photon; #sigma_{i#eta i#eta}; Entries", 100, 0.0, 0.5);
+     hOverE_pho_hist = ibook.book1D("hOverE_pho", "H/E Photon; H/E; Entries", 100, 0.0, 1.5);
+     ecalIso_pho_hist = ibook.book1D("ecalIso_pho", "ECAL Isolation Photon; Isolation (GeV); Entries", 100, 0.0, 100.0);
+     hcalIso_pho_hist = ibook.book1D("hcalIso_pho", "HCAL Isolation Photon; Isolation (GeV); Entries", 100, 0.0, 100.0);
+     trackIso_pho_hist = ibook.book1D("trackIso_pho", "Track Isolation Photon; Isolation (GeV); Entries", 100, 0.0, 0.5);
+     r9_pho_hist = ibook.book1D("r9_pho", "R9; R9; Entries", 100, 0.0, 5);
+     sMin_pho_hist = ibook.book1D("sMin_pho", "sMin Photon; sMin; Entries", 100, 0.0, 3);
+     sMaj_pho_hist = ibook.book1D("sMaj_pho", "sMaj Photon ; sMaj; Entries", 100, 0.0, 3);
+
+
+/*
+     pt_pho_hist = ibook.book1D("pt_pho", "Photon pT; pT (GeV); Entries", 100, 0.0, 200.0);
+          eta_pho_hist = ibook.book1D("eta_pho", "photon #eta; #eta (GeV); Entries", 100, -2.7, 2.7);
+    phi_pho_hist = ibook.book1D("phi_pho", "Photon #phi; #phi (rad); Entries", 100, -3.14, 3.14);
+     m_pho_hist = ibook.book1D("m_pho", "Photon #m; m; Entries", 100, -2.7, 2.7);
+     rawEnergy_pho_hist = ibook.book1D("rawEnergy_pho", "Raw Energy Photon; Energy (GeV); Entries", 100, 0.0, 500.0);
+     preshowerEnergy_pho_hist = ibook.book1D("preshowerEnergy_pho", "Preshower Energy Photon; Energy (GeV); Entries", 100, 0.0, 10.0);
+     corrEcalEnergyError_pho_hist = ibook.book1D("corrEcalEnergyError_pho", "Corrected ECAL Energy Error Photon; Energy Error (GeV); Entries", 100, 0.0, 100.0);
+     sigmaIetaIeta_pho_hist = ibook.book1D("sigmaIetaIeta_pho", "Sigma iEta iEta Photon; #sigma_{i#eta i#eta}; Entries", 100, 0.0, 0.05);
+     hOverE_pho_hist = ibook.book1D("hOverE_pho", "H/E Photon; H/E; Entries", 100, 0.0, 0.2);
+     ecalIso_pho_hist = ibook.book1D("ecalIso_pho", "ECAL Isolation Photon; Isolation (GeV); Entries", 100, 0.0, 10.0);
+     hcalIso_pho_hist = ibook.book1D("hcalIso_pho", "HCAL Isolation Photon; Isolation (GeV); Entries", 100, 0.0, 100.0);
+     trackIso_pho_hist = ibook.book1D("trackIso_pho", "Track Isolation Photon; Isolation (GeV); Entries", 100, 0.0, 10.0);
+     r9_pho_hist = ibook.book1D("r9_pho", "R9; R9; Entries", 100, 0.0, 1.2);
+     sMin_pho_hist = ibook.book1D("sMin_pho", "sMin Photon; sMin; Entries", 100, 0.0, 0.1);
+     sMaj_pho_hist = ibook.book1D("sMaj_pho", "sMaj Photon ; sMaj; Entries", 100, 0.0, 0.1);
+
+     */
+     }
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
 void ScoutingDQMMakerRun3::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   //The following says we do not know what parameters are allowed so do no validation
