@@ -110,6 +110,8 @@ private:
   dqm::reco::MonitorElement* PF_pT_n211_hist;
   dqm::reco::MonitorElement* PF_pT_130_hist;
   dqm::reco::MonitorElement* PF_pT_22_hist;
+  dqm::reco::MonitorElement* PF_pT_13_hist;
+  dqm::reco::MonitorElement* PF_pT_n13_hist;
   dqm::reco::MonitorElement* PF_pT_1_hist;
   dqm::reco::MonitorElement* PF_pT_2_hist;
  
@@ -117,6 +119,8 @@ private:
   dqm::reco::MonitorElement* PF_eta_n211_hist;
   dqm::reco::MonitorElement* PF_eta_130_hist;
   dqm::reco::MonitorElement* PF_eta_22_hist;
+  dqm::reco::MonitorElement* PF_eta_13_hist;
+  dqm::reco::MonitorElement* PF_eta_n13_hist;
   dqm::reco::MonitorElement* PF_eta_1_hist;
   dqm::reco::MonitorElement* PF_eta_2_hist;
 
@@ -124,6 +128,8 @@ private:
   dqm::reco::MonitorElement* PF_phi_n211_hist;
   dqm::reco::MonitorElement* PF_phi_130_hist;
   dqm::reco::MonitorElement* PF_phi_22_hist;
+  dqm::reco::MonitorElement* PF_phi_13_hist;
+  dqm::reco::MonitorElement* PF_phi_n13_hist;
   dqm::reco::MonitorElement* PF_phi_1_hist;
   dqm::reco::MonitorElement* PF_phi_2_hist;
 
@@ -194,11 +200,13 @@ void ScoutingDQMMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSet
 	   std::cout << " " << iter->pdgId() << " ";
      switch (iter->pdgId()){ 
        case 211: PF_pT_211_hist->Fill(iter->pt()); PF_eta_211_hist->Fill(iter->eta()); PF_phi_211_hist->Fill(iter->phi());    break;
-       case -211: PF_pT_n211_hist->Fill(iter->pt()); PF_eta_n211_hist->Fill(iter->eta()); PF_phi_211_hist->Fill(iter->phi());    break;
-       case 130: PF_pT_130_hist->Fill(iter->pt()); PF_eta_130_hist->Fill(iter->eta()); PF_phi_211_hist->Fill(iter->phi());    break;
-       case 22: PF_pT_22_hist->Fill(iter->pt()); PF_eta_22_hist->Fill(iter->eta()); PF_phi_211_hist->Fill(iter->phi());    break;
-       case 1: PF_pT_1_hist->Fill(iter->pt()); PF_eta_1_hist->Fill(iter->eta()); PF_phi_211_hist->Fill(iter->phi());    break;
-       case 2: PF_pT_2_hist->Fill(iter->pt()); PF_eta_2_hist->Fill(iter->eta()); PF_phi_211_hist->Fill(iter->phi());    break; 
+       case -211: PF_pT_n211_hist->Fill(iter->pt()); PF_eta_n211_hist->Fill(iter->eta()); PF_phi_n211_hist->Fill(iter->phi());    break;
+       case 130: PF_pT_130_hist->Fill(iter->pt()); PF_eta_130_hist->Fill(iter->eta()); PF_phi_130_hist->Fill(iter->phi());    break;
+       case 22: PF_pT_22_hist->Fill(iter->pt()); PF_eta_22_hist->Fill(iter->eta()); PF_phi_22_hist->Fill(iter->phi());    break;
+       case 13: PF_pT_13_hist->Fill(iter->pt()); PF_eta_13_hist->Fill(iter->eta()); PF_phi_13_hist->Fill(iter->phi());    break;
+       case -13: PF_pT_n13_hist->Fill(iter->pt()); PF_eta_n13_hist->Fill(iter->eta()); PF_phi_n13_hist->Fill(iter->phi());    break;
+       case 1: PF_pT_1_hist->Fill(iter->pt()); PF_eta_1_hist->Fill(iter->eta()); PF_phi_1_hist->Fill(iter->phi());    break;
+       case 2: PF_pT_2_hist->Fill(iter->pt()); PF_eta_2_hist->Fill(iter->eta()); PF_phi_1_hist->Fill(iter->phi());    break; 
        }
    }
   
@@ -211,27 +219,33 @@ void ScoutingDQMMakerRun3::bookHistograms(DQMStore::IBooker & ibook, edm::Run co
 	
   ibook.setCurrentFolder(outputInternalPath_);
 
-    PF_pT_211_hist = ibook.book1DD("pT_211", "PF #pi^{+} p_{T} (GeV); Entries", 100,0.0,13.0);
-    PF_pT_n211_hist = ibook.book1DD("pT_n211", "PF #pi^{-} p_{T} (GeV); Entries", 100,0.0,14.0);
-    PF_pT_130_hist = ibook.book1DD("pT_130", "PF K_{L}^{0} p_{T} (GeV); Entries", 100,0.0,20.0);
+    PF_pT_211_hist = ibook.book1DD("pT_211", "PF h^{+}  p_{T} (GeV); Entries", 100,0.0,13.0);
+    PF_pT_n211_hist = ibook.book1DD("pT_n211", "PF h^{-} p_{T} (GeV); Entries", 100,0.0,14.0);
+    PF_pT_130_hist = ibook.book1DD("pT_130", "PF h^{0} p_{T} (GeV); Entries", 100,0.0,20.0);
     PF_pT_22_hist = ibook.book1DD("pT_22", "PF #gamma p_{T} (GeV); Entries", 100,0.0,18.0);
-    PF_pT_2_hist = ibook.book1DD("pT_2", "PF d-quark p_{T} (GeV); Entries", 100,0.0,4.5);
-    PF_pT_1_hist = ibook.book1DD("pT_1", "PF u-quark p_{T} (GeV); Entries", 100,0.0,6.0);
+    PF_pT_13_hist = ibook.book1DD("pT_13", "PF #mu^{+} p_{T} (GeV); Entries", 100,0.0,200.0);
+    PF_pT_n13_hist = ibook.book1DD("pT_n13", "PF #mu^{-} p_{T} (GeV); Entries", 100,0.0,200.0);
+    PF_pT_2_hist = ibook.book1DD("pT_2", "PF HF h (GeV); Entries", 100,0.0,4.5);
+    PF_pT_1_hist = ibook.book1DD("pT_1", "PF HF e/#gamma p_{T} (GeV); Entries", 100,0.0,6.0);
 
-    PF_eta_211_hist = ibook.book1DD("eta_211", "PF #pi^{+} #eta; Entries", 100, -5.0, 5.0);
-    PF_eta_n211_hist = ibook.book1DD("eta_n211", "PF #pi^{-} #eta; Entries", 100, -5.0, 5.0);
-    PF_eta_130_hist = ibook.book1DD("eta_130", "PF K_{L}^{0} #eta; Entries", 100, -5.0, 5.0);
+
+    PF_eta_211_hist = ibook.book1DD("eta_211", "PF h^{+} #eta; Entries", 100, -5.0, 5.0);
+    PF_eta_n211_hist = ibook.book1DD("eta_n211", "PF h^{-} #eta; Entries", 100, -5.0, 5.0);
+    PF_eta_130_hist = ibook.book1DD("eta_130", "PF h^{0} #eta; Entries", 100, -5.0, 5.0);
     PF_eta_22_hist = ibook.book1DD("eta_22", "PF #gamma #eta; Entries", 100, -5.0, 5.0);
-    PF_eta_1_hist = ibook.book1DD("eta_2", "PF d-quark #eta; Entries", 100, -5.0, 5.0);
-    PF_eta_2_hist = ibook.book1DD("eta_1", "PF u-quark #eta; Entries", 100, -5.0, 5.0);
+    PF_eta_13_hist = ibook.book1DD("eta_13", "PF #mu^{+} #eta; Entries", 100, -5.0, 5.0);
+    PF_eta_n13_hist = ibook.book1DD("eta_n13", "PF #mu^{-} #eta; Entries", 100, -5.0, 5.0);
+    PF_eta_1_hist = ibook.book1DD("eta_2", "PF HF h #eta; Entries", 100, -5.0, 5.0);
+    PF_eta_2_hist = ibook.book1DD("eta_1", "PF HF e/#gamma #eta; Entries", 100, -5.0, 5.0);
 
-    PF_phi_211_hist = ibook.book1DD("phi_211", "PF #pi^{+} #phi (rad); Entries", 100, -3.14, 3.14);
-    PF_phi_n211_hist = ibook.book1DD("phi_n211", "PF #pi^{-} #phi (rad); Entries", 100, -3.14, 3.14);
-    PF_phi_130_hist = ibook.book1DD("phi_130", "PF K_{L}^{0} #phi (rad); Entries", 100, -3.14, 3.14);
+    PF_phi_211_hist = ibook.book1DD("phi_211", "PF h^{+} #phi (rad); Entries", 100, -3.14, 3.14);
+    PF_phi_n211_hist = ibook.book1DD("phi_n211", "PF h^{-} #phi (rad); Entries", 100, -3.14, 3.14);
+    PF_phi_130_hist = ibook.book1DD("phi_130", "PF h^{0} #phi (rad); Entries", 100, -3.14, 3.14);
     PF_phi_22_hist = ibook.book1DD("phi_22", "PF #gamma #phi (rad); Entries", 100, -3.14, 3.14);
-    PF_phi_1_hist = ibook.book1DD("phi_2", "PF d-quark #phi (rad); Entries", 100, -3.14, 3.14);
-    PF_phi_2_hist = ibook.book1DD("phi_1", "PF u-quark #phi (rad); Entries", 100, -3.14, 3.14);
-
+    PF_phi_13_hist = ibook.book1DD("phi_13", "PF #mu^{+} #phi (rad); Entries", 100, -3.14, 3.14);
+    PF_phi_n13_hist = ibook.book1DD("phi_n13", "PF #mu^{-} #phi (rad); Entries", 100, -3.14, 3.14);
+    PF_phi_1_hist = ibook.book1DD("phi_2", "PF HF h #phi (rad); Entries", 100, -3.14, 3.14);
+    PF_phi_2_hist = ibook.book1DD("phi_1", "PF HF e/#gamma #phi (rad); Entries", 100, -3.14, 3.14);
 
 }
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
