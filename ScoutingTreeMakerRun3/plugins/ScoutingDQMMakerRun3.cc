@@ -132,6 +132,92 @@ private:
   dqm::reco::MonitorElement* PF_phi_1_hist;
   dqm::reco::MonitorElement* PF_phi_2_hist;
 
+
+
+  dqm::reco::MonitorElement* PF_vertex_211_hist;
+  dqm::reco::MonitorElement* PF_vertex_n211_hist;
+  dqm::reco::MonitorElement* PF_vertex_130_hist;
+  dqm::reco::MonitorElement* PF_vertex_22_hist;
+  dqm::reco::MonitorElement* PF_vertex_13_hist;
+  dqm::reco::MonitorElement* PF_vertex_n13_hist;
+  dqm::reco::MonitorElement* PF_vertex_1_hist;
+  dqm::reco::MonitorElement* PF_vertex_2_hist;
+  
+  dqm::reco::MonitorElement* PF_normchi2_211_hist;
+  dqm::reco::MonitorElement* PF_normchi2_n211_hist;
+  dqm::reco::MonitorElement* PF_normchi2_130_hist;
+  dqm::reco::MonitorElement* PF_normchi2_22_hist;
+  dqm::reco::MonitorElement* PF_normchi2_13_hist;
+  dqm::reco::MonitorElement* PF_normchi2_n13_hist;
+  dqm::reco::MonitorElement* PF_normchi2_1_hist;
+  dqm::reco::MonitorElement* PF_normchi2_2_hist;
+  
+  dqm::reco::MonitorElement* PF_dz_211_hist;
+  dqm::reco::MonitorElement* PF_dz_n211_hist;
+  dqm::reco::MonitorElement* PF_dz_130_hist;
+  dqm::reco::MonitorElement* PF_dz_22_hist;
+  dqm::reco::MonitorElement* PF_dz_13_hist;
+  dqm::reco::MonitorElement* PF_dz_n13_hist;
+  dqm::reco::MonitorElement* PF_dz_1_hist;
+  dqm::reco::MonitorElement* PF_dz_2_hist;
+  
+  dqm::reco::MonitorElement* PF_dxy_211_hist;
+  dqm::reco::MonitorElement* PF_dxy_n211_hist;
+  dqm::reco::MonitorElement* PF_dxy_130_hist;
+  dqm::reco::MonitorElement* PF_dxy_22_hist;
+  dqm::reco::MonitorElement* PF_dxy_13_hist;
+  dqm::reco::MonitorElement* PF_dxy_n13_hist;
+  dqm::reco::MonitorElement* PF_dxy_1_hist;
+  dqm::reco::MonitorElement* PF_dxy_2_hist;
+  
+  dqm::reco::MonitorElement* PF_dzsig_211_hist;
+  dqm::reco::MonitorElement* PF_dzsig_n211_hist;
+  dqm::reco::MonitorElement* PF_dzsig_130_hist;
+  dqm::reco::MonitorElement* PF_dzsig_22_hist;
+  dqm::reco::MonitorElement* PF_dzsig_13_hist;
+  dqm::reco::MonitorElement* PF_dzsig_n13_hist;
+  dqm::reco::MonitorElement* PF_dzsig_1_hist;
+  dqm::reco::MonitorElement* PF_dzsig_2_hist;
+  
+  dqm::reco::MonitorElement* PF_dxysig_211_hist;
+  dqm::reco::MonitorElement* PF_dxysig_n211_hist;
+  dqm::reco::MonitorElement* PF_dxysig_130_hist;
+  dqm::reco::MonitorElement* PF_dxysig_22_hist;
+  dqm::reco::MonitorElement* PF_dxysig_13_hist;
+  dqm::reco::MonitorElement* PF_dxysig_n13_hist;
+  dqm::reco::MonitorElement* PF_dxysig_1_hist;
+  dqm::reco::MonitorElement* PF_dxysig_2_hist;
+  
+  dqm::reco::MonitorElement* PF_trk_pt_211_hist;
+  dqm::reco::MonitorElement* PF_trk_pt_n211_hist;
+  dqm::reco::MonitorElement* PF_trk_pt_130_hist;
+  dqm::reco::MonitorElement* PF_trk_pt_22_hist;
+  dqm::reco::MonitorElement* PF_trk_pt_13_hist;
+  dqm::reco::MonitorElement* PF_trk_pt_n13_hist;
+  dqm::reco::MonitorElement* PF_trk_pt_1_hist;
+  dqm::reco::MonitorElement* PF_trk_pt_2_hist;
+  
+  dqm::reco::MonitorElement* PF_trk_eta_211_hist;
+  dqm::reco::MonitorElement* PF_trk_eta_n211_hist;
+  dqm::reco::MonitorElement* PF_trk_eta_130_hist;
+  dqm::reco::MonitorElement* PF_trk_eta_22_hist;
+  dqm::reco::MonitorElement* PF_trk_eta_13_hist;
+  dqm::reco::MonitorElement* PF_trk_eta_n13_hist;
+  dqm::reco::MonitorElement* PF_trk_eta_1_hist;
+  dqm::reco::MonitorElement* PF_trk_eta_2_hist;
+  
+  dqm::reco::MonitorElement* PF_trk_phi_211_hist;
+  dqm::reco::MonitorElement* PF_trk_phi_n211_hist;
+  dqm::reco::MonitorElement* PF_trk_phi_130_hist;
+  dqm::reco::MonitorElement* PF_trk_phi_22_hist;
+  dqm::reco::MonitorElement* PF_trk_phi_13_hist;
+  dqm::reco::MonitorElement* PF_trk_phi_n13_hist;
+  dqm::reco::MonitorElement* PF_trk_phi_1_hist;
+  dqm::reco::MonitorElement* PF_trk_phi_2_hist;
+  
+
+
+
   // photon histograms
   dqm::reco::MonitorElement* pt_pho_hist;
   dqm::reco::MonitorElement* eta_pho_hist;
@@ -356,7 +442,7 @@ void ScoutingDQMMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSet
 
   // fill the PF candidate histograms (no electrons!)
 
-  for (auto iter = pfcandsH->begin(); iter != pfcandsH->end(); ++iter) {
+  /*for (auto iter = pfcandsH->begin(); iter != pfcandsH->end(); ++iter) {
     switch (iter->pdgId()) {
       case 211:
         PF_pT_211_hist->Fill(iter->pt());
@@ -399,7 +485,125 @@ void ScoutingDQMMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSet
         PF_phi_1_hist->Fill(iter->phi());
         break;
     }
+  }*/
+
+  for (auto iter = pfcandsH->begin(); iter != pfcandsH->end(); ++iter) {
+    switch (iter->pdgId()) {
+      case 211:
+        PF_pT_211_hist->Fill(iter->pt());
+        PF_eta_211_hist->Fill(iter->eta());
+        PF_phi_211_hist->Fill(iter->phi());
+        PF_vertex_211_hist->Fill(iter->vertex());
+        PF_normchi2_211_hist->Fill(iter->normchi2());
+        PF_dz_211_hist->Fill(iter->dz());
+        PF_dxy_211_hist->Fill(iter->dxy());
+        PF_dzsig_211_hist->Fill(iter->dzsig());
+        PF_dxysig_211_hist->Fill(iter->dxysig());
+        PF_trk_pt_211_hist->Fill(iter->trk_pt());
+        PF_trk_eta_211_hist->Fill(iter->trk_eta());
+        PF_trk_phi_211_hist->Fill(iter->trk_phi());
+        break;
+      case -211:
+        PF_pT_n211_hist->Fill(iter->pt());
+        PF_eta_n211_hist->Fill(iter->eta());
+        PF_phi_n211_hist->Fill(iter->phi());
+        PF_vertex_n211_hist->Fill(iter->vertex());
+        PF_normchi2_n211_hist->Fill(iter->normchi2());
+        PF_dz_n211_hist->Fill(iter->dz());
+        PF_dxy_n211_hist->Fill(iter->dxy());
+        PF_dzsig_n211_hist->Fill(iter->dzsig());
+        PF_dxysig_n211_hist->Fill(iter->dxysig());
+        PF_trk_pt_n211_hist->Fill(iter->trk_pt());
+        PF_trk_eta_n211_hist->Fill(iter->trk_eta());
+        PF_trk_phi_n211_hist->Fill(iter->trk_phi());
+        break;
+      case 130:
+        PF_pT_130_hist->Fill(iter->pt());
+        PF_eta_130_hist->Fill(iter->eta());
+        PF_phi_130_hist->Fill(iter->phi());
+        PF_vertex_130_hist->Fill(iter->vertex());
+        PF_normchi2_130_hist->Fill(iter->normchi2());
+        PF_dz_130_hist->Fill(iter->dz());
+        PF_dxy_130_hist->Fill(iter->dxy());
+        PF_dzsig_130_hist->Fill(iter->dzsig());
+        PF_dxysig_130_hist->Fill(iter->dxysig());
+        PF_trk_pt_130_hist->Fill(iter->trk_pt());
+        PF_trk_eta_130_hist->Fill(iter->trk_eta());
+        PF_trk_phi_130_hist->Fill(iter->trk_phi());
+        break;
+      case 22:
+        PF_pT_22_hist->Fill(iter->pt());
+        PF_eta_22_hist->Fill(iter->eta());
+        PF_phi_22_hist->Fill(iter->phi());
+        PF_vertex_22_hist->Fill(iter->vertex());
+        PF_normchi2_22_hist->Fill(iter->normchi2());
+        PF_dz_22_hist->Fill(iter->dz());
+        PF_dxy_22_hist->Fill(iter->dxy());
+        PF_dzsig_22_hist->Fill(iter->dzsig());
+        PF_dxysig_22_hist->Fill(iter->dxysig());
+        PF_trk_pt_22_hist->Fill(iter->trk_pt());
+        PF_trk_eta_22_hist->Fill(iter->trk_eta());
+        PF_trk_phi_22_hist->Fill(iter->trk_phi());
+        break;
+      case 13:
+        PF_pT_13_hist->Fill(iter->pt());
+        PF_eta_13_hist->Fill(iter->eta());
+        PF_phi_13_hist->Fill(iter->phi());
+        PF_vertex_13_hist->Fill(iter->vertex());
+        PF_normchi2_13_hist->Fill(iter->normchi2());
+        PF_dz_13_hist->Fill(iter->dz());
+        PF_dxy_13_hist->Fill(iter->dxy());
+        PF_dzsig_13_hist->Fill(iter->dzsig());
+        PF_dxysig_13_hist->Fill(iter->dxysig());
+        PF_trk_pt_13_hist->Fill(iter->trk_pt());
+        PF_trk_eta_13_hist->Fill(iter->trk_eta());
+        PF_trk_phi_13_hist->Fill(iter->trk_phi());
+        break;
+      case -13:
+        PF_pT_n13_hist->Fill(iter->pt());
+        PF_eta_n13_hist->Fill(iter->eta());
+        PF_phi_n13_hist->Fill(iter->phi());
+        PF_vertex_n13_hist->Fill(iter->vertex());
+        PF_normchi2_n13_hist->Fill(iter->normchi2());
+        PF_dz_n13_hist->Fill(iter->dz());
+        PF_dxy_n13_hist->Fill(iter->dxy());
+        PF_dzsig_n13_hist->Fill(iter->dzsig());
+        PF_dxysig_n13_hist->Fill(iter->dxysig());
+        PF_trk_pt_n13_hist->Fill(iter->trk_pt());
+        PF_trk_eta_n13_hist->Fill(iter->trk_eta());
+        PF_trk_phi_n13_hist->Fill(iter->trk_phi());
+        break;
+      case 1:
+        PF_pT_1_hist->Fill(iter->pt());
+        PF_eta_1_hist->Fill(iter->eta());
+        PF_phi_1_hist->Fill(iter->phi());
+        PF_vertex_1_hist->Fill(iter->vertex());
+        PF_normchi2_1_hist->Fill(iter->normchi2());
+        PF_dz_1_hist->Fill(iter->dz());
+        PF_dxy_1_hist->Fill(iter->dxy());
+        PF_dzsig_1_hist->Fill(iter->dzsig());
+        PF_dxysig_1_hist->Fill(iter->dxysig());
+        PF_trk_pt_1_hist->Fill(iter->trk_pt());
+        PF_trk_eta_1_hist->Fill(iter->trk_eta());
+        PF_trk_phi_1_hist->Fill(iter->trk_phi());
+        break;
+      case 2:
+        PF_pT_2_hist->Fill(iter->pt());
+        PF_eta_2_hist->Fill(iter->eta());
+        PF_phi_2_hist->Fill(iter->phi());
+        PF_vertex_2_hist->Fill(iter->vertex());
+        PF_normchi2_2_hist->Fill(iter->normchi2());
+        PF_dz_2_hist->Fill(iter->dz());
+        PF_dxy_2_hist->Fill(iter->dxy());
+        PF_dzsig_2_hist->Fill(iter->dzsig());
+        PF_dxysig_2_hist->Fill(iter->dxysig());
+        PF_trk_pt_2_hist->Fill(iter->trk_pt());
+        PF_trk_eta_2_hist->Fill(iter->trk_eta());
+        PF_trk_phi_2_hist->Fill(iter->trk_phi());
+        break;
+    }
   }
+
 
   // fill all the photon histograms
 
@@ -578,6 +782,93 @@ void ScoutingDQMMakerRun3::bookHistograms(DQMStore::IBooker& ibook,
   PF_phi_n13_hist = ibook.book1DD("phi_n13", "PF #mu^{-} #phi (rad); Entries", 100, -3.14, 3.14);
   PF_phi_1_hist = ibook.book1DD("phi_2", "PF HF h #phi (rad); Entries", 100, -3.14, 3.14);
   PF_phi_2_hist = ibook.book1DD("phi_1", "PF HF e/#gamma #phi (rad); Entries", 100, -3.14, 3.14);
+
+
+  PF_vertex_211_hist = ibook.book1DD("vertex_211", "PF h^{+} Vertex; Entries", 100, -10.0, 10.0);
+  PF_vertex_n211_hist = ibook.book1DD("vertex_n211", "PF h^{-} Vertex; Entries", 100, -10.0, 10.0);
+  PF_vertex_130_hist = ibook.book1DD("vertex_130", "PF h^{0} Vertex; Entries", 100, -10.0, 10.0);
+  PF_vertex_22_hist = ibook.book1DD("vertex_22", "PF #gamma Vertex; Entries", 100, -10.0, 10.0);
+  PF_vertex_13_hist = ibook.book1DD("vertex_13", "PF #mu^{+} Vertex; Entries", 100, -10.0, 10.0);
+  PF_vertex_n13_hist = ibook.book1DD("vertex_n13", "PF #mu^{-} Vertex; Entries", 100, -10.0, 10.0);
+  PF_vertex_1_hist = ibook.book1DD("vertex_1", "PF HF h Vertex; Entries", 100, -10.0, 10.0);
+  PF_vertex_2_hist = ibook.book1DD("vertex_2", "PF HF e/#gamma Vertex; Entries", 100, -10.0, 10.0);
+  
+  PF_normchi2_211_hist = ibook.book1DD("normchi2_211", "PF h^{+} Norm Chi^2; Entries", 100, 0.0, 10.0);
+  PF_normchi2_n211_hist = ibook.book1DD("normchi2_n211", "PF h^{-} Norm Chi^2; Entries", 100, 0.0, 10.0);
+  PF_normchi2_130_hist = ibook.book1DD("normchi2_130", "PF h^{0} Norm Chi^2; Entries", 100, 0.0, 10.0);
+  PF_normchi2_22_hist = ibook.book1DD("normchi2_22", "PF #gamma Norm Chi^2; Entries", 100, 0.0, 10.0);
+  PF_normchi2_13_hist = ibook.book1DD("normchi2_13", "PF #mu^{+} Norm Chi^2; Entries", 100, 0.0, 10.0);
+  PF_normchi2_n13_hist = ibook.book1DD("normchi2_n13", "PF #mu^{-} Norm Chi^2; Entries", 100, 0.0, 10.0);
+  PF_normchi2_1_hist = ibook.book1DD("normchi2_1", "PF HF h Norm Chi^2; Entries", 100, 0.0, 10.0);
+  PF_normchi2_2_hist = ibook.book1DD("normchi2_2", "PF HF e/#gamma Norm Chi^2; Entries", 100, 0.0, 10.0);
+  
+  PF_dz_211_hist = ibook.book1DD("dz_211", "PF h^{+} dz (cm); Entries", 100, -1.0, 1.0);
+  PF_dz_n211_hist = ibook.book1DD("dz_n211", "PF h^{-} dz (cm); Entries", 100, -1.0, 1.0);
+  PF_dz_130_hist = ibook.book1DD("dz_130", "PF h^{0} dz (cm); Entries", 100, -1.0, 1.0);
+  PF_dz_22_hist = ibook.book1DD("dz_22", "PF #gamma dz (cm); Entries", 100, -1.0, 1.0);
+  PF_dz_13_hist = ibook.book1DD("dz_13", "PF #mu^{+} dz (cm); Entries", 100, -1.0, 1.0);
+  PF_dz_n13_hist = ibook.book1DD("dz_n13", "PF #mu^{-} dz (cm); Entries", 100, -1.0, 1.0);
+  PF_dz_1_hist = ibook.book1DD("dz_1", "PF HF h dz (cm); Entries", 100, -1.0, 1.0);
+  PF_dz_2_hist = ibook.book1DD("dz_2", "PF HF e/#gamma dz (cm); Entries", 100, -1.0, 1.0);
+  
+  PF_dxy_211_hist = ibook.book1DD("dxy_211", "PF h^{+} dxy (cm); Entries", 100, -0.5, 0.5);
+  PF_dxy_n211_hist = ibook.book1DD("dxy_n211", "PF h^{-} dxy (cm); Entries", 100, -0.5, 0.5);
+  PF_dxy_130_hist = ibook.book1DD("dxy_130", "PF h^{0} dxy (cm); Entries", 100, -0.5, 0.5);
+  PF_dxy_22_hist = ibook.book1DD("dxy_22", "PF #gamma dxy (cm); Entries", 100, -0.5, 0.5);
+  PF_dxy_13_hist = ibook.book1DD("dxy_13", "PF #mu^{+} dxy (cm); Entries", 100, -0.5, 0.5);
+  PF_dxy_n13_hist = ibook.book1DD("dxy_n13", "PF #mu^{-} dxy (cm); Entries", 100, -0.5, 0.5);
+  PF_dxy_1_hist = ibook.book1DD("dxy_1", "PF HF h dxy (cm); Entries", 100, -0.5, 0.5);
+  PF_dxy_2_hist = ibook.book1DD("dxy_2", "PF HF e/#gamma dxy (cm); Entries", 100, -0.5, 0.5);
+  
+  PF_dzsig_211_hist = ibook.book1DD("dzsig_211", "PF h^{+} dzsig; Entries", 100, 0.0, 10.0);
+  PF_dzsig_n211_hist = ibook.book1DD("dzsig_n211", "PF h^{-} dzsig; Entries", 100, 0.0, 10.0);
+  PF_dzsig_130_hist = ibook.book1DD("dzsig_130", "PF h^{0} dzsig; Entries", 100, 0.0, 10.0);
+  PF_dzsig_22_hist = ibook.book1DD("dzsig_22", "PF #gamma dzsig; Entries", 100, 0.0, 10.0);
+  PF_dzsig_13_hist = ibook.book1DD("dzsig_13", "PF #mu^{+} dzsig; Entries", 100, 0.0, 10.0);
+  PF_dzsig_n13_hist = ibook.book1DD("dzsig_n13", "PF #mu^{-} dzsig; Entries", 100, 0.0, 10.0);
+  PF_dzsig_1_hist = ibook.book1DD("dzsig_1", "PF HF h dzsig; Entries", 100, 0.0, 10.0);
+  PF_dzsig_2_hist = ibook.book1DD("dzsig_2", "PF HF e/#gamma dzsig; Entries", 100, 0.0, 10.0);
+  
+  PF_dxysig_211_hist = ibook.book1DD("dxysig_211", "PF h^{+} dxysig; Entries", 100, 0.0, 10.0);
+  PF_dxysig_n211_hist = ibook.book1DD("dxysig_n211", "PF h^{-} dxysig; Entries", 100, 0.0, 10.0);
+  PF_dxysig_130_hist = ibook.book1DD("dxysig_130", "PF h^{0} dxysig; Entries", 100, 0.0, 10.0);
+  PF_dxysig_22_hist = ibook.book1DD("dxysig_22", "PF #gamma dxysig; Entries", 100, 0.0, 10.0);
+  PF_dxysig_13_hist = ibook.book1DD("dxysig_13", "PF #mu^{+} dxysig; Entries", 100, 0.0, 10.0);
+  PF_dxysig_n13_hist = ibook.book1DD("dxysig_n13", "PF #mu^{-} dxysig; Entries", 100, 0.0, 10.0);
+  PF_dxysig_1_hist = ibook.book1DD("dxysig_1", "PF HF h dxysig; Entries", 100, 0.0, 10.0);
+  PF_dxysig_2_hist = ibook.book1DD("dxysig_2", "PF HF e/#gamma dxysig; Entries", 100, 0.0, 10.0);
+  
+  PF_trk_pt_211_hist = ibook.book1DD("trk_pt_211", "PF h^{+} Track p_{T} (GeV); Entries", 100, 0.0, 10.0);
+  PF_trk_pt_n211_hist = ibook.book1DD("trk_pt_n211", "PF h^{-} Track p_{T} (GeV); Entries", 100, 0.0, 10.0);
+  PF_trk_pt_130_hist = ibook.book1DD("trk_pt_130", "PF h^{0} Track p_{T} (GeV); Entries", 100, 0.0, 10.0);
+  PF_trk_pt_22_hist = ibook.book1DD("trk_pt_22", "PF #gamma Track p_{T} (GeV); Entries", 100, 0.0, 10.0);
+  PF_trk_pt_13_hist = ibook.book1DD("trk_pt_13", "PF #mu^{+} Track p_{T} (GeV); Entries", 100, 0.0, 10.0);
+  PF_trk_pt_n13_hist = ibook.book1DD("trk_pt_n13", "PF #mu^{-} Track p_{T} (GeV); Entries", 100, 0.0, 10.0);
+  PF_trk_pt_1_hist = ibook.book1DD("trk_pt_1", "PF HF h Track p_{T} (GeV); Entries", 100, 0.0, 10.0);
+  PF_trk_pt_2_hist = ibook.book1DD("trk_pt_2", "PF HF e/#gamma Track p_{T} (GeV); Entries", 100, 0.0, 10.0);
+
+  
+  PF_trk_eta_211_hist = ibook.book1DD("trk_eta_211", "PF h^{+} Track #eta; Entries", 100, -3.0, 3.0);
+PF_trk_eta_n211_hist = ibook.book1DD("trk_eta_n211", "PF h^{-} Track #eta; Entries", 100, -3.0, 3.0);
+PF_trk_eta_130_hist = ibook.book1DD("trk_eta_130", "PF h^{0} Track #eta; Entries", 100, -3.0, 3.0);
+PF_trk_eta_22_hist = ibook.book1DD("trk_eta_22", "PF #gamma Track #eta; Entries", 100, -3.0, 3.0);
+PF_trk_eta_13_hist = ibook.book1DD("trk_eta_13", "PF #mu^{+} Track #eta; Entries", 100, -3.0, 3.0);
+PF_trk_eta_n13_hist = ibook.book1DD("trk_eta_n13", "PF #mu^{-} Track #eta; Entries", 100, -3.0, 3.0);
+PF_trk_eta_1_hist = ibook.book1DD("trk_eta_1", "PF HF h Track #eta; Entries", 100, -3.0, 3.0);
+PF_trk_eta_2_hist = ibook.book1DD("trk_eta_2", "PF HF e/#gamma Track #eta; Entries", 100, -3.0, 3.0);
+
+PF_trk_phi_211_hist = ibook.book1DD("trk_phi_211", "PF h^{+} Track #phi; Entries", 100, -3.2, 3.2);
+PF_trk_phi_n211_hist = ibook.book1DD("trk_phi_n211", "PF h^{-} Track #phi; Entries", 100, -3.2, 3.2);
+PF_trk_phi_130_hist = ibook.book1DD("trk_phi_130", "PF h^{0} Track #phi; Entries", 100, -3.2, 3.2);
+PF_trk_phi_22_hist = ibook.book1DD("trk_phi_22", "PF #gamma Track #phi; Entries", 100, -3.2, 3.2);
+PF_trk_phi_13_hist = ibook.book1DD("trk_phi_13", "PF #mu^{+} Track #phi; Entries", 100, -3.2, 3.2);
+PF_trk_phi_n13_hist = ibook.book1DD("trk_phi_n13", "PF #mu^{-} Track #phi; Entries", 100, -3.2, 3.2);
+PF_trk_phi_1_hist = ibook.book1DD("trk_phi_1", "PF HF h Track #phi; Entries", 100, -3.2, 3.2);
+PF_trk_phi_2_hist = ibook.book1DD("trk_phi_2", "PF HF e/#gamma Track #phi; Entries", 100, -3.2, 3.2);
+
+
+
+
 
   pt_pho_hist = ibook.book1D("pt_pho", "Photon pT; pT (GeV); Entries", 100, 0.0, 200.0);
   eta_pho_hist = ibook.book1D("eta_pho", "photon #eta; #eta (GeV); Entries", 100, -2.7, 2.7);
