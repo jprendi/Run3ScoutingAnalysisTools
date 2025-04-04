@@ -284,6 +284,35 @@ private:
   dqm::reco::MonitorElement* nValidStripHits_mu_hist;
   dqm::reco::MonitorElement* nPixelLayersWithMeasurement_mu_hist;
   dqm::reco::MonitorElement* nTrackerLayersWithMeasurement_mu_hist;
+  dqm::reco::MonitorElement* trk_chi2_mu_hist;
+dqm::reco::MonitorElement* trk_ndof_mu_hist;
+dqm::reco::MonitorElement* trk_dxy_mu_hist;
+dqm::reco::MonitorElement* trk_dz_mu_hist;
+dqm::reco::MonitorElement* trk_qoverp_mu_hist;
+dqm::reco::MonitorElement* trk_lambda_mu_hist;
+dqm::reco::MonitorElement* trk_pt_mu_hist;
+dqm::reco::MonitorElement* trk_phi_mu_hist;
+dqm::reco::MonitorElement* trk_eta_mu_hist;
+dqm::reco::MonitorElement* trk_dxyError_mu_hist;
+dqm::reco::MonitorElement* trk_dzError_mu_hist;
+dqm::reco::MonitorElement* trk_qoverpError_mu_hist;
+dqm::reco::MonitorElement* trk_lambdaError_mu_hist;
+dqm::reco::MonitorElement* trk_phiError_mu_hist;
+dqm::reco::MonitorElement* trk_dsz_mu_hist;
+dqm::reco::MonitorElement* trk_dszError_mu_hist;
+dqm::reco::MonitorElement* trk_qoverp_lambda_cov_mu_hist;
+dqm::reco::MonitorElement* trk_qoverp_phi_cov_mu_hist;
+dqm::reco::MonitorElement* trk_qoverp_dxy_cov_mu_hist;
+dqm::reco::MonitorElement* trk_qoverp_dsz_cov_mu_hist;
+dqm::reco::MonitorElement* trk_lambda_phi_cov_mu_hist;
+dqm::reco::MonitorElement* trk_lambda_dxy_cov_mu_hist;
+dqm::reco::MonitorElement* trk_lambda_dsz_cov_mu_hist;
+dqm::reco::MonitorElement* trk_phi_dxy_cov_mu_hist;
+dqm::reco::MonitorElement* trk_phi_dsz_cov_mu_hist;
+dqm::reco::MonitorElement* trk_dxy_dsz_cov_mu_hist;
+dqm::reco::MonitorElement* trk_vx_mu_hist;
+dqm::reco::MonitorElement* trk_vy_mu_hist;
+dqm::reco::MonitorElement* trk_vz_mu_hist;
 
   // PF Jet histograms
 
@@ -725,6 +754,38 @@ if (!tracksH.isValid()) {
       nValidStripHits_mu_hist->Fill(iter->nValidStripHits());
       nPixelLayersWithMeasurement_mu_hist->Fill(iter->nPixelLayersWithMeasurement());
       nTrackerLayersWithMeasurement_mu_hist->Fill(iter->nTrackerLayersWithMeasurement());
+
+trk_chi2_mu_hist->Fill(iter->trk_chi2());
+trk_ndof_mu_hist->Fill(iter->trk_ndof());
+trk_dxy_mu_hist->Fill(iter->trk_dxy());
+trk_dz_mu_hist->Fill(iter->trk_dz());
+trk_qoverp_mu_hist->Fill(iter->trk_qoverp());
+trk_lambda_mu_hist->Fill(iter->trk_lambda());
+trk_pt_mu_hist->Fill(iter->trk_pt());
+trk_phi_mu_hist->Fill(iter->trk_phi());
+trk_eta_mu_hist->Fill(iter->trk_eta());
+trk_dxyError_mu_hist->Fill(iter->trk_dxyError());
+trk_dzError_mu_hist->Fill(iter->trk_dzError());
+trk_qoverpError_mu_hist->Fill(iter->trk_qoverpError());
+trk_lambdaError_mu_hist->Fill(iter->trk_lambdaError());
+trk_phiError_mu_hist->Fill(iter->trk_phiError());
+trk_dsz_mu_hist->Fill(iter->trk_dsz());
+trk_dszError_mu_hist->Fill(iter->trk_dszError());
+trk_qoverp_lambda_cov_mu_hist->Fill(iter->trk_qoverp_lambda_cov());
+trk_qoverp_phi_cov_mu_hist->Fill(iter->trk_qoverp_phi_cov());
+trk_qoverp_dxy_cov_mu_hist->Fill(iter->trk_qoverp_dxy_cov());
+trk_qoverp_dsz_cov_mu_hist->Fill(iter->trk_qoverp_dsz_cov());
+trk_lambda_phi_cov_mu_hist->Fill(iter->trk_lambda_phi_cov());
+trk_lambda_dxy_cov_mu_hist->Fill(iter->trk_lambda_dxy_cov());
+trk_lambda_dsz_cov_mu_hist->Fill(iter->trk_lambda_dsz_cov());
+trk_phi_dxy_cov_mu_hist->Fill(iter->trk_phi_dxy_cov());
+trk_phi_dsz_cov_mu_hist->Fill(iter->trk_phi_dsz_cov());
+trk_dxy_dsz_cov_mu_hist->Fill(iter->trk_dxy_dsz_cov());
+trk_vx_mu_hist->Fill(iter->trk_vx());
+trk_vy_mu_hist->Fill(iter->trk_vy());
+trk_vz_mu_hist->Fill(iter->trk_vz());
+
+
     }
 
     // fill all the PF Jet histograms
@@ -1008,6 +1069,35 @@ PF_trk_phi_2_hist = ibook.book1DD("trk_phi_2", "PF HF e/#gamma Track #phi; Entri
       ibook.book1D("nPixelLayersWithMeasurement_mu", "Pixel Layers with Measurement; Layers; Entries", 10, 0, 10);
   nTrackerLayersWithMeasurement_mu_hist =
       ibook.book1D("nTrackerLayersWithMeasurement_mu", "Tracker Layers with Measurement; Layers; Entries", 20, 0, 20);
+trk_chi2_mu_hist = ibook.book1D("trk_chi2_mu", "Muon Tracker Chi2; #chi^{2}; Entries", 100, 0.0, 50.0);
+trk_ndof_mu_hist = ibook.book1D("trk_ndof_mu", "Muon Tracker Ndof; Ndof; Entries", 100, 0, 100);
+trk_dxy_mu_hist = ibook.book1D("trk_dxy_mu", "Muon Tracker dxy; dxy (cm); Entries", 100, -0.5, 0.5);
+trk_dz_mu_hist = ibook.book1D("trk_dz_mu", "Muon Tracker dz; dz (cm); Entries", 100, -20.0, 20.0);
+trk_qoverp_mu_hist = ibook.book1D("trk_qoverp_mu", "Muon q/p; q/p; Entries", 100, -0.1, 0.1);
+trk_lambda_mu_hist = ibook.book1D("trk_lambda_mu", "Muon Lambda; #lambda; Entries", 100, -2, 2);
+trk_pt_mu_hist = ibook.book1D("trk_pt_mu", "Muon Tracker pT; pT (GeV); Entries", 100, 0.0, 200.0);
+trk_phi_mu_hist = ibook.book1D("trk_phi_mu", "Muon Tracker #phi; #phi (rad); Entries", 100, -3.14, 3.14);
+trk_eta_mu_hist = ibook.book1D("trk_eta_mu", "Muon Tracker #eta; #eta; Entries", 100, -2.7, 2.7);
+trk_dxyError_mu_hist = ibook.book1D("trk_dxyError_mu", "Muon dxy Error; dxy Error (cm); Entries", 100, 0.0, 0.05);
+trk_dzError_mu_hist = ibook.book1D("trk_dzError_mu", "Muon dz Error; dz Error (cm); Entries", 100, 0.0, 0.05);
+trk_qoverpError_mu_hist = ibook.book1D("trk_qoverpError_mu", "Muon q/p Error; q/p Error; Entries", 100, 0.0, 0.01);
+trk_lambdaError_mu_hist = ibook.book1D("trk_lambdaError_mu", "Muon Lambda Error; #lambda Error; Entries", 100, 0.0, 0.1);
+trk_phiError_mu_hist = ibook.book1D("trk_phiError_mu", "Muon Phi Error; #phi Error (rad); Entries", 100, 0.0, 0.01);
+trk_dsz_mu_hist = ibook.book1D("trk_dsz_mu", "Muon dsz; dsz (cm); Entries", 100, -2, 2);
+trk_dszError_mu_hist = ibook.book1D("trk_dszError_mu", "Muon dsz Error; dsz Error (cm); Entries", 100, 0.0, 0.05);
+trk_qoverp_lambda_cov_mu_hist = ibook.book1D("trk_qoverp_lambda_cov_mu", "Muon q/p-#lambda Covariance; Covariance; Entries", 100, -0.001, 0.001);
+trk_qoverp_phi_cov_mu_hist = ibook.book1D("trk_qoverp_phi_cov_mu", "Muon q/p-#phi Covariance; Covariance; Entries", 100, -0.001, 0.001);
+trk_qoverp_dxy_cov_mu_hist = ibook.book1D("trk_qoverp_dxy_cov_mu", "Muon q/p-dxy Covariance; Covariance; Entries", 100, -0.001, 0.001);
+trk_qoverp_dsz_cov_mu_hist = ibook.book1D("trk_qoverp_dsz_cov_mu", "Muon q/p-dsz Covariance; Covariance; Entries", 100, -0.001, 0.001);
+trk_lambda_phi_cov_mu_hist = ibook.book1D("trk_lambda_phi_cov_mu", "Muon Lambda-#phi Covariance; Covariance; Entries", 100, -0.001, 0.001);
+trk_lambda_dxy_cov_mu_hist = ibook.book1D("trk_lambda_dxy_cov_mu", "Muon Lambda-dxy Covariance; Covariance; Entries", 100, -0.001, 0.001);
+trk_lambda_dsz_cov_mu_hist = ibook.book1D("trk_lambda_dsz_cov_mu", "Muon Lambda-dsz Covariance; Covariance; Entries", 100, -0.001, 0.001);
+trk_phi_dxy_cov_mu_hist = ibook.book1D("trk_phi_dxy_cov_mu", "Muon Phi-dxy Covariance; Covariance; Entries", 100, -0.001, 0.001);
+trk_phi_dsz_cov_mu_hist = ibook.book1D("trk_phi_dsz_cov_mu", "Muon Phi-dsz Covariance; Covariance; Entries", 100, -0.001, 0.001);
+trk_dxy_dsz_cov_mu_hist = ibook.book1D("trk_dxy_dsz_cov_mu", "Muon dxy-dsz Covariance; Covariance; Entries", 100, -0.001, 0.001);
+trk_vx_mu_hist = ibook.book1D("trk_vx_mu", "Muon Tracker Vertex X; x (cm); Entries", 100, -0.5, 0.5);
+trk_vy_mu_hist = ibook.book1D("trk_vy_mu", "Muon Tracker Vertex Y; y (cm); Entries", 100, -0.5, 0.5);
+trk_vz_mu_hist = ibook.book1D("trk_vz_mu", "Muon Tracker Vertex Z; z (cm); Entries", 100, -20.0, 20.0);
 
 
   ibook.setCurrentFolder(outputInternalPath_ + "/PFJet");
