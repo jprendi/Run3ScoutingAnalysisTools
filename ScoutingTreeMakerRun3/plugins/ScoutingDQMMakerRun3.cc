@@ -421,9 +421,57 @@ void ScoutingDQMMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSet
   using namespace reco;
 
   // all the handles needed
-  Handle<vector<Run3ScoutingParticle>> pfcandsH;
-  iEvent.getByToken(pfcandsToken, pfcandsH);
-  Handle<vector<Run3ScoutingPhoton>> photonsH;
+ 
+Handle<vector<Run3ScoutingParticle>> pfcandsH;
+iEvent.getByToken(pfcandsToken, pfcandsH);
+if (!pfcandsH.isValid()) {
+  edm::LogWarning("ScoutingAnalyzer") << "Invalid handle for PF candidates";
+  return;
+}
+
+Handle<vector<Run3ScoutingPhoton>> photonsH;
+iEvent.getByToken(photonsToken, photonsH);
+if (!photonsH.isValid()) {
+  edm::LogWarning("ScoutingAnalyzer") << "Invalid handle for photons";
+  return;
+}
+
+Handle<vector<Run3ScoutingElectron>> electronsH;
+iEvent.getByToken(electronsToken, electronsH);
+if (!electronsH.isValid()) {
+  edm::LogWarning("ScoutingAnalyzer") << "Invalid handle for electrons";
+  return;
+}
+
+Handle<vector<Run3ScoutingMuon>> muonsH;
+iEvent.getByToken(muonsToken, muonsH);
+if (!muonsH.isValid()) {
+  edm::LogWarning("ScoutingAnalyzer") << "Invalid handle for muons";
+  return;
+}
+
+Handle<vector<Run3ScoutingPFJet>> PFjetsH;
+iEvent.getByToken(pfjetsToken, PFjetsH);
+if (!PFjetsH.isValid()) {
+  edm::LogWarning("ScoutingAnalyzer") << "Invalid handle for PF jets";
+  return;
+}
+
+Handle<vector<Run3ScoutingVertex>> verticesH;
+iEvent.getByToken(verticesToken, verticesH);
+if (!verticesH.isValid()) {
+  edm::LogWarning("ScoutingAnalyzer") << "Invalid handle for vertices";
+  return;
+}
+
+Handle<vector<Run3ScoutingTrack>> tracksH;
+iEvent.getByToken(tracksToken, tracksH);
+if (!tracksH.isValid()) {
+  edm::LogWarning("ScoutingAnalyzer") << "Invalid handle for tracks";
+  return;
+}
+
+/*  Handle<vector<Run3ScoutingPhoton>> photonsH;
   iEvent.getByToken(photonsToken, photonsH);
   Handle<vector<Run3ScoutingElectron>> electronsH;
   iEvent.getByToken(electronsToken, electronsH);
@@ -435,7 +483,7 @@ void ScoutingDQMMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSet
   iEvent.getByToken(verticesToken, verticesH);
   Handle<vector<Run3ScoutingTrack> > tracksH;
   iEvent.getByToken(tracksToken, tracksH);
-  
+  */
   
 
   
@@ -754,8 +802,11 @@ void ScoutingDQMMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSet
 void ScoutingDQMMakerRun3::bookHistograms(DQMStore::IBooker& ibook,
                                           edm::Run const& run,
                                           edm::EventSetup const& iSetup) {
-  ibook.setCurrentFolder(outputInternalPath_);
 
+ // ibook.setCurrentFolder(outputInternalPath_);
+  
+  ibook.setCurrentFolder(outputInternalPath_ + "/PFcand");
+  
   PF_pT_211_hist = ibook.book1DD("pT_211", "PF h^{+}  p_{T} (GeV); Entries", 100, 0.0, 13.0);
   PF_pT_n211_hist = ibook.book1DD("pT_n211", "PF h^{-} p_{T} (GeV); Entries", 100, 0.0, 14.0);
   PF_pT_130_hist = ibook.book1DD("pT_130", "PF h^{0} p_{T} (GeV); Entries", 100, 0.0, 20.0);
@@ -869,6 +920,7 @@ PF_trk_phi_2_hist = ibook.book1DD("trk_phi_2", "PF HF e/#gamma Track #phi; Entri
 
 
 
+  ibook.setCurrentFolder(outputInternalPath_ + "/Photon");
 
   pt_pho_hist = ibook.book1D("pt_pho", "Photon pT; pT (GeV); Entries", 100, 0.0, 200.0);
   eta_pho_hist = ibook.book1D("eta_pho", "photon #eta; #eta (GeV); Entries", 100, -2.7, 2.7);
@@ -889,6 +941,11 @@ PF_trk_phi_2_hist = ibook.book1DD("trk_phi_2", "PF HF e/#gamma Track #phi; Entri
   sMin_pho_hist = ibook.book1D("sMin_pho", "sMin Photon; sMin; Entries", 100, 0.0, 3);
   sMaj_pho_hist = ibook.book1D("sMaj_pho", "sMaj Photon ; sMaj; Entries", 100, 0.0, 3);
 
+
+
+
+  ibook.setCurrentFolder(outputInternalPath_ + "/Electron");
+  
   pt_ele_hist = ibook.book1D("pt_ele", "Electron pT; pT (GeV); Entries", 100, 0.0, 200.0);
   eta_ele_hist = ibook.book1D("eta_ele", "Electron #eta; #eta; Entries", 100, -2.7, 2.7);
   phi_ele_hist = ibook.book1D("phi_ele", "Electron #phi; #phi (rad); Entries", 100, -3.14, 3.14);
@@ -912,6 +969,9 @@ PF_trk_phi_2_hist = ibook.book1DD("trk_phi_2", "PF HF e/#gamma Track #phi; Entri
   r9_ele_hist = ibook.book1D("r9_ele", "R9 Electron; R9; Entries", 100, 0.0, 5);
   sMin_ele_hist = ibook.book1D("sMin_ele", "sMin Electron; sMin; Entries", 100, 0.0, 3);
   sMaj_ele_hist = ibook.book1D("sMaj_ele", "sMaj Electron; sMaj; Entries", 100, 0.0, 3);
+
+
+  ibook.setCurrentFolder(outputInternalPath_ + "/Muon");
 
   pt_mu_hist = ibook.book1D("pt_mu", "Muon pT; pT (GeV); Entries", 100, 0.0, 200.0);
   eta_mu_hist = ibook.book1D("eta_mu", "Muon #eta; #eta; Entries", 100, -2.7, 2.7);
@@ -949,6 +1009,9 @@ PF_trk_phi_2_hist = ibook.book1DD("trk_phi_2", "PF HF e/#gamma Track #phi; Entri
   nTrackerLayersWithMeasurement_mu_hist =
       ibook.book1D("nTrackerLayersWithMeasurement_mu", "Tracker Layers with Measurement; Layers; Entries", 20, 0, 20);
 
+
+  ibook.setCurrentFolder(outputInternalPath_ + "/PFJet");
+
   pt_pfj_hist = ibook.book1D("pt_pfj", "PF Jet pT; pT (GeV); Entries", 100, 0.0, 500.0);
   eta_pfj_hist = ibook.book1D("eta_pfj", "PF Jet #eta; #eta; Entries", 100, -5.0, 5.0);
   phi_pfj_hist = ibook.book1D("phi_pfj", "PF Jet #phi; #phi (rad); Entries", 100, -3.14, 3.14);
@@ -983,6 +1046,9 @@ PF_trk_phi_2_hist = ibook.book1DD("trk_phi_2", "PF HF e/#gamma Track #phi; Entri
   csv_pfj_hist = ibook.book1D("csv_pfj", "Combined Secondary Vertex (CSV); CSV Score; Entries", 100, 0.0, 1.0);
   mvaDiscriminator_pfj_hist = ibook.book1D("mvaDiscriminator_pfj", "MVA Discriminator; Score; Entries", 100, -1.0, 1.0);
 
+
+
+  ibook.setCurrentFolder(outputInternalPath_ + "/Vertex");
   x_vtx_hist = ibook.book1D("x_vtx", "Vertex X Position; x (cm); Entries", 100, -0.5, 0.5);
   y_vtx_hist = ibook.book1D("y_vtx", "Vertex Y Position; y (cm); Entries", 100, -0.5, 0.5);
   z_vtx_hist = ibook.book1D("z_vtx", "Vertex Z Position; z (cm); Entries", 100, -20.0, 20.0);
@@ -996,7 +1062,11 @@ PF_trk_phi_2_hist = ibook.book1DD("trk_phi_2", "PF HF e/#gamma Track #phi; Entri
   xyCov_vtx_hist = ibook.book1D("xyCov_vtx", "Vertex XY Covariance; Cov(x,y); Entries", 100, -0.01, 0.01);
   xzCov_vtx_hist = ibook.book1D("xzCov_vtx", "Vertex XZ Covariance; Cov(x,z); Entries", 100, -0.01, 0.01);
   yzCov_vtx_hist = ibook.book1D("yzCov_vtx", "Vertex YZ Covariance; Cov(y,z); Entries", 100, -0.01, 0.01);
-  
+ 
+
+
+
+  ibook.setCurrentFolder(outputInternalPath_ + "/Tracker");
   tk_pt_tk_hist = ibook.book1D("tk_pt_tk", "Tracker pT; pT (GeV); Entries", 100, 0.0, 200.0);
 tk_eta_tk_hist = ibook.book1D("tk_eta_tk", "Tracker #eta; #eta; Entries", 100, -2.7, 2.7);
 tk_phi_tk_hist = ibook.book1D("tk_phi_tk", "Tracker #phi; #phi (rad); Entries", 100, -3.14, 3.14);
