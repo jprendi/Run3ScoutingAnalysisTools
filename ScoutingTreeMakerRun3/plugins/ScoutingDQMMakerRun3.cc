@@ -519,344 +519,316 @@ if (!tracksH.isValid()) {
 
   // fill the PF candidate histograms (no electrons!)
 
-  /*for (auto iter = pfcandsH->begin(); iter != pfcandsH->end(); ++iter) {
-    switch (iter->pdgId()) {
-      case 211:
-        PF_pT_211_hist->Fill(iter->pt());
-        PF_eta_211_hist->Fill(iter->eta());
-        PF_phi_211_hist->Fill(iter->phi());
-        break;
-      case -211:
-        PF_pT_n211_hist->Fill(iter->pt());
-        PF_eta_n211_hist->Fill(iter->eta());
-        PF_phi_n211_hist->Fill(iter->phi());
-        break;
-      case 130:
-        PF_pT_130_hist->Fill(iter->pt());
-        PF_eta_130_hist->Fill(iter->eta());
-        PF_phi_130_hist->Fill(iter->phi());
-        break;
-      case 22:
-        PF_pT_22_hist->Fill(iter->pt());
-        PF_eta_22_hist->Fill(iter->eta());
-        PF_phi_22_hist->Fill(iter->phi());
-        break;
-      case 13:
-        PF_pT_13_hist->Fill(iter->pt());
-        PF_eta_13_hist->Fill(iter->eta());
-        PF_phi_13_hist->Fill(iter->phi());
-        break;
-      case -13:
-        PF_pT_n13_hist->Fill(iter->pt());
-        PF_eta_n13_hist->Fill(iter->eta());
-        PF_phi_n13_hist->Fill(iter->phi());
-        break;
-      case 1:
-        PF_pT_1_hist->Fill(iter->pt());
-        PF_eta_1_hist->Fill(iter->eta());
-        PF_phi_1_hist->Fill(iter->phi());
-        break;
-      case 2:
-        PF_pT_2_hist->Fill(iter->pt());
-        PF_eta_2_hist->Fill(iter->eta());
-        PF_phi_1_hist->Fill(iter->phi());
-        break;
-    }
-  }*/
+for (const auto& cand : *pfcandsH) {
+    switch (cand.pdgId()) {
+        case 211:
+            PF_pT_211_hist->Fill(cand.pt());
+            PF_eta_211_hist->Fill(cand.eta());
+            PF_phi_211_hist->Fill(cand.phi());
+            PF_vertex_211_hist->Fill(cand.vertex());
+            PF_normchi2_211_hist->Fill(cand.normchi2());
+            PF_dz_211_hist->Fill(cand.dz());
+            PF_dxy_211_hist->Fill(cand.dxy());
+            PF_dzsig_211_hist->Fill(cand.dzsig());
+            PF_dxysig_211_hist->Fill(cand.dxysig());
+            PF_trk_pt_211_hist->Fill(cand.trk_pt());
+            PF_trk_eta_211_hist->Fill(cand.trk_eta());
+            PF_trk_phi_211_hist->Fill(cand.trk_phi());
+            break;
 
-  for (auto iter = pfcandsH->begin(); iter != pfcandsH->end(); ++iter) {
-    switch (iter->pdgId()) {
-      case 211:
-        PF_pT_211_hist->Fill(iter->pt());
-        PF_eta_211_hist->Fill(iter->eta());
-        PF_phi_211_hist->Fill(iter->phi());
-        PF_vertex_211_hist->Fill(iter->vertex());
-        PF_normchi2_211_hist->Fill(iter->normchi2());
-        PF_dz_211_hist->Fill(iter->dz());
-        PF_dxy_211_hist->Fill(iter->dxy());
-        PF_dzsig_211_hist->Fill(iter->dzsig());
-        PF_dxysig_211_hist->Fill(iter->dxysig());
-        PF_trk_pt_211_hist->Fill(iter->trk_pt());
-        PF_trk_eta_211_hist->Fill(iter->trk_eta());
-        PF_trk_phi_211_hist->Fill(iter->trk_phi());
-        break;
-      case -211:
-        PF_pT_n211_hist->Fill(iter->pt());
-        PF_eta_n211_hist->Fill(iter->eta());
-        PF_phi_n211_hist->Fill(iter->phi());
-        PF_vertex_n211_hist->Fill(iter->vertex());
-        PF_normchi2_n211_hist->Fill(iter->normchi2());
-        PF_dz_n211_hist->Fill(iter->dz());
-        PF_dxy_n211_hist->Fill(iter->dxy());
-        PF_dzsig_n211_hist->Fill(iter->dzsig());
-        PF_dxysig_n211_hist->Fill(iter->dxysig());
-        PF_trk_pt_n211_hist->Fill(iter->trk_pt());
-        PF_trk_eta_n211_hist->Fill(iter->trk_eta());
-        PF_trk_phi_n211_hist->Fill(iter->trk_phi());
-        break;
-      case 130:
-        PF_pT_130_hist->Fill(iter->pt());
-        PF_eta_130_hist->Fill(iter->eta());
-        PF_phi_130_hist->Fill(iter->phi());
-        PF_vertex_130_hist->Fill(iter->vertex());
-        PF_normchi2_130_hist->Fill(iter->normchi2());
-        PF_dz_130_hist->Fill(iter->dz());
-        PF_dxy_130_hist->Fill(iter->dxy());
-        PF_dzsig_130_hist->Fill(iter->dzsig());
-        PF_dxysig_130_hist->Fill(iter->dxysig());
-        PF_trk_pt_130_hist->Fill(iter->trk_pt());
-        PF_trk_eta_130_hist->Fill(iter->trk_eta());
-        PF_trk_phi_130_hist->Fill(iter->trk_phi());
-        break;
-      case 22:
-        PF_pT_22_hist->Fill(iter->pt());
-        PF_eta_22_hist->Fill(iter->eta());
-        PF_phi_22_hist->Fill(iter->phi());
-        PF_vertex_22_hist->Fill(iter->vertex());
-        PF_normchi2_22_hist->Fill(iter->normchi2());
-        PF_dz_22_hist->Fill(iter->dz());
-        PF_dxy_22_hist->Fill(iter->dxy());
-        PF_dzsig_22_hist->Fill(iter->dzsig());
-        PF_dxysig_22_hist->Fill(iter->dxysig());
-        PF_trk_pt_22_hist->Fill(iter->trk_pt());
-        PF_trk_eta_22_hist->Fill(iter->trk_eta());
-        PF_trk_phi_22_hist->Fill(iter->trk_phi());
-        break;
-      case 13:
-        PF_pT_13_hist->Fill(iter->pt());
-        PF_eta_13_hist->Fill(iter->eta());
-        PF_phi_13_hist->Fill(iter->phi());
-        PF_vertex_13_hist->Fill(iter->vertex());
-        PF_normchi2_13_hist->Fill(iter->normchi2());
-        PF_dz_13_hist->Fill(iter->dz());
-        PF_dxy_13_hist->Fill(iter->dxy());
-        PF_dzsig_13_hist->Fill(iter->dzsig());
-        PF_dxysig_13_hist->Fill(iter->dxysig());
-        PF_trk_pt_13_hist->Fill(iter->trk_pt());
-        PF_trk_eta_13_hist->Fill(iter->trk_eta());
-        PF_trk_phi_13_hist->Fill(iter->trk_phi());
-        break;
-      case -13:
-        PF_pT_n13_hist->Fill(iter->pt());
-        PF_eta_n13_hist->Fill(iter->eta());
-        PF_phi_n13_hist->Fill(iter->phi());
-        PF_vertex_n13_hist->Fill(iter->vertex());
-        PF_normchi2_n13_hist->Fill(iter->normchi2());
-        PF_dz_n13_hist->Fill(iter->dz());
-        PF_dxy_n13_hist->Fill(iter->dxy());
-        PF_dzsig_n13_hist->Fill(iter->dzsig());
-        PF_dxysig_n13_hist->Fill(iter->dxysig());
-        PF_trk_pt_n13_hist->Fill(iter->trk_pt());
-        PF_trk_eta_n13_hist->Fill(iter->trk_eta());
-        PF_trk_phi_n13_hist->Fill(iter->trk_phi());
-        break;
-      case 1:
-        PF_pT_1_hist->Fill(iter->pt());
-        PF_eta_1_hist->Fill(iter->eta());
-        PF_phi_1_hist->Fill(iter->phi());
-        PF_vertex_1_hist->Fill(iter->vertex());
-        PF_normchi2_1_hist->Fill(iter->normchi2());
-        PF_dz_1_hist->Fill(iter->dz());
-        PF_dxy_1_hist->Fill(iter->dxy());
-        PF_dzsig_1_hist->Fill(iter->dzsig());
-        PF_dxysig_1_hist->Fill(iter->dxysig());
-        PF_trk_pt_1_hist->Fill(iter->trk_pt());
-        PF_trk_eta_1_hist->Fill(iter->trk_eta());
-        PF_trk_phi_1_hist->Fill(iter->trk_phi());
-        break;
-      case 2:
-        PF_pT_2_hist->Fill(iter->pt());
-        PF_eta_2_hist->Fill(iter->eta());
-        PF_phi_2_hist->Fill(iter->phi());
-        PF_vertex_2_hist->Fill(iter->vertex());
-        PF_normchi2_2_hist->Fill(iter->normchi2());
-        PF_dz_2_hist->Fill(iter->dz());
-        PF_dxy_2_hist->Fill(iter->dxy());
-        PF_dzsig_2_hist->Fill(iter->dzsig());
-        PF_dxysig_2_hist->Fill(iter->dxysig());
-        PF_trk_pt_2_hist->Fill(iter->trk_pt());
-        PF_trk_eta_2_hist->Fill(iter->trk_eta());
-        PF_trk_phi_2_hist->Fill(iter->trk_phi());
-        break;
+        case -211:
+            PF_pT_n211_hist->Fill(cand.pt());
+            PF_eta_n211_hist->Fill(cand.eta());
+            PF_phi_n211_hist->Fill(cand.phi());
+            PF_vertex_n211_hist->Fill(cand.vertex());
+            PF_normchi2_n211_hist->Fill(cand.normchi2());
+            PF_dz_n211_hist->Fill(cand.dz());
+            PF_dxy_n211_hist->Fill(cand.dxy());
+            PF_dzsig_n211_hist->Fill(cand.dzsig());
+            PF_dxysig_n211_hist->Fill(cand.dxysig());
+            PF_trk_pt_n211_hist->Fill(cand.trk_pt());
+            PF_trk_eta_n211_hist->Fill(cand.trk_eta());
+            PF_trk_phi_n211_hist->Fill(cand.trk_phi());
+            break;
+
+        case 130:
+            PF_pT_130_hist->Fill(cand.pt());
+            PF_eta_130_hist->Fill(cand.eta());
+            PF_phi_130_hist->Fill(cand.phi());
+            PF_vertex_130_hist->Fill(cand.vertex());
+            PF_normchi2_130_hist->Fill(cand.normchi2());
+            PF_dz_130_hist->Fill(cand.dz());
+            PF_dxy_130_hist->Fill(cand.dxy());
+            PF_dzsig_130_hist->Fill(cand.dzsig());
+            PF_dxysig_130_hist->Fill(cand.dxysig());
+            PF_trk_pt_130_hist->Fill(cand.trk_pt());
+            PF_trk_eta_130_hist->Fill(cand.trk_eta());
+            PF_trk_phi_130_hist->Fill(cand.trk_phi());
+            break;
+
+        case 22:
+            PF_pT_22_hist->Fill(cand.pt());
+            PF_eta_22_hist->Fill(cand.eta());
+            PF_phi_22_hist->Fill(cand.phi());
+            PF_vertex_22_hist->Fill(cand.vertex());
+            PF_normchi2_22_hist->Fill(cand.normchi2());
+            PF_dz_22_hist->Fill(cand.dz());
+            PF_dxy_22_hist->Fill(cand.dxy());
+            PF_dzsig_22_hist->Fill(cand.dzsig());
+            PF_dxysig_22_hist->Fill(cand.dxysig());
+            PF_trk_pt_22_hist->Fill(cand.trk_pt());
+            PF_trk_eta_22_hist->Fill(cand.trk_eta());
+            PF_trk_phi_22_hist->Fill(cand.trk_phi());
+            break;
+
+        case 13:
+            PF_pT_13_hist->Fill(cand.pt());
+            PF_eta_13_hist->Fill(cand.eta());
+            PF_phi_13_hist->Fill(cand.phi());
+            PF_vertex_13_hist->Fill(cand.vertex());
+            PF_normchi2_13_hist->Fill(cand.normchi2());
+            PF_dz_13_hist->Fill(cand.dz());
+            PF_dxy_13_hist->Fill(cand.dxy());
+            PF_dzsig_13_hist->Fill(cand.dzsig());
+            PF_dxysig_13_hist->Fill(cand.dxysig());
+            PF_trk_pt_13_hist->Fill(cand.trk_pt());
+            PF_trk_eta_13_hist->Fill(cand.trk_eta());
+            PF_trk_phi_13_hist->Fill(cand.trk_phi());
+            break;
+
+        case -13:
+            PF_pT_n13_hist->Fill(cand.pt());
+            PF_eta_n13_hist->Fill(cand.eta());
+            PF_phi_n13_hist->Fill(cand.phi());
+            PF_vertex_n13_hist->Fill(cand.vertex());
+            PF_normchi2_n13_hist->Fill(cand.normchi2());
+            PF_dz_n13_hist->Fill(cand.dz());
+            PF_dxy_n13_hist->Fill(cand.dxy());
+            PF_dzsig_n13_hist->Fill(cand.dzsig());
+            PF_dxysig_n13_hist->Fill(cand.dxysig());
+            PF_trk_pt_n13_hist->Fill(cand.trk_pt());
+            PF_trk_eta_n13_hist->Fill(cand.trk_eta());
+            PF_trk_phi_n13_hist->Fill(cand.trk_phi());
+            break;
+
+        case 1:
+            PF_pT_1_hist->Fill(cand.pt());
+            PF_eta_1_hist->Fill(cand.eta());
+            PF_phi_1_hist->Fill(cand.phi());
+            PF_vertex_1_hist->Fill(cand.vertex());
+            PF_normchi2_1_hist->Fill(cand.normchi2());
+            PF_dz_1_hist->Fill(cand.dz());
+            PF_dxy_1_hist->Fill(cand.dxy());
+            PF_dzsig_1_hist->Fill(cand.dzsig());
+            PF_dxysig_1_hist->Fill(cand.dxysig());
+            PF_trk_pt_1_hist->Fill(cand.trk_pt());
+            PF_trk_eta_1_hist->Fill(cand.trk_eta());
+            PF_trk_phi_1_hist->Fill(cand.trk_phi());
+            break;
+
+        case 2:
+            PF_pT_2_hist->Fill(cand.pt());
+            PF_eta_2_hist->Fill(cand.eta());
+            PF_phi_2_hist->Fill(cand.phi());
+            PF_vertex_2_hist->Fill(cand.vertex());
+            PF_normchi2_2_hist->Fill(cand.normchi2());
+            PF_dz_2_hist->Fill(cand.dz());
+            PF_dxy_2_hist->Fill(cand.dxy());
+            PF_dzsig_2_hist->Fill(cand.dzsig());
+            PF_dxysig_2_hist->Fill(cand.dxysig());
+            PF_trk_pt_2_hist->Fill(cand.trk_pt());
+            PF_trk_eta_2_hist->Fill(cand.trk_eta());
+            PF_trk_phi_2_hist->Fill(cand.trk_phi());
+            break;
     }
-  }
+}
+
+
 
 
   // fill all the photon histograms
 
-  for (auto iter = photonsH->begin(); iter != photonsH->end(); ++iter) {
-    pt_pho_hist->Fill(iter->pt());
-    eta_pho_hist->Fill(iter->eta());
-    phi_pho_hist->Fill(iter->phi());
-    m_pho_hist->Fill(iter->m());
-    rawEnergy_pho_hist->Fill(iter->rawEnergy());
-    preshowerEnergy_pho_hist->Fill(iter->preshowerEnergy());
-    corrEcalEnergyError_pho_hist->Fill(iter->corrEcalEnergyError());
-    sigmaIetaIeta_pho_hist->Fill(iter->sigmaIetaIeta());
-    hOverE_pho_hist->Fill(iter->hOverE());
-    ecalIso_pho_hist->Fill(iter->ecalIso());
-    hcalIso_pho_hist->Fill(iter->hcalIso());
-    trackIso_pho_hist->Fill(iter->trkIso());
-    r9_pho_hist->Fill(iter->r9());
-    sMin_pho_hist->Fill(iter->sMin());
-    sMaj_pho_hist->Fill(iter->sMaj());
-  }
+for (const auto& pho : *photonsH) {
+    pt_pho_hist->Fill(pho.pt());
+    eta_pho_hist->Fill(pho.eta());
+    phi_pho_hist->Fill(pho.phi());
+    m_pho_hist->Fill(pho.m());
+    rawEnergy_pho_hist->Fill(pho.rawEnergy());
+    preshowerEnergy_pho_hist->Fill(pho.preshowerEnergy());
+    corrEcalEnergyError_pho_hist->Fill(pho.corrEcalEnergyError());
+    sigmaIetaIeta_pho_hist->Fill(pho.sigmaIetaIeta());
+    hOverE_pho_hist->Fill(pho.hOverE());
+    ecalIso_pho_hist->Fill(pho.ecalIso());
+    hcalIso_pho_hist->Fill(pho.hcalIso());
+    trackIso_pho_hist->Fill(pho.trkIso());
+    r9_pho_hist->Fill(pho.r9());
+    sMin_pho_hist->Fill(pho.sMin());
+    sMaj_pho_hist->Fill(pho.sMaj());
+}
 
-  // fill all the electron histograms
 
-  for (auto iter = electronsH->begin(); iter != electronsH->end(); ++iter) {
-    pt_ele_hist->Fill(iter->pt());
-    eta_ele_hist->Fill(iter->eta());
-    phi_ele_hist->Fill(iter->phi());
-    m_ele_hist->Fill(iter->m());
-    rawEnergy_ele_hist->Fill(iter->rawEnergy());
-    preshowerEnergy_ele_hist->Fill(iter->preshowerEnergy());
-    corrEcalEnergyError_ele_hist->Fill(iter->corrEcalEnergyError());
-    dEtaIn_ele_hist->Fill(iter->dEtaIn());
-    dPhiIn_ele_hist->Fill(iter->dPhiIn());
-    sigmaIetaIeta_ele_hist->Fill(iter->sigmaIetaIeta());
-    hOverE_ele_hist->Fill(iter->hOverE());
-    ooEMOop_ele_hist->Fill(iter->ooEMOop());
-    missingHits_ele_hist->Fill(iter->missingHits());
-    trackfbrem_ele_hist->Fill(iter->trackfbrem());
-    ecalIso_ele_hist->Fill(iter->ecalIso());
-    hcalIso_ele_hist->Fill(iter->hcalIso());
-    trackIso_ele_hist->Fill(iter->trackIso());
-    r9_ele_hist->Fill(iter->r9());
-    sMin_ele_hist->Fill(iter->sMin());
-    sMaj_ele_hist->Fill(iter->sMaj());
-  }
+
+ // fill all the electron histograms
+
+for (const auto& ele : *electronsH) {
+    pt_ele_hist->Fill(ele.pt());
+    eta_ele_hist->Fill(ele.eta());
+    phi_ele_hist->Fill(ele.phi());
+    m_ele_hist->Fill(ele.m());
+    rawEnergy_ele_hist->Fill(ele.rawEnergy());
+    preshowerEnergy_ele_hist->Fill(ele.preshowerEnergy());
+    corrEcalEnergyError_ele_hist->Fill(ele.corrEcalEnergyError());
+    dEtaIn_ele_hist->Fill(ele.dEtaIn());
+    dPhiIn_ele_hist->Fill(ele.dPhiIn());
+    sigmaIetaIeta_ele_hist->Fill(ele.sigmaIetaIeta());
+    hOverE_ele_hist->Fill(ele.hOverE());
+    ooEMOop_ele_hist->Fill(ele.ooEMOop());
+    missingHits_ele_hist->Fill(ele.missingHits());
+    trackfbrem_ele_hist->Fill(ele.trackfbrem());
+    ecalIso_ele_hist->Fill(ele.ecalIso());
+    hcalIso_ele_hist->Fill(ele.hcalIso());
+    trackIso_ele_hist->Fill(ele.trackIso());
+    r9_ele_hist->Fill(ele.r9());
+    sMin_ele_hist->Fill(ele.sMin());
+    sMaj_ele_hist->Fill(ele.sMaj());
+}
+
+
 
     // fill all the muon histograms
-    for (auto iter = muonsH->begin(); iter != muonsH->end(); ++iter) {
-      pt_mu_hist->Fill(iter->pt());
-      eta_mu_hist->Fill(iter->eta());
-      phi_mu_hist->Fill(iter->phi());
-      m_mu_hist->Fill(iter->m());
-      type_mu_hist->Fill(iter->type());
-      charge_mu_hist->Fill(iter->charge());
-      normalizedChi2_mu_hist->Fill(iter->normalizedChi2());
-      ecalIso_mu_hist->Fill(iter->ecalIso());
-      hcalIso_mu_hist->Fill(iter->hcalIso());
-      trackIso_mu_hist->Fill(iter->trackIso());
-      nValidStandAloneMuonHits_mu_hist->Fill(iter->nValidStandAloneMuonHits());
-      nStandAloneMuonMatchedStations_mu_hist->Fill(iter->nStandAloneMuonMatchedStations());
-      nValidRecoMuonHits_mu_hist->Fill(iter->nValidRecoMuonHits());
-      nRecoMuonChambers_mu_hist->Fill(iter->nRecoMuonChambers());
-      nRecoMuonChambersCSCorDT_mu_hist->Fill(iter->nRecoMuonChambersCSCorDT());
-      nRecoMuonMatches_mu_hist->Fill(iter->nRecoMuonMatches());
-      nRecoMuonMatchedStations_mu_hist->Fill(iter->nRecoMuonMatchedStations());
-      nRecoMuonExpectedMatchedStations_mu_hist->Fill(iter->nRecoMuonExpectedMatchedStations());
-      recoMuonStationMask_mu_hist->Fill(iter->recoMuonStationMask());
-      nRecoMuonMatchedRPCLayers_mu_hist->Fill(iter->nRecoMuonMatchedRPCLayers());
-      recoMuonRPClayerMask_mu_hist->Fill(iter->recoMuonRPClayerMask());
-      nValidPixelHits_mu_hist->Fill(iter->nValidPixelHits());
-      nValidStripHits_mu_hist->Fill(iter->nValidStripHits());
-      nPixelLayersWithMeasurement_mu_hist->Fill(iter->nPixelLayersWithMeasurement());
-      nTrackerLayersWithMeasurement_mu_hist->Fill(iter->nTrackerLayersWithMeasurement());
+    
+    for (const auto& mu : *muonsH) {
+  pt_mu_hist->Fill(mu.pt());
+  eta_mu_hist->Fill(mu.eta());
+  phi_mu_hist->Fill(mu.phi());
+  m_mu_hist->Fill(mu.m());
+  type_mu_hist->Fill(mu.type());
+  charge_mu_hist->Fill(mu.charge());
+  normalizedChi2_mu_hist->Fill(mu.normalizedChi2());
+  ecalIso_mu_hist->Fill(mu.ecalIso());
+  hcalIso_mu_hist->Fill(mu.hcalIso());
+  trackIso_mu_hist->Fill(mu.trackIso());
+  nValidStandAloneMuonHits_mu_hist->Fill(mu.nValidStandAloneMuonHits());
+  nStandAloneMuonMatchedStations_mu_hist->Fill(mu.nStandAloneMuonMatchedStations());
+  nValidRecoMuonHits_mu_hist->Fill(mu.nValidRecoMuonHits());
+  nRecoMuonChambers_mu_hist->Fill(mu.nRecoMuonChambers());
+  nRecoMuonChambersCSCorDT_mu_hist->Fill(mu.nRecoMuonChambersCSCorDT());
+  nRecoMuonMatches_mu_hist->Fill(mu.nRecoMuonMatches());
+  nRecoMuonMatchedStations_mu_hist->Fill(mu.nRecoMuonMatchedStations());
+  nRecoMuonExpectedMatchedStations_mu_hist->Fill(mu.nRecoMuonExpectedMatchedStations());
+  recoMuonStationMask_mu_hist->Fill(mu.recoMuonStationMask());
+  nRecoMuonMatchedRPCLayers_mu_hist->Fill(mu.nRecoMuonMatchedRPCLayers());
+  recoMuonRPClayerMask_mu_hist->Fill(mu.recoMuonRPClayerMask());
+  nValidPixelHits_mu_hist->Fill(mu.nValidPixelHits());
+  nValidStripHits_mu_hist->Fill(mu.nValidStripHits());
+  nPixelLayersWithMeasurement_mu_hist->Fill(mu.nPixelLayersWithMeasurement());
+  nTrackerLayersWithMeasurement_mu_hist->Fill(mu.nTrackerLayersWithMeasurement());
+  trk_chi2_mu_hist->Fill(mu.trk_chi2());
+  trk_ndof_mu_hist->Fill(mu.trk_ndof());
+  trk_dxy_mu_hist->Fill(mu.trk_dxy());
+  trk_dz_mu_hist->Fill(mu.trk_dz());
+  trk_qoverp_mu_hist->Fill(mu.trk_qoverp());
+  trk_lambda_mu_hist->Fill(mu.trk_lambda());
+  trk_pt_mu_hist->Fill(mu.trk_pt());
+  trk_phi_mu_hist->Fill(mu.trk_phi());
+  trk_eta_mu_hist->Fill(mu.trk_eta());
+  trk_dxyError_mu_hist->Fill(mu.trk_dxyError());
+  trk_dzError_mu_hist->Fill(mu.trk_dzError());
+  trk_qoverpError_mu_hist->Fill(mu.trk_qoverpError());
+  trk_lambdaError_mu_hist->Fill(mu.trk_lambdaError());
+  trk_phiError_mu_hist->Fill(mu.trk_phiError());
+  trk_dsz_mu_hist->Fill(mu.trk_dsz());
+  trk_dszError_mu_hist->Fill(mu.trk_dszError());
+  trk_qoverp_lambda_cov_mu_hist->Fill(mu.trk_qoverp_lambda_cov());
+  trk_qoverp_phi_cov_mu_hist->Fill(mu.trk_qoverp_phi_cov());
+  trk_qoverp_dxy_cov_mu_hist->Fill(mu.trk_qoverp_dxy_cov());
+  trk_qoverp_dsz_cov_mu_hist->Fill(mu.trk_qoverp_dsz_cov());
+  trk_lambda_phi_cov_mu_hist->Fill(mu.trk_lambda_phi_cov());
+  trk_lambda_dxy_cov_mu_hist->Fill(mu.trk_lambda_dxy_cov());
+  trk_lambda_dsz_cov_mu_hist->Fill(mu.trk_lambda_dsz_cov());
+  trk_phi_dxy_cov_mu_hist->Fill(mu.trk_phi_dxy_cov());
+  trk_phi_dsz_cov_mu_hist->Fill(mu.trk_phi_dsz_cov());
+  trk_dxy_dsz_cov_mu_hist->Fill(mu.trk_dxy_dsz_cov());
+  trk_vx_mu_hist->Fill(mu.trk_vx());
+  trk_vy_mu_hist->Fill(mu.trk_vy());
+  trk_vz_mu_hist->Fill(mu.trk_vz());
+}
 
-trk_chi2_mu_hist->Fill(iter->trk_chi2());
-trk_ndof_mu_hist->Fill(iter->trk_ndof());
-trk_dxy_mu_hist->Fill(iter->trk_dxy());
-trk_dz_mu_hist->Fill(iter->trk_dz());
-trk_qoverp_mu_hist->Fill(iter->trk_qoverp());
-trk_lambda_mu_hist->Fill(iter->trk_lambda());
-trk_pt_mu_hist->Fill(iter->trk_pt());
-trk_phi_mu_hist->Fill(iter->trk_phi());
-trk_eta_mu_hist->Fill(iter->trk_eta());
-trk_dxyError_mu_hist->Fill(iter->trk_dxyError());
-trk_dzError_mu_hist->Fill(iter->trk_dzError());
-trk_qoverpError_mu_hist->Fill(iter->trk_qoverpError());
-trk_lambdaError_mu_hist->Fill(iter->trk_lambdaError());
-trk_phiError_mu_hist->Fill(iter->trk_phiError());
-trk_dsz_mu_hist->Fill(iter->trk_dsz());
-trk_dszError_mu_hist->Fill(iter->trk_dszError());
-trk_qoverp_lambda_cov_mu_hist->Fill(iter->trk_qoverp_lambda_cov());
-trk_qoverp_phi_cov_mu_hist->Fill(iter->trk_qoverp_phi_cov());
-trk_qoverp_dxy_cov_mu_hist->Fill(iter->trk_qoverp_dxy_cov());
-trk_qoverp_dsz_cov_mu_hist->Fill(iter->trk_qoverp_dsz_cov());
-trk_lambda_phi_cov_mu_hist->Fill(iter->trk_lambda_phi_cov());
-trk_lambda_dxy_cov_mu_hist->Fill(iter->trk_lambda_dxy_cov());
-trk_lambda_dsz_cov_mu_hist->Fill(iter->trk_lambda_dsz_cov());
-trk_phi_dxy_cov_mu_hist->Fill(iter->trk_phi_dxy_cov());
-trk_phi_dsz_cov_mu_hist->Fill(iter->trk_phi_dsz_cov());
-trk_dxy_dsz_cov_mu_hist->Fill(iter->trk_dxy_dsz_cov());
-trk_vx_mu_hist->Fill(iter->trk_vx());
-trk_vy_mu_hist->Fill(iter->trk_vy());
-trk_vz_mu_hist->Fill(iter->trk_vz());
-
-
-    }
-
+    
+    
+    
     // fill all the PF Jet histograms
-    for (auto iter = PFjetsH->begin(); iter != PFjetsH->end(); ++iter) {
-      pt_pfj_hist->Fill(iter->pt());
-      eta_pfj_hist->Fill(iter->eta());
-      phi_pfj_hist->Fill(iter->phi());
-      m_pfj_hist->Fill(iter->m());
-      jetArea_pfj_hist->Fill(iter->jetArea());
-      chargedHadronEnergy_pfj_hist->Fill(iter->chargedHadronEnergy());
-      neutralHadronEnergy_pfj_hist->Fill(iter->neutralHadronEnergy());
-      photonEnergy_pfj_hist->Fill(iter->photonEnergy());
-      electronEnergy_pfj_hist->Fill(iter->electronEnergy());
-      muonEnergy_pfj_hist->Fill(iter->muonEnergy());
-      HFHadronEnergy_pfj_hist->Fill(iter->HFHadronEnergy());
-      HFEMEnergy_pfj_hist->Fill(iter->HFEMEnergy());
-      chargedHadronMultiplicity_pfj_hist->Fill(iter->chargedHadronMultiplicity());
-      neutralHadronMultiplicity_pfj_hist->Fill(iter->neutralHadronMultiplicity());
-      photonMultiplicity_pfj_hist->Fill(iter->photonMultiplicity());
-      electronMultiplicity_pfj_hist->Fill(iter->electronMultiplicity());
-      muonMultiplicity_pfj_hist->Fill(iter->muonMultiplicity());
-      HFHadronMultiplicity_pfj_hist->Fill(iter->HFHadronMultiplicity());
-      HFEMMultiplicity_pfj_hist->Fill(iter->HFEMMultiplicity());
-      HOEnergy_pfj_hist->Fill(iter->HOEnergy());
-      csv_pfj_hist->Fill(iter->csv());
-      mvaDiscriminator_pfj_hist->Fill(iter->mvaDiscriminator());
-    }
-  
+for (const auto& jet : *PFjetsH) {
+  pt_pfj_hist->Fill(jet.pt());
+  eta_pfj_hist->Fill(jet.eta());
+  phi_pfj_hist->Fill(jet.phi());
+  m_pfj_hist->Fill(jet.m());
+  jetArea_pfj_hist->Fill(jet.jetArea());
+  chargedHadronEnergy_pfj_hist->Fill(jet.chargedHadronEnergy());
+  neutralHadronEnergy_pfj_hist->Fill(jet.neutralHadronEnergy());
+  photonEnergy_pfj_hist->Fill(jet.photonEnergy());
+  electronEnergy_pfj_hist->Fill(jet.electronEnergy());
+  muonEnergy_pfj_hist->Fill(jet.muonEnergy());
+  HFHadronEnergy_pfj_hist->Fill(jet.HFHadronEnergy());
+  HFEMEnergy_pfj_hist->Fill(jet.HFEMEnergy());
+  chargedHadronMultiplicity_pfj_hist->Fill(jet.chargedHadronMultiplicity());
+  neutralHadronMultiplicity_pfj_hist->Fill(jet.neutralHadronMultiplicity());
+  photonMultiplicity_pfj_hist->Fill(jet.photonMultiplicity());
+  electronMultiplicity_pfj_hist->Fill(jet.electronMultiplicity());
+  muonMultiplicity_pfj_hist->Fill(jet.muonMultiplicity());
+  HFHadronMultiplicity_pfj_hist->Fill(jet.HFHadronMultiplicity());
+  HFEMMultiplicity_pfj_hist->Fill(jet.HFEMMultiplicity());
+  HOEnergy_pfj_hist->Fill(jet.HOEnergy());
+  csv_pfj_hist->Fill(jet.csv());
+  mvaDiscriminator_pfj_hist->Fill(jet.mvaDiscriminator());
+}
+ 
+// fill all the vertices histograms
 
-    for (auto iter = verticesH->begin(); iter != verticesH->end(); ++iter) {
-      x_vtx_hist->Fill(iter->x());
-      y_vtx_hist->Fill(iter->y());
-      z_vtx_hist->Fill(iter->z());
-      zError_vtx_hist->Fill(iter->zError());
-      xError_vtx_hist->Fill(iter->xError());
-      yError_vtx_hist->Fill(iter->yError());
-      tracksSize_vtx_hist->Fill(iter->tracksSize());
-      chi2_vtx_hist->Fill(iter->chi2());
-      ndof_vtx_hist->Fill(iter->ndof());
-      isValidVtx_vtx_hist->Fill(iter->isValidVtx());
-      xyCov_vtx_hist->Fill(iter->xyCov());
-      xzCov_vtx_hist->Fill(iter->xzCov());
-      yzCov_vtx_hist->Fill(iter->yzCov());
-    }
 
-    for (auto iter = tracksH->begin(); iter != tracksH->end(); ++iter) {
-      tk_pt_tk_hist->Fill(iter->tk_pt());
-      tk_eta_tk_hist->Fill(iter->tk_eta());
-      tk_phi_tk_hist->Fill(iter->tk_phi());
-      tk_chi2_tk_hist->Fill(iter->tk_chi2());
-      tk_ndof_tk_hist->Fill(iter->tk_ndof());
-      tk_charge_tk_hist->Fill(iter->tk_charge());
-      tk_dxy_tk_hist->Fill(iter->tk_dxy());
-      tk_dz_tk_hist->Fill(iter->tk_dz());
-      tk_nValidPixelHits_tk_hist->Fill(iter->tk_nValidPixelHits());
-      tk_nTrackerLayersWithMeasurement_tk_hist->Fill(iter->tk_nTrackerLayersWithMeasurement());
-      tk_nValidStripHits_tk_hist->Fill(iter->tk_nValidStripHits());
-      tk_qoverp_tk_hist->Fill(iter->tk_qoverp());
-      tk_lambda_tk_hist->Fill(iter->tk_lambda());
-      tk_dxy_Error_tk_hist->Fill(iter->tk_dxy_Error());
-      tk_dz_Error_tk_hist->Fill(iter->tk_dz_Error());
-      tk_qoverp_Error_tk_hist->Fill(iter->tk_qoverp_Error());
-      tk_lambda_Error_tk_hist->Fill(iter->tk_lambda_Error());
-      tk_phi_Error_tk_hist->Fill(iter->tk_phi_Error());
-      tk_vtxInd_tk_hist->Fill(iter->tk_vtxInd());
-      tk_vx_tk_hist->Fill(iter->tk_vx());
-      tk_vy_tk_hist->Fill(iter->tk_vy());
-      tk_vz_tk_hist->Fill(iter->tk_vz());
-    }
-    
-    
+for (const auto& vtx : *verticesH) {
+  x_vtx_hist->Fill(vtx.x());
+  y_vtx_hist->Fill(vtx.y());
+  z_vtx_hist->Fill(vtx.z());
+  zError_vtx_hist->Fill(vtx.zError());
+  xError_vtx_hist->Fill(vtx.xError());
+  yError_vtx_hist->Fill(vtx.yError());
+  tracksSize_vtx_hist->Fill(vtx.tracksSize());
+  chi2_vtx_hist->Fill(vtx.chi2());
+  ndof_vtx_hist->Fill(vtx.ndof());
+  isValidVtx_vtx_hist->Fill(vtx.isValidVtx());
+  xyCov_vtx_hist->Fill(vtx.xyCov());
+  xzCov_vtx_hist->Fill(vtx.xzCov());
+  yzCov_vtx_hist->Fill(vtx.yzCov());
+}
+
+
+// fill tracks histograms
+for (const auto& tk : *tracksH) {
+  tk_pt_tk_hist->Fill(tk.tk_pt());
+  tk_eta_tk_hist->Fill(tk.tk_eta());
+  tk_phi_tk_hist->Fill(tk.tk_phi());
+  tk_chi2_tk_hist->Fill(tk.tk_chi2());
+  tk_ndof_tk_hist->Fill(tk.tk_ndof());
+  tk_charge_tk_hist->Fill(tk.tk_charge());
+  tk_dxy_tk_hist->Fill(tk.tk_dxy());
+  tk_dz_tk_hist->Fill(tk.tk_dz());
+  tk_nValidPixelHits_tk_hist->Fill(tk.tk_nValidPixelHits());
+  tk_nTrackerLayersWithMeasurement_tk_hist->Fill(tk.tk_nTrackerLayersWithMeasurement());
+  tk_nValidStripHits_tk_hist->Fill(tk.tk_nValidStripHits());
+  tk_qoverp_tk_hist->Fill(tk.tk_qoverp());
+  tk_lambda_tk_hist->Fill(tk.tk_lambda());
+  tk_dxy_Error_tk_hist->Fill(tk.tk_dxy_Error());
+  tk_dz_Error_tk_hist->Fill(tk.tk_dz_Error());
+  tk_qoverp_Error_tk_hist->Fill(tk.tk_qoverp_Error());
+  tk_lambda_Error_tk_hist->Fill(tk.tk_lambda_Error());
+  tk_phi_Error_tk_hist->Fill(tk.tk_phi_Error());
+  tk_vtxInd_tk_hist->Fill(tk.tk_vtxInd());
+  tk_vx_tk_hist->Fill(tk.tk_vx());
+  tk_vy_tk_hist->Fill(tk.tk_vy());
+  tk_vz_tk_hist->Fill(tk.tk_vz());
+}
+
 }
 
 // ------------ method called once each job just before starting event loop  ------------
