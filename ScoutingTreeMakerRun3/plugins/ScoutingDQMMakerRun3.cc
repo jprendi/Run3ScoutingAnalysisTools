@@ -1158,7 +1158,23 @@ tk_vz_tk_hist = ibook.book1D("tk_vz_tk", "Tracker Vertex Z; z (cm); Entries", 10
 
 }
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
-void ScoutingDQMMakerRun3::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+
+void ScoutingDQMMakerRun3::fillDescriptions(edm::ConfigurationDescriptions& descriptions){
+
+	edm::ParameterSetDescription desc;
+	desc.add<std::string>("OutputInternalPath", "MY_FOLDER");
+	desc.add<edm::InputTag>("electrons", edm::InputTag("Run3ScoutingElectrons"));
+	desc.add<edm::InputTag>("muons", edm::InputTag("Run3ScoutingMuons"));
+        desc.add<edm::InputTag>("pfcands", edm::InputTag("Run3ScoutingParticle"));
+        desc.add<edm::InputTag>("photons", edm::InputTag("Run3ScoutingPhoton"));
+        desc.add<edm::InputTag>("pfjets", edm::InputTag("Run3ScoutingPFJet"));
+        desc.add<edm::InputTag>("vertices", edm::InputTag("Run3ScoutingVertex"));
+        desc.add<edm::InputTag>("tracks", edm::InputTag("Run3ScoutingTrack"));
+	descriptions.addWithDefaultLabel(desc);
+
+}
+
+/* void ScoutingDQMMakerRun3::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   //The following says we do not know what parameters are allowed so do no validation
   // Please change this to state exactly what you do use, even if it is no parameters
   edm::ParameterSetDescription desc;
@@ -1170,7 +1186,7 @@ void ScoutingDQMMakerRun3::fillDescriptions(edm::ConfigurationDescriptions& desc
   //ParameterSetDescription desc;
   //desc.addUntracked<edm::InputTag>("tracks","ctfWithMaterialTracks");
   //descriptions.addWithDefaultLabel(desc);
-}
+} */
 
 //define this as a plug-in
 DEFINE_FWK_MODULE(ScoutingDQMMakerRun3);
