@@ -100,9 +100,9 @@ private:
   edm::InputTag algInputTag_;
   edm::InputTag extInputTag_;
   edm::EDGetToken algToken_;
-  std::unique_ptr<l1t::L1TGlobalUtil> l1GtUtils_;
-  std::vector<std::string> l1Seeds_;
-  std::vector<bool> l1Result_;
+
+  // rho
+  dqm::reco::MonitorElement* rho_hist;
 
   // PF candidates histograms
   dqm::reco::MonitorElement* PF_pT_211_hist;
@@ -417,20 +417,8 @@ ScoutingDQMMakerRun3::ScoutingDQMMakerRun3(const edm::ParameterSet& iConfig)
       photonsToken(consumes<std::vector<Run3ScoutingPhoton>>(iConfig.getParameter<edm::InputTag>("photons"))),
       pfcandsToken(consumes<std::vector<Run3ScoutingParticle>>(iConfig.getParameter<edm::InputTag>("pfcands"))),
       pfjetsToken(consumes<std::vector<Run3ScoutingPFJet>>(iConfig.getParameter<edm::InputTag>("pfjets"))),
-      tracksToken(consumes<std::vector<Run3ScoutingTrack>>(iConfig.getParameter<edm::InputTag>("tracks"))),
-      doL1(iConfig.existsAs<bool>("doL1") ? iConfig.getParameter<bool>("doL1") : false) {
-  if (doL1) {
-    algInputTag_ = iConfig.getParameter<edm::InputTag>("AlgInputTag");
-    extInputTag_ = iConfig.getParameter<edm::InputTag>("l1tExtBlkInputTag");
-    algToken_ = consumes<BXVector<GlobalAlgBlk>>(algInputTag_);
-    l1Seeds_ = iConfig.getParameter<std::vector<std::string>>("l1Seeds");
-    l1GtUtils_ = std::make_unique<l1t::L1TGlobalUtil>(
-        iConfig, consumesCollector(), *this, algInputTag_, extInputTag_, l1t::UseEventSetupIn::Event);
-  } else {
-    l1Seeds_ = std::vector<std::string>();
-    l1GtUtils_ = nullptr;
-  }
-}
+      tracksToken(consumes<std::vector<Run3ScoutingTrack>>(iConfig.getParameter<edm::InputTag>("tracks"))){
+    }
 
 ScoutingDQMMakerRun3::~ScoutingDQMMakerRun3() {
   // do anything here that needs to be done at desctruction time
@@ -450,7 +438,13 @@ void ScoutingDQMMakerRun3::analyze(const edm::Event& iEvent, const edm::EventSet
   using namespace reco;
 
   // all the handles needed
- 
+Handle<double> rhoH;
+iEvent.getByToken(rhoToken, rhoH);
+if (!rhoH.isValid()){
+  edm::LogWarning("ScoutingAnalyzer") << "Invalid handle for rho";
+  return;
+}
+
 Handle<vector<Run3ScoutingParticle>> pfcandsH;
 iEvent.getByToken(pfcandsToken, pfcandsH);
 if (!pfcandsH.isValid()) {
@@ -515,7 +509,8 @@ if (!tracksH.isValid()) {
   */
   
 
-  
+ // put rho in histogram
+ rho_hist->Fill(*rhoH);
 
   // fill the PF candidate histograms (no electrons!)
 
@@ -836,8 +831,10 @@ void ScoutingDQMMakerRun3::bookHistograms(DQMStore::IBooker& ibook,
                                           edm::Run const& run,
                                           edm::EventSetup const& iSetup) {
 
- // ibook.setCurrentFolder(outputInternalPath_);
-  
+  ibook.setCurrentFolder(outputInternalPath_);
+ 
+  rho_hist = ibook.book1D("rho", "#rho; Entries", 100, 20.0, 50.0);
+
   ibook.setCurrentFolder(outputInternalPath_ + "/PFcand");
   
   PF_pT_211_hist = ibook.book1DD("pT_211", "PF h^{+}  p_{T} (GeV); Entries", 100, 0.0, 13.0);
@@ -1159,7 +1156,7 @@ tk_vz_tk_hist = ibook.book1D("tk_vz_tk", "Tracker Vertex Z; z (cm); Entries", 10
 }
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
 
-void ScoutingDQMMakerRun3::fillDescriptions(edm::ConfigurationDescriptions& descriptions){
+/* void ScoutingDQMMakerRun3::fillDescriptions(edm::ConfigurationDescriptions& descriptions){
 
 	edm::ParameterSetDescription desc;
 	desc.add<std::string>("OutputInternalPath", "MY_FOLDER");
@@ -1173,8 +1170,9 @@ void ScoutingDQMMakerRun3::fillDescriptions(edm::ConfigurationDescriptions& desc
 	descriptions.addWithDefaultLabel(desc);
 
 }
+*/
 
-/* void ScoutingDQMMakerRun3::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+ void ScoutingDQMMakerRun3::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   //The following says we do not know what parameters are allowed so do no validation
   // Please change this to state exactly what you do use, even if it is no parameters
   edm::ParameterSetDescription desc;
@@ -1186,7 +1184,7 @@ void ScoutingDQMMakerRun3::fillDescriptions(edm::ConfigurationDescriptions& desc
   //ParameterSetDescription desc;
   //desc.addUntracked<edm::InputTag>("tracks","ctfWithMaterialTracks");
   //descriptions.addWithDefaultLabel(desc);
-} */
+} 
 
 //define this as a plug-in
 DEFINE_FWK_MODULE(ScoutingDQMMakerRun3);
