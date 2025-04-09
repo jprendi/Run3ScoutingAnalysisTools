@@ -51,7 +51,7 @@ process.scoutingTree = DQMEDAnalyzer('ScoutingDQMMakerRun3',
                                       tracks            = cms.InputTag("hltScoutingTrackPacker"),
                                       primaryVertices   = cms.InputTag("hltScoutingPrimaryVertexPacker","primaryVtx"),
                                       displacedVertices = cms.InputTag("hltScoutingMuonPackerNoVtx","displacedVtx"),
-                                      pfMet             = cms.InputTag("hltScoutingPFPacker","pfMetPt"),
+                                      pfMetPt             = cms.InputTag("hltScoutingPFPacker","pfMetPt"),
                                       pfMetPhi          = cms.InputTag("hltScoutingPFPacker","pfMetPhi"),
                                       rho               = cms.InputTag("hltScoutingPFPacker","rho"),
                                   )

@@ -85,8 +85,10 @@ private:
   const edm::EDGetTokenT<std::vector<Run3ScoutingElectron>> electronsToken;
   const edm::EDGetTokenT<std::vector<Run3ScoutingVertex>> primaryVerticesToken;
   const edm::EDGetTokenT<std::vector<Run3ScoutingVertex>> verticesToken;
-  const edm::EDGetTokenT<double> rhoToken;
   const edm::EDGetTokenT<std::vector<Run3ScoutingPhoton>> photonsToken;
+  const edm::EDGetTokenT<double> rhoToken;
+  const edm::EDGetTokenT<double> pfMetPhiToken;
+  const edm::EDGetTokenT<double> pfMetPtToken;
   const edm::EDGetTokenT<std::vector<Run3ScoutingParticle>> pfcandsToken;
   const edm::EDGetTokenT<std::vector<Run3ScoutingPFJet>> pfjetsToken;
   const edm::EDGetTokenT<std::vector<Run3ScoutingTrack>> tracksToken;
@@ -101,8 +103,10 @@ private:
   edm::InputTag extInputTag_;
   edm::EDGetToken algToken_;
 
-  // rho
+  // rho + pfMetphi + pfMetPt
   dqm::reco::MonitorElement* rho_hist;
+  dqm::reco::MonitorElement* pfMetPhi_hist;
+  dqm::reco::MonitorElement* pfMetPt_hist;
 
   // PF candidates histograms
   dqm::reco::MonitorElement* PF_pT_211_hist;
@@ -340,7 +344,23 @@ dqm::reco::MonitorElement* trk_vz_mu_hist;
   dqm::reco::MonitorElement* mvaDiscriminator_pfj_hist;
 
 
-  dqm::reco::MonitorElement* x_vtx_hist;
+dqm::reco::MonitorElement* x_pv_hist;
+dqm::reco::MonitorElement* y_pv_hist;
+dqm::reco::MonitorElement* z_pv_hist;
+dqm::reco::MonitorElement* zError_pv_hist;
+dqm::reco::MonitorElement* xError_pv_hist;
+dqm::reco::MonitorElement* yError_pv_hist;
+dqm::reco::MonitorElement* tracksSize_pv_hist;
+dqm::reco::MonitorElement* chi2_pv_hist;
+dqm::reco::MonitorElement* ndof_pv_hist;
+dqm::reco::MonitorElement* isValidVtx_pv_hist;
+dqm::reco::MonitorElement* xyCov_pv_hist;
+dqm::reco::MonitorElement* xzCov_pv_hist;
+dqm::reco::MonitorElement* yzCov_pv_hist;
+
+
+
+dqm::reco::MonitorElement* x_vtx_hist;
 dqm::reco::MonitorElement* y_vtx_hist;
 dqm::reco::MonitorElement* z_vtx_hist;
 dqm::reco::MonitorElement* zError_vtx_hist;
@@ -413,8 +433,10 @@ ScoutingDQMMakerRun3::ScoutingDQMMakerRun3(const edm::ParameterSet& iConfig)
           consumes<std::vector<Run3ScoutingVertex>>(iConfig.getParameter<edm::InputTag>("primaryVertices"))),
       verticesToken(
           consumes<std::vector<Run3ScoutingVertex>>(iConfig.getParameter<edm::InputTag>("displacedVertices"))),
-      rhoToken(consumes<double>(iConfig.getParameter<edm::InputTag>("rho"))),
       photonsToken(consumes<std::vector<Run3ScoutingPhoton>>(iConfig.getParameter<edm::InputTag>("photons"))),
+      rhoToken(consumes<double>(iConfig.getParameter<edm::InputTag>("rho"))),
+      pfMetPhiToken(consumes<double>(iConfig.getParameter<edm::InputTag>("pfMetPhi"))),
+      pfMetPtToken(consumes<double>(iConfig.getParameter<edm::InputTag>("pfMetPt"))),
       pfcandsToken(consumes<std::vector<Run3ScoutingParticle>>(iConfig.getParameter<edm::InputTag>("pfcands"))),
       pfjetsToken(consumes<std::vector<Run3ScoutingPFJet>>(iConfig.getParameter<edm::InputTag>("pfjets"))),
       tracksToken(consumes<std::vector<Run3ScoutingTrack>>(iConfig.getParameter<edm::InputTag>("tracks"))){
@@ -444,6 +466,21 @@ if (!rhoH.isValid()){
   edm::LogWarning("ScoutingAnalyzer") << "Invalid handle for rho";
   return;
 }
+
+Handle<double> pfMetPhiH;
+iEvent.getByToken(pfMetPhiToken, pfMetPhiH);
+if (!pfMetPhiH.isValid()){
+  edm::LogWarning("ScoutingAnalyzer") << "Invalid handle for MET phi";
+  return;
+}
+
+Handle<double> pfMetPtH;
+iEvent.getByToken(pfMetPtToken, pfMetPtH);
+if (!pfMetPtH.isValid()){
+  edm::LogWarning("ScoutingAnalyzer") << "Invalid handle for MET pT";
+  return;
+}
+
 
 Handle<vector<Run3ScoutingParticle>> pfcandsH;
 iEvent.getByToken(pfcandsToken, pfcandsH);
@@ -480,10 +517,18 @@ if (!PFjetsH.isValid()) {
   return;
 }
 
+
+Handle<vector<Run3ScoutingVertex> > primaryVerticesH;
+iEvent.getByToken(primaryVerticesToken, primaryVerticesH);
+if (!primaryVerticesH.isValid()) {
+  edm::LogWarning("ScoutingAnalyzer") << "Invalid handle for primary vertices";
+  return;
+}
+
 Handle<vector<Run3ScoutingVertex>> verticesH;
 iEvent.getByToken(verticesToken, verticesH);
 if (!verticesH.isValid()) {
-  edm::LogWarning("ScoutingAnalyzer") << "Invalid handle for vertices";
+  edm::LogWarning("ScoutingAnalyzer") << "Invalid handle for displaced vertices";
   return;
 }
 
@@ -493,24 +538,12 @@ if (!tracksH.isValid()) {
   edm::LogWarning("ScoutingAnalyzer") << "Invalid handle for tracks";
   return;
 }
-
-/*  Handle<vector<Run3ScoutingPhoton>> photonsH;
-  iEvent.getByToken(photonsToken, photonsH);
-  Handle<vector<Run3ScoutingElectron>> electronsH;
-  iEvent.getByToken(electronsToken, electronsH);
-  Handle<vector<Run3ScoutingMuon>> muonsH;
-  iEvent.getByToken(muonsToken, muonsH);
-  Handle<vector<Run3ScoutingPFJet>> PFjetsH;
-  iEvent.getByToken(pfjetsToken, PFjetsH);
-  Handle<vector<Run3ScoutingVertex> > verticesH;
-  iEvent.getByToken(verticesToken, verticesH);
-  Handle<vector<Run3ScoutingTrack> > tracksH;
-  iEvent.getByToken(tracksToken, tracksH);
-  */
   
 
- // put rho in histogram
+ // put stuff in histogram
  rho_hist->Fill(*rhoH);
+ pfMetPhi_hist->Fill(*pfMetPhiH);
+ pfMetPt_hist->Fill(*pfMetPtH);
 
   // fill the PF candidate histograms (no electrons!)
 
@@ -777,9 +810,28 @@ for (const auto& jet : *PFjetsH) {
   csv_pfj_hist->Fill(jet.csv());
   mvaDiscriminator_pfj_hist->Fill(jet.mvaDiscriminator());
 }
- 
-// fill all the vertices histograms
 
+// fill all the primary vertices histograms
+//
+for (const auto& vtx : *primaryVerticesH) {
+  x_pv_hist->Fill(vtx.x());
+  y_pv_hist->Fill(vtx.y());
+  z_pv_hist->Fill(vtx.z());
+  zError_pv_hist->Fill(vtx.zError());
+  xError_pv_hist->Fill(vtx.xError());
+  yError_pv_hist->Fill(vtx.yError());
+  tracksSize_pv_hist->Fill(vtx.tracksSize());
+  chi2_pv_hist->Fill(vtx.chi2());
+  ndof_pv_hist->Fill(vtx.ndof());
+  isValidVtx_pv_hist->Fill(vtx.isValidVtx());
+  xyCov_pv_hist->Fill(vtx.xyCov());
+  xzCov_pv_hist->Fill(vtx.xzCov());
+  yzCov_pv_hist->Fill(vtx.yzCov());
+}
+
+
+
+// fill all the displaced vertices histograms
 
 for (const auto& vtx : *verticesH) {
   x_vtx_hist->Fill(vtx.x());
@@ -834,6 +886,10 @@ void ScoutingDQMMakerRun3::bookHistograms(DQMStore::IBooker& ibook,
   ibook.setCurrentFolder(outputInternalPath_);
  
   rho_hist = ibook.book1D("rho", "#rho; Entries", 100, 20.0, 50.0);
+  pfMetPhi_hist = ibook.book1D("pfMetPhi", "pf MET #phi; Entries", 100, -3.14, 3.14);
+  pfMetPt_hist = ibook.book1D("pfMetPt", "pf MET p_{T};p_{T} [GeV];Entries", 100, 0.0, 250.0);
+
+
 
   ibook.setCurrentFolder(outputInternalPath_ + "/PFcand");
   
@@ -1105,9 +1161,23 @@ trk_vz_mu_hist = ibook.book1D("trk_vz_mu", "Muon Tracker Vertex Z; z (cm); Entri
   csv_pfj_hist = ibook.book1D("csv_pfj", "Combined Secondary Vertex (CSV); CSV Score; Entries", 100, 0.0, 1.0);
   mvaDiscriminator_pfj_hist = ibook.book1D("mvaDiscriminator_pfj", "MVA Discriminator; Score; Entries", 100, -1.0, 1.0);
 
+ibook.setCurrentFolder(outputInternalPath_ + "/PrimaryVertex");
+x_pv_hist = ibook.book1D("x_pv", "Primary Vertex X Position; x (cm); Entries", 100, -0.5, 0.5);
+y_pv_hist = ibook.book1D("y_pv", "Primary Vertex Y Position; y (cm); Entries", 100, -0.5, 0.5);
+z_pv_hist = ibook.book1D("z_pv", "Primary Vertex Z Position; z (cm); Entries", 100, -20.0, 20.0);
+zError_pv_hist = ibook.book1D("zError_pv", "Primary Vertex Z Error; z Error (cm); Entries", 100, 0.0, 0.05);
+xError_pv_hist = ibook.book1D("xError_pv", "Primary Vertex X Error; x Error (cm); Entries", 100, 0.0, 0.05);
+yError_pv_hist = ibook.book1D("yError_pv", "Primary Vertex Y Error; y Error (cm); Entries", 100, 0.0, 0.05);
+tracksSize_pv_hist = ibook.book1D("tracksSize_pv", "Number of Tracks at Primary Vertex; Tracks; Entries", 100, 0, 100);
+chi2_pv_hist = ibook.book1D("chi2_pv", "Primary Vertex Chi2; #chi^{2}; Entries", 100, 0.0, 50.0);
+ndof_pv_hist = ibook.book1D("ndof_pv", "Primary Vertex Ndof; Ndof; Entries", 100, 0, 100);
+isValidVtx_pv_hist = ibook.book1D("isValidVtx_pv", "Is Valid Primary Vertex?; 0 = False, 1 = True; Entries", 2, 0, 2);
+xyCov_pv_hist = ibook.book1D("xyCov_pv", "Primary Vertex XY Covariance; Cov(x,y); Entries", 100, -0.01, 0.01);
+xzCov_pv_hist = ibook.book1D("xzCov_pv", "Primary Vertex XZ Covariance; Cov(x,z); Entries", 100, -0.01, 0.01);
+yzCov_pv_hist = ibook.book1D("yzCov_pv", "Primary Vertex YZ Covariance; Cov(y,z); Entries", 100, -0.01, 0.01);
 
 
-  ibook.setCurrentFolder(outputInternalPath_ + "/Vertex");
+  ibook.setCurrentFolder(outputInternalPath_ + "/DisplacedVertex");
   x_vtx_hist = ibook.book1D("x_vtx", "Vertex X Position; x (cm); Entries", 100, -0.5, 0.5);
   y_vtx_hist = ibook.book1D("y_vtx", "Vertex Y Position; y (cm); Entries", 100, -0.5, 0.5);
   z_vtx_hist = ibook.book1D("z_vtx", "Vertex Z Position; z (cm); Entries", 100, -20.0, 20.0);
