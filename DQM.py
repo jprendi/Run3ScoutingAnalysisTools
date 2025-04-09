@@ -35,16 +35,6 @@ process.source = cms.Source("PoolSource",
  )
 )
 
-#process.load("Run3ScoutingAnalysisTools.ScoutingFilter.ScoutingFilter_cff")
-
-process.load("EventFilter.L1TRawToDigi.gtStage2Digis_cfi")
-process.gtStage2Digis.InputLabel = cms.InputTag( "hltFEDSelectorL1" )
-
-#process.TFileService = cms.Service("TFileService", 
-  #  fileName = cms.string("scout.root")
-#)
-
-#process.ScoutingFilterPath = cms.Path(process.scoutingFilter)
 
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 from Configuration.AlCa.GlobalTag import GlobalTag
@@ -53,9 +43,6 @@ process.GlobalTag = GlobalTag(process.GlobalTag, '140X_dataRun3_Prompt_v4', '') 
 process.scoutingTree = DQMEDAnalyzer('ScoutingDQMMakerRun3',
                                       triggerresults   = cms.InputTag("TriggerResults", "", "HLT"),
                                       ReadPrescalesFromFile = cms.bool( False ),
-                                      AlgInputTag       = cms.InputTag("gtStage2Digis"),
-                                      l1tAlgBlkInputTag = cms.InputTag("gtStage2Digis"),
-                                      l1tExtBlkInputTag = cms.InputTag("gtStage2Digis"),
                                       muons             = cms.InputTag("hltScoutingMuonPackerNoVtx"),
                                       electrons         = cms.InputTag("hltScoutingEgammaPacker"),
                                       photons           = cms.InputTag("hltScoutingEgammaPacker"),
@@ -70,6 +57,5 @@ process.scoutingTree = DQMEDAnalyzer('ScoutingDQMMakerRun3',
                                   )
 process.dqmSaver.tag = 'SCOUTING'   
 
-process.p = cms.Path(process.gtStage2Digis+process.scoutingTree + process.dqmSaver)
-
+process.p = cms.Path(process.scoutingTree + process.dqmSaver)
 process.DQMoutput_step = cms.EndPath(process.DQMoutput)
