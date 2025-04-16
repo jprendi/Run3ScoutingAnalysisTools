@@ -68,7 +68,7 @@ private:
   void analyze(const edm::Event&, const edm::EventSetup&) override;
   void bookHistograms(DQMStore::IBooker&, edm::Run const&, edm::EventSetup const&) override;
 
-  const std::string outputInternalPath_ = "HLT/ScoutingOffline/Misc";
+  const std::string outputInternalPath_ = "HLT/ScoutingOffline/Miscellaneous";
 
   const edm::InputTag triggerResultsTag;
   const edm::EDGetTokenT<edm::TriggerResults> triggerResultsToken;
@@ -1164,8 +1164,7 @@ void ScoutingDQMMakerRun3::bookHistograms(DQMStore::IBooker& ibook,
 
  void ScoutingDQMMakerRun3::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   edm::ParameterSetDescription desc;
-  desc.setUnknown();
- 	desc.add<std::string>("OutputInternalPath", "MY_FOLDER");
+  desc.add<std::string>("OutputInternalPath", "MY_FOLDER");
 	desc.add<edm::InputTag>("triggerresults", edm::InputTag("TriggerResults", "", "HLT"));
 	desc.add<edm::InputTag>("electrons", edm::InputTag("hltScoutingEgammaPacker"));
 	desc.add<edm::InputTag>("muons", edm::InputTag("hltScoutingMuonPackerNoVtx"));
@@ -1178,7 +1177,7 @@ void ScoutingDQMMakerRun3::bookHistograms(DQMStore::IBooker& ibook,
 	desc.add<edm::InputTag>("pfMetPt", edm::InputTag("hltScoutingPFPacker","pfMetPt"));
 	desc.add<edm::InputTag>("pfMetPhi", edm::InputTag("hltScoutingPFPacker","pfMetPhi"));
 	desc.add<edm::InputTag>("rho", edm::InputTag("hltScoutingPFPacker","rho"));
-  descriptions.addDefault(desc);
+    descriptions.addWithDefaultLabel(desc);
 
 } 
 

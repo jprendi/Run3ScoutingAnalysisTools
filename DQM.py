@@ -43,7 +43,7 @@ process.GlobalTag = GlobalTag(process.GlobalTag, '140X_dataRun3_Prompt_v4', '') 
 
 process.scoutingTree = DQMEDAnalyzer('ScoutingDQMMakerRun3',
                                       triggerresults   = cms.InputTag("TriggerResults", "", "HLT"),
-                                      ReadPrescalesFromFile = cms.bool( False ),
+                                #      ReadPrescalesFromFile = cms.bool( False ),
                                       muons             = cms.InputTag("hltScoutingMuonPackerNoVtx"),
                                       electrons         = cms.InputTag("hltScoutingEgammaPacker"),
                                       photons           = cms.InputTag("hltScoutingEgammaPacker"),
