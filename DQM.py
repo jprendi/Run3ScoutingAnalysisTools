@@ -31,8 +31,9 @@ process.maxEvents = cms.untracked.PSet(
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-       'file:/eos/cms/store/group/tsg-phase2/user/jprendi/fywPaths/src/outputLocalTestDataScouting.root'
- )
+       'file:/eos/cms/store/group/tsg-phase2/user/jprendi/CMSSW_15_0_4/src/outputLocalTestDataScouting.root'
+
+       )
 )
 
 

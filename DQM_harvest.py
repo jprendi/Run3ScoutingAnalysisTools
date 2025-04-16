@@ -14,7 +14,7 @@ process.MessageLogger.cerr = cms.untracked.PSet(
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 process.source = cms.Source("DQMRootSource",
-                            fileNames = cms.untracked.vstring("file:DQM_test.root")) # Files from step 1
+                            fileNames = cms.untracked.vstring("file:/eos/cms/store/group/tsg-phase2/user/jprendi/CMSSW_15_0_4/src/Run3ScoutingAnalysisTools/DQM_test.root")) # Files from step 1
 
 
 
